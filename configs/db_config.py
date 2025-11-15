@@ -60,6 +60,27 @@ def initialize_database():
     conn.close()
 
 
+def initialize_medallion_schema():
+    """
+    Initialize the medallion architecture (Bronze, Silver, Gold layers).
+    This should be run after initialize_database().
+    """
+    conn = get_connection()
+    cur = conn.cursor()
+
+    print("Initializing Medallion Architecture (Bronze, Silver, Gold layers)...")
+
+    with open("db/medallion_schema.sql", "r") as f:
+        medallion_sql = f.read()
+        cur.execute(medallion_sql)
+
+    conn.commit()
+    cur.close()
+    conn.close()
+
+    print("✅ Medallion schema initialized successfully!")
+
+
 def save_to_db(table_name, df):
     """
     Generic function to insert pandas DataFrame into a PostgreSQL table.
