@@ -9,6 +9,9 @@ from core.page_navigator import PageNavigator
 from core.metadata_extractor import MetadataExtractor
 from core.commentary_parser import CommentaryParser
 from core.file_manager import FileManager
+from configs.db_config import initialize_database, save_to_db
+import json
+
 
 class MatchScraper:
     def __init__(self, url, base_dir="data"):
@@ -61,6 +64,16 @@ class MatchScraper:
         # Extract metadata
         metadata = MetadataExtractor.extract_metadata(driver.page_source,match_id)
 
+        # Regex pattern to identify columns to merge
+        pattern = re.compile(r".*Replacement$")
+
+        # Identify matching keys
+        keys_to_merge = [k for k in metadata if pattern.match(k)]
+
+        # Combine into a single new key with original keys and values
+        metadata["player_replacements"] = json.dumps({k: metadata.pop(k) for k in keys_to_merge})
+
+        '''
         # Folder setup
         folder_name = self.get_folder_name(metadata)
         folder_path = os.path.join(self.base_dir, folder_name)
@@ -72,6 +85,8 @@ class MatchScraper:
 
         # Save metadata
         FileManager.save_json(metadata, os.path.join(folder_path, "metadata.json"))
+        '''
+
 
         commentary_url = self.url.replace("/full-scorecard","/ball-by-ball-commentary")
         driver.get(commentary_url)
@@ -81,6 +96,7 @@ class MatchScraper:
         # Extract default innings team
         default_team_name = self.get_current_innings_team(driver)
         print(f"📝 Default batting team: {default_team_name}")
+        metadata["second_innings"] = default_team_name
 
         # Save first innings commentary
         innings1_html = driver.page_source
@@ -89,9 +105,10 @@ class MatchScraper:
         innings1_df["Innings"] = default_team_name
         innings1_df["MatchID"] = match_id
 
+        '''
         # Save innings 1 html
         FileManager.save_html(innings1_html, os.path.join(folder_path, f"{default_team_name}_innings.html"))
-
+        '''
         # Scroll to top before switch
         page_nav.scroll_to_top()
         time.sleep(3)
@@ -99,6 +116,24 @@ class MatchScraper:
         # Switch innings
         switched_team_name = page_nav.click_dropdown_and_switch_innings(default_team_name)
         print(f"📝 Switched batting team: {switched_team_name}")
+        metadata["first_innings"] = switched_team_name
+
+        print(metadata)
+
+        # convert the metadata from dictionary to pandas dataframe
+        metadata_df = pd.DataFrame([metadata])
+
+        # Replace spaces with underscores in all column names
+        metadata_df.columns = (
+            metadata_df.columns
+            .str.replace(r"[ ()]", "_", regex=True)  # replace spaces/parentheses
+            .str.replace(r"_+", "_", regex=True)  # collapse multiple underscores
+            .str.strip("_")  # remove leading/trailing underscores
+            .str.lower()  # lowercase everything
+        )
+
+        # Save metadata to DB
+        save_to_db("raw_match_metadata", metadata_df)
 
         time.sleep(5)
         page_nav.scroll_full_page()
@@ -109,19 +144,34 @@ class MatchScraper:
         innings2_df = CommentaryParser.to_dataframe(innings2_data)
         innings2_df["Innings"] = switched_team_name
         innings2_df["MatchID"] = match_id
-
+        '''
         FileManager.save_html(innings2_html, os.path.join(folder_path, f"{switched_team_name}_innings.html"))
-
+        '''
         # Combine both innings
         final_df = pd.concat([innings1_df, innings2_df], ignore_index=True)
 
+        final_df.columns = (
+            final_df.columns
+            .str.replace(r"[ ()]", "_", regex=True)  # replace spaces/parentheses
+            .str.replace(r"_+", "_", regex=True)  # collapse multiple underscores
+            .str.strip("_")  # remove leading/trailing underscores
+            .str.lower()  # lowercase everything
+        )
+
+        # Replace spaces with underscores in all column names
+        final_df.columns = final_df.columns.str.replace(' ', '_')
+
+        '''
         # Add Metadata Columns
         for key, value in metadata.items():
             clean_key = key.replace(" ", "_")
             final_df[clean_key] = value
-
+        
         # Save commentary CSV
         FileManager.save_csv(final_df, os.path.join(folder_path, "commentary.csv"))
+        '''
+        # Save commentary to DB
+        save_to_db("raw_match_events",final_df)
 
         driver_manager.stop_driver()
         print(f"✅ Saved commentary and metadata for match: {match_id}")

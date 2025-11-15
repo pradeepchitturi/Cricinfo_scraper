@@ -18,4 +18,5 @@ class MetadataExtractor:
             elif len(columns) == 1:
                 metadata["Venue"] = columns[0].get_text(strip=True)
         metadata["MatchID"] = match_id
+        print(type(metadata))
         return metadata

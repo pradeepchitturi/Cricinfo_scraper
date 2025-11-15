@@ -1,6 +1,7 @@
 from scraping.schedule_scraper import ScheduleScraper
 from scraping.match_scraper import MatchScraper
 from utils.tracker import MatchTracker
+from configs.db_config import initialize_database, save_to_db
 import re
 
 def extract_match_id(url):
@@ -8,6 +9,9 @@ def extract_match_id(url):
     return match.group(1) if match else None
 
 def main():
+    print("Initializing database...")
+    initialize_database()
+
     schedule_url = "https://www.espncricinfo.com/series/ipl-2025-1449924/match-schedule-fixtures-and-results"
     tracker = MatchTracker()
 

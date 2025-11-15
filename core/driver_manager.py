@@ -3,7 +3,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service
 
 class DriverManager:
-    def __init__(self, headless=True):   # headless=False to open browser window
+    def __init__(self, headless=False):   # headless=False to open browser window
         self.headless = headless
         self.driver = None
 
