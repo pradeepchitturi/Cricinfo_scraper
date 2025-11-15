@@ -73,21 +73,6 @@ class MatchScraper:
         # Combine into a single new key with original keys and values
         metadata["player_replacements"] = json.dumps({k: metadata.pop(k) for k in keys_to_merge})
 
-        '''
-        # Folder setup
-        folder_name = self.get_folder_name(metadata)
-        folder_path = os.path.join(self.base_dir, folder_name)
-        print(folder_path)
-        FileManager.make_folder(folder_path)
-
-        # Save scorecard page HTML
-        FileManager.save_html(driver.page_source, os.path.join(folder_path, "scorecard.html"))
-
-        # Save metadata
-        FileManager.save_json(metadata, os.path.join(folder_path, "metadata.json"))
-        '''
-
-
         commentary_url = self.url.replace("/full-scorecard","/ball-by-ball-commentary")
         driver.get(commentary_url)
         time.sleep(5)
@@ -105,10 +90,6 @@ class MatchScraper:
         innings1_df["Innings"] = default_team_name
         innings1_df["MatchID"] = match_id
 
-        '''
-        # Save innings 1 html
-        FileManager.save_html(innings1_html, os.path.join(folder_path, f"{default_team_name}_innings.html"))
-        '''
         # Scroll to top before switch
         page_nav.scroll_to_top()
         time.sleep(3)
@@ -144,9 +125,7 @@ class MatchScraper:
         innings2_df = CommentaryParser.to_dataframe(innings2_data)
         innings2_df["Innings"] = switched_team_name
         innings2_df["MatchID"] = match_id
-        '''
-        FileManager.save_html(innings2_html, os.path.join(folder_path, f"{switched_team_name}_innings.html"))
-        '''
+
         # Combine both innings
         final_df = pd.concat([innings1_df, innings2_df], ignore_index=True)
 
@@ -161,15 +140,6 @@ class MatchScraper:
         # Replace spaces with underscores in all column names
         final_df.columns = final_df.columns.str.replace(' ', '_')
 
-        '''
-        # Add Metadata Columns
-        for key, value in metadata.items():
-            clean_key = key.replace(" ", "_")
-            final_df[clean_key] = value
-        
-        # Save commentary CSV
-        FileManager.save_csv(final_df, os.path.join(folder_path, "commentary.csv"))
-        '''
         # Save commentary to DB
         save_to_db("raw_match_events",final_df)
 
