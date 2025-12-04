@@ -60,7 +60,7 @@ def initialize_database():
     conn.close()
 
 
-def save_to_db(table_name, df):
+def save_to_db(schema_name,table_name, df):
     """
     Generic function to insert pandas DataFrame into a PostgreSQL table.
 
@@ -69,7 +69,7 @@ def save_to_db(table_name, df):
         df (pd.DataFrame): pandas DataFrame
     """
     if df.empty:
-        print(f"No data to insert into {table_name}.")
+        print(f"No data to insert into {schema_name}.{table_name}.")
         return
 
     conn = get_connection()
@@ -79,7 +79,7 @@ def save_to_db(table_name, df):
     values = [tuple(x) for x in df.to_numpy()]
 
     insert_query = f"""
-        INSERT INTO {table_name} ({', '.join(columns)})
+        INSERT INTO {schema_name}.{table_name} ({', '.join(columns)})
         VALUES %s
         ON CONFLICT DO NOTHING;
     """
@@ -89,4 +89,4 @@ def save_to_db(table_name, df):
     conn.commit()
     cur.close()
     conn.close()
-    print(f"✅ Inserted {len(df)} rows into '{table_name}'.")
+    print(f"✅ Inserted {len(df)} rows into '{schema_name}.{table_name}'.")

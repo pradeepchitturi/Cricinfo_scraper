@@ -114,7 +114,7 @@ class MatchScraper:
         )
 
         # Save metadata to DB
-        save_to_db("raw_match_metadata", metadata_df)
+        save_to_db("raw","match_metadata", metadata_df)
 
         time.sleep(5)
         page_nav.scroll_full_page()
@@ -141,7 +141,7 @@ class MatchScraper:
         final_df.columns = final_df.columns.str.replace(' ', '_')
 
         # Save commentary to DB
-        save_to_db("raw_match_events",final_df)
+        save_to_db("raw","match_events",final_df)
 
         driver_manager.stop_driver()
         print(f"✅ Saved commentary and metadata for match: {match_id}")

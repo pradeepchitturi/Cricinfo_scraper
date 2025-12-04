@@ -1,6 +1,9 @@
+-- Create the raw schema
+CREATE SCHEMA IF NOT EXISTS raw;
+
 
 -- Create tables inside cricinfo_db
-CREATE TABLE IF NOT EXISTS raw_match_metadata (
+CREATE TABLE IF NOT EXISTS raw.match_metadata (
     id SERIAL PRIMARY KEY,
 
     venue VARCHAR(255),
@@ -22,7 +25,7 @@ CREATE TABLE IF NOT EXISTS raw_match_metadata (
     second_innings VARCHAR(20)
 );
 
-CREATE TABLE IF NOT EXISTS raw_match_events (
+CREATE TABLE IF NOT EXISTS raw.match_events (
     id SERIAL PRIMARY KEY,
 
     ball VARCHAR(10),
@@ -33,4 +36,33 @@ CREATE TABLE IF NOT EXISTS raw_match_events (
     batsman VARCHAR(100),
     innings VARCHAR(50),
     matchid BIGINT
+);
+
+
+CREATE TABLE IF NOT EXISTS raw.match_download_tracker (
+    -- Primary Key
+    id SERIAL PRIMARY KEY,
+
+    -- Match Identification
+    match_id VARCHAR(50) NOT NULL,
+
+    -- Download Information
+    downloaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    status VARCHAR(20) DEFAULT 'completed' CHECK (status IN ('completed', 'failed', 'in_progress')),
+
+    -- Statistics
+    metadata_rows INT DEFAULT 0,
+    events_rows INT DEFAULT 0,
+
+    -- Source & Error Tracking
+    source_url TEXT,
+    error_message TEXT,
+
+    -- Audit Columns
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    -- Constraints
+    CONSTRAINT unique_match_id UNIQUE (match_id),
+    CONSTRAINT check_positive_rows CHECK (metadata_rows >= 0 AND events_rows >= 0)
 );
