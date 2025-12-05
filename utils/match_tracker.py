@@ -58,9 +58,9 @@ class MatchTracker:
                         f"Please run schema.sql first using initialize_database()"
                     )
 
-            print(f"✅ Tracker table verified: {self.full_table_name}")
+            print(f"Tracker table verified: {self.full_table_name}")
         except Exception as e:
-            print(f"❌ Failed to verify tracker table: {e}")
+            print(f"Failed to verify tracker table: {e}")
             raise
         finally:
             conn.close()
@@ -113,12 +113,12 @@ class MatchTracker:
             if self._cache is not None:
                 self._cache.add(str(match_id))
 
-            print(f"✅ Match {match_id} tracked successfully")
+            print(f"Match {match_id} tracked successfully")
             return True
 
         except Exception as e:
             conn.rollback()
-            print(f"❌ Error adding match {match_id} to tracker: {e}")
+            print(f"Error adding match {match_id} to tracker: {e}")
             return False
         finally:
             conn.close()

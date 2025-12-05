@@ -1,0 +1,190 @@
+# ============================================================================
+# Cricket Data Pipeline - Medallion Architecture Configuration
+# ============================================================================
+# Note: Database credentials are read from .env file
+# ============================================================================
+
+# Schema Configuration
+schemas:
+  raw: raw          # Source data from scraper
+  bronze: bronze    # Raw copy with audit columns
+  silver: silver    # Cleaned and validated data
+  gold: gold        # Business aggregations
+
+# ============================================================================
+# Bronze Layer Configuration
+# ============================================================================
+bronze:
+  source_schema: raw
+  target_schema: bronze
+
+  source_tables:
+    - name: match_metadata
+      primary_key: id
+      business_key: matchid
+      check_duplicates: true
+      required_columns: [matchid, venue, series, season]
+
+    - name: match_events
+      primary_key: id
+      business_key: [matchid, ball, innings]
+      check_duplicates: true
+      required_columns: [matchid, ball, innings, batsman, bowler]
+
+  settings:
+    batch_size: 1000
+    add_audit_columns: true
+    remove_nulls: true
+    report_data_quality: true
+    validate_innings: true
+
+# ============================================================================
+# Silver Layer Configuration
+# ============================================================================
+silver:
+  source_schema: bronze
+  target_schema: silver
+
+  transformations:
+    match_metadata:
+      - type: deduplicate
+        columns: [matchid]
+        keep: last
+
+      - type: clean
+        columns:
+          venue: [trim, title_case]
+          series: [trim]
+          toss: [trim]
+          player_of_the_match: [trim]
+
+      - type: validate
+        rules:
+          season: not_null
+          matchid: not_null
+          venue: not_null
+
+    match_events:
+      - type: deduplicate
+        columns: [matchid, ball, innings]
+        keep: last
+
+      - type: clean
+        columns:
+          bowler: [trim]
+          batsman: [trim]
+          commentary: [trim]
+          innings: [trim]
+
+      - type: convert_score
+        column: score
+        mappings:
+          "no runs": 0
+          "no run": 0
+          "1 run": 1
+          "2 runs": 2
+          "3 runs": 3
+          "FOUR": 4
+          "FOUR runs": 4
+          "SIX": 6
+          "SIX runs": 6
+          "1 wide": 1
+          "2 wides": 2
+          "3 wides": 3
+          "4 wides": 4
+          "5 wides": 5
+          "1 no ball": 1
+          "2 no balls": 2
+          "3 no balls": 3
+          "4 no balls": 4
+          "1 leg bye": 1
+          "2 leg byes": 2
+          "3 leg byes": 3
+          "4 leg byes": 4
+          "1 bye": 1
+          "2 byes": 2
+          "3 byes": 3
+          "4 byes": 4
+
+      - type: validate
+        rules:
+          matchid: not_null
+          ball: not_null
+          innings: not_null
+
+# ============================================================================
+# Gold Layer Configuration
+# ============================================================================
+gold:
+  source_schema: silver
+  target_schema: gold
+
+  aggregations:
+    match_summary:
+      source: match_metadata
+      group_by: [matchid, series, season, venue]
+      metrics:
+        - name: match_count
+          type: count
+
+    series_summary:
+      source: match_metadata
+      group_by: [series, season]
+      metrics:
+        - name: total_matches
+          type: count
+        - name: unique_venues
+          type: count_distinct
+          column: venue
+
+    venue_statistics:
+      source: match_metadata
+      group_by: [venue, season]
+      metrics:
+        - name: matches_played
+          type: count
+        - name: series_count
+          type: count_distinct
+          column: series
+
+    match_ball_statistics:
+      source: match_events
+      group_by: [matchid, innings]
+      metrics:
+        - name: total_balls
+          type: count
+        - name: total_runs
+          type: sum
+          column: runs_scored
+        - name: unique_batsmen
+          type: count_distinct
+          column: batsman
+        - name: unique_bowlers
+          type: count_distinct
+          column: bowler
+
+    batsman_statistics:
+      source: match_events
+      group_by: [batsman, matchid]
+      metrics:
+        - name: balls_faced
+          type: count
+        - name: runs_scored
+          type: sum
+          column: runs_scored
+        - name: matches_played
+          type: count_distinct
+          column: matchid
+
+    bowler_statistics:
+      source: match_events
+      group_by: [bowler, matchid]
+      metrics:
+        - name: balls_bowled
+          type: count
+        - name: runs_conceded
+          type: sum
+          column: runs_scored
+        - name: matches_played
+          type: count_distinct
+          column: matchid

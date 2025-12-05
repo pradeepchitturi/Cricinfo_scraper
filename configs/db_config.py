@@ -3,9 +3,12 @@ import os
 import psycopg2
 from psycopg2.extras import execute_values
 from dotenv import load_dotenv
+from utils.logger import setup_logger
 
 # Load .env variables
 load_dotenv()
+
+logger = setup_logger(__name__)
 
 def get_connection(db_override=None):
     """
@@ -51,7 +54,7 @@ def initialize_database():
     conn = get_connection()
     cur = conn.cursor()
 
-    with open("db/schema.sql", "r") as f:
+    with open("db/schema.sql", "r",encoding='utf-8') as f:
         schema_sql = f.read()
         cur.execute(schema_sql)
 
@@ -59,6 +62,28 @@ def initialize_database():
     cur.close()
     conn.close()
 
+
+def initialize_medallion_schema():
+    """Initialize Bronze, Silver, and Gold schemas"""
+    logger.info("Initializing Medallion Architecture schemas...")
+
+    conn = get_connection()
+    try:
+        with open('db/medallion_schema.sql', 'r', encoding='utf-8') as f:
+            sql = f.read()
+
+        with conn.cursor() as cursor:
+            cursor.execute(sql)
+
+        conn.commit()
+        logger.info("Medallion schemas (Bronze, Silver, Gold) initialized")
+
+    except Exception as e:
+        conn.rollback()
+        logger.error(f"Error initializing medallion schema: {e}")
+        raise
+    finally:
+        conn.close()
 
 def save_to_db(schema_name,table_name, df):
     """
@@ -89,4 +114,4 @@ def save_to_db(schema_name,table_name, df):
     conn.commit()
     cur.close()
     conn.close()
-    print(f"✅ Inserted {len(df)} rows into '{schema_name}.{table_name}'.")
+    print(f"Inserted {len(df)} rows into '{schema_name}.{table_name}'.")

@@ -1,53 +1,143 @@
+"""
+Page Navigator - Handles page navigation and interactions
+"""
 import time
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException, NoSuchElementException
+from selenium.common.exceptions import TimeoutException, NoSuchElementException, ElementClickInterceptedException
+from utils.logger import setup_logger
+
+logger = setup_logger(__name__)
+
 
 class PageNavigator:
     def __init__(self, driver):
+        """
+        Initialize Page Navigator
+
+        Args:
+            driver: Selenium WebDriver instance
+        """
         self.driver = driver
 
     def scroll_full_page(self, scroll_times=25):
-        for _ in range(scroll_times):
-            self.driver.execute_script("window.scrollBy(0, window.innerHeight);")
-            time.sleep(2)
+        """
+        Scroll down the entire page to load dynamic content
+
+        Args:
+            scroll_times: Number of times to scroll (default: 25)
+        """
+        try:
+            logger.info(f"Scrolling page {scroll_times} times")
+            for i in range(scroll_times):
+                self.driver.execute_script("window.scrollBy(0, window.innerHeight);")
+                time.sleep(2)
+            logger.info("Page scrolling completed")
+        except Exception as e:
+            logger.error(f"Error during page scroll: {e}")
 
     def scroll_to_top(self):
-        self.driver.execute_script("window.scrollTo(0, 0);")
+        """Scroll to the top of the page"""
+        try:
+            logger.info("Scrolling to top of page")
+            self.driver.execute_script("window.scrollTo(0, 0);")
+            time.sleep(1)
+        except Exception as e:
+            logger.error(f"Error scrolling to top: {e}")
 
     def dismiss_popup(self):
+        """Dismiss any popups or overlays that might be blocking content"""
         try:
+            logger.debug("Attempting to dismiss popups")
             close_button = WebDriverWait(self.driver, 3).until(
                 EC.element_to_be_clickable((By.CSS_SELECTOR, ".ds-modal__close, .wzrk-close"))
             )
             close_button.click()
+            logger.info("Popup dismissed via close button")
+            time.sleep(1)
         except (TimeoutException, NoSuchElementException):
             try:
                 overlay = self.driver.find_element(By.CSS_SELECTOR, ".wzrk-overlay")
                 self.driver.execute_script("arguments[0].remove();", overlay)
+                logger.info("Popup dismissed by removing overlay")
             except NoSuchElementException:
+                logger.debug("No popup found to dismiss")
                 pass
+        except Exception as e:
+            logger.warning(f"Error dismissing popup: {e}")
 
     def click_dropdown_and_switch_innings(self, default_team):
-        print("innings switch started")
-        self.dismiss_popup()
-        dropdown = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((By.CSS_SELECTOR, "div.ds-cursor-pointer.ds-min-w-max"))
-        )
-        dropdown.click()
-        time.sleep(2)
+        """
+        Click innings dropdown and switch to the other innings
 
-        innings_items = WebDriverWait(self.driver, 10).until(
-            EC.presence_of_all_elements_located((By.CSS_SELECTOR, "li.ds-w-full.ds-flex"))
-        )
+        Args:
+            default_team: Current team batting (to avoid selecting it again)
 
-        for item in innings_items:
-            label = item.text.strip()
-            if label != default_team:
-                try:
-                    item.click()
-                except:
-                    self.driver.execute_script("arguments[0].click();", item)
-                return label
-        raise Exception("Other innings not found")
+        Returns:
+            Name of the switched team
+
+        Raises:
+            Exception: If switching innings fails
+        """
+        logger.info(f"Switching innings from: {default_team}")
+
+        try:
+            # Dismiss any popups first
+            self.dismiss_popup()
+
+            # Wait for and click the dropdown
+            logger.debug("Waiting for dropdown element")
+            dropdown = WebDriverWait(self.driver, 15).until(
+                EC.element_to_be_clickable((By.CSS_SELECTOR, "div.ds-cursor-pointer.ds-min-w-max"))
+            )
+
+            # Scroll dropdown into view
+            self.driver.execute_script("arguments[0].scrollIntoView(true);", dropdown)
+            time.sleep(1)
+
+            # Click the dropdown
+            try:
+                logger.debug("Clicking dropdown")
+                dropdown.click()
+            except ElementClickInterceptedException:
+                logger.debug("Regular click failed, trying JavaScript click")
+                self.driver.execute_script("arguments[0].click();", dropdown)
+
+            time.sleep(2)
+
+            # Wait for innings items to appear
+            logger.debug("Waiting for innings items")
+            innings_items = WebDriverWait(self.driver, 15).until(
+                EC.presence_of_all_elements_located((By.CSS_SELECTOR, "li.ds-w-full.ds-flex"))
+            )
+
+            logger.debug(f"Found {len(innings_items)} innings options")
+
+            # Find and click the other innings
+            for item in innings_items:
+                label = item.text.strip()
+                logger.debug(f"Checking innings option: {label}")
+
+                if label and label != default_team:
+                    logger.info(f"Switching to innings: {label}")
+
+                    try:
+                        # Scroll item into view
+                        self.driver.execute_script("arguments[0].scrollIntoView(true);", item)
+                        time.sleep(0.5)
+                        item.click()
+                    except ElementClickInterceptedException:
+                        logger.debug("Regular click intercepted, using JavaScript")
+                        self.driver.execute_script("arguments[0].click();", item)
+
+                    time.sleep(2)
+                    logger.info(f"Successfully switched to {label}")
+                    return label
+
+            # If we get here, other innings wasn't found
+            raise Exception(f"Other innings not found (only found: {default_team})")
+
+        except Exception as e:
+            logger.error(f"Error switching innings: {e}")
+            raise
