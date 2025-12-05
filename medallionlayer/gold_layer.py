@@ -18,12 +18,7 @@ class GoldLayer:
     """Gold Layer: Creates business-ready aggregations"""
 
     def __init__(self, config: Dict[str, Any]):
-        """
-        Initialize Gold Layer
-
-        Args:
-            config: Configuration dictionary
-        """
+        """Initialize Gold Layer"""
         self.config = config
         self.gold_config = config.get('gold', {})
         self.source_schema = self.gold_config.get('source_schema', 'silver')
@@ -33,12 +28,7 @@ class GoldLayer:
         logger.info("Gold Layer initialized")
 
     def run(self) -> Dict[str, Any]:
-        """
-        Execute Gold Layer processing
-
-        Returns:
-            Dictionary with processing results
-        """
+        """Execute Gold Layer processing"""
         logger.info("=" * 70)
         logger.info("GOLD LAYER - Starting")
         logger.info("=" * 70)
@@ -63,6 +53,7 @@ class GoldLayer:
             except Exception as e:
                 error_msg = f"Error processing {agg_name}: {str(e)}"
                 logger.error(error_msg)
+                logger.error(f"Full error details:", exc_info=True)
                 results['errors'].append(error_msg)
                 results['status'] = 'partial_success' if results['aggregations_processed'] > 0 else 'failed'
 
@@ -75,20 +66,12 @@ class GoldLayer:
         return results
 
     def _process_aggregation(self, agg_name: str, agg_config: Dict) -> int:
-        """
-        Process a single aggregation
-
-        Args:
-            agg_name: Name of the aggregation
-            agg_config: Aggregation configuration
-
-        Returns:
-            Number of rows created
-        """
+        """Process a single aggregation"""
         source_table = agg_config.get('source')
         group_by = agg_config.get('group_by', [])
         metrics = agg_config.get('metrics', [])
         select_columns = agg_config.get('select_columns', [])
+        filters = agg_config.get('filters', {})
 
         # Read from silver
         source_full = f"{self.source_schema}.{source_table}"
@@ -99,6 +82,10 @@ class GoldLayer:
             return 0
 
         logger.info(f"Read {len(df)} rows from {source_full}")
+
+        # Apply filters before aggregation
+        if filters:
+            df = self._apply_filters(df, filters, agg_name)
 
         # Build aggregation
         agg_df = self._build_aggregation(df, group_by, metrics)
@@ -121,18 +108,77 @@ class GoldLayer:
 
         return len(agg_df)
 
+    def _apply_filters(self, df: pd.DataFrame, filters: Dict, agg_name: str) -> pd.DataFrame:
+        """Apply filters to DataFrame before aggregation"""
+        initial_count = len(df)
+
+        # Filter out extras
+        if 'exclude_extras' in filters and filters['exclude_extras']:
+            df = self._exclude_extras(df)
+            # Changed arrow to -> for Windows compatibility
+            logger.info(f"  Filtered extras: {initial_count} -> {len(df)} rows ({initial_count - len(df)} extras removed)")
+
+        # Add more filter types as needed
+        if 'exclude_nulls' in filters:
+            columns = filters['exclude_nulls']
+            df = df.dropna(subset=columns)
+            logger.info(f"  Removed null values in {columns}")
+
+        return df
+
+    def _exclude_extras(self, df: pd.DataFrame) -> pd.DataFrame:
+        """Exclude extras (wides, no-balls, leg-byes, byes) from DataFrame"""
+        if 'score' not in df.columns and 'event' not in df.columns:
+            logger.warning("  Cannot filter extras - 'score' and 'event' columns not found")
+            return df
+
+        # Define extra keywords (case-insensitive)
+        extras_keywords = [
+            'wide',
+            'no ball',
+            'noball',
+            'leg bye',
+            'legbye',
+            'leg-bye',
+            'bye',
+            'byes',
+            'penalty'
+        ]
+
+        # Create filter mask
+        mask = pd.Series([True] * len(df), index=df.index)
+
+        # Check 'score' column if it exists
+        if 'score' in df.columns:
+            score_mask = ~df['score'].fillna('').str.lower().str.contains(
+                '|'.join(extras_keywords),
+                case=False,
+                na=False,
+                regex=True
+            )
+            mask = mask & score_mask
+
+        # Check 'event' column if it exists
+        if 'event' in df.columns:
+            event_mask = ~df['event'].fillna('').str.lower().str.contains(
+                '|'.join(extras_keywords),
+                case=False,
+                na=False,
+                regex=True
+            )
+            mask = mask & event_mask
+
+        # Apply filter
+        filtered_df = df[mask].copy()
+
+        extras_count = len(df) - len(filtered_df)
+        if extras_count > 0:
+            logger.info(f"  Excluded {extras_count} extras from aggregation")
+
+        return filtered_df
+
     def _select_gold_columns(self, df: pd.DataFrame, select_columns: list) -> pd.DataFrame:
-        """
-        Select only specified columns for Gold layer
-
-        Args:
-            df: DataFrame with all columns
-            select_columns: List of columns to keep
-
-        Returns:
-            DataFrame with only selected columns
-        """
-        # Keep only columns that exist in both the DataFrame and select list
+        """Select only specified columns for Gold layer"""
         columns_to_keep = [col for col in select_columns if col in df.columns]
 
         if columns_to_keep:
@@ -142,16 +188,7 @@ class GoldLayer:
         return df
 
     def _clean_for_gold(self, df: pd.DataFrame) -> pd.DataFrame:
-        """
-        Remove Silver-specific columns before writing to Gold
-
-        Args:
-            df: DataFrame with aggregated data
-
-        Returns:
-            Cleaned DataFrame
-        """
-        # Columns to remove (Silver-specific audit columns)
+        """Remove Silver-specific columns before writing to Gold"""
         columns_to_remove = [
             'id',
             'source_id',
@@ -160,7 +197,6 @@ class GoldLayer:
             'validation_errors'
         ]
 
-        # Remove columns that exist in the DataFrame
         columns_to_drop = [col for col in columns_to_remove if col in df.columns]
 
         if columns_to_drop:
@@ -183,14 +219,20 @@ class GoldLayer:
     def _build_aggregation(self, df: pd.DataFrame, group_by: list, metrics: list) -> pd.DataFrame:
         """Build aggregation based on configuration"""
 
-        # Special case: No metrics means just select distinct rows (no aggregation)
+        # Check if DataFrame is empty after filtering
+        if df.empty:
+            logger.warning("DataFrame is empty after filtering - returning empty result")
+            if group_by and metrics:
+                columns = group_by + [m.get('name') for m in metrics]
+                return pd.DataFrame(columns=columns)
+            return pd.DataFrame()
+
+        # Special case: No metrics means just select distinct rows
         if not metrics or len(metrics) == 0:
             if group_by:
-                # Just get unique combinations of group_by columns
                 result = df[group_by].drop_duplicates().reset_index(drop=True)
                 logger.info(f"  Selected {len(result)} distinct rows (no aggregation)")
             else:
-                # No grouping, just return the dataframe
                 result = df.copy()
                 logger.info(f"  Returned {len(result)} rows (no aggregation)")
             return result
@@ -202,6 +244,12 @@ class GoldLayer:
             metric_name = metric.get('name')
             metric_type = metric.get('type')
             column = metric.get('column')
+
+            # Validate that the column exists
+            if column and column not in df.columns:
+                logger.error(f"Column '{column}' not found in DataFrame")
+                logger.error(f"Available columns: {list(df.columns)}")
+                raise KeyError(f"Column '{column}' not found for metric '{metric_name}'")
 
             if metric_type == 'count':
                 if column:
@@ -220,13 +268,29 @@ class GoldLayer:
                 agg_dict[metric_name] = (column, 'max')
 
         # Group and aggregate
-        if group_by:
-            result = df.groupby(group_by).agg(**agg_dict).reset_index()
-        else:
-            result = df.agg(**agg_dict).to_frame().T
+        try:
+            if group_by:
+                # Validate group_by columns exist
+                missing_cols = [col for col in group_by if col not in df.columns]
+                if missing_cols:
+                    logger.error(f"Group by columns not found: {missing_cols}")
+                    logger.error(f"Available columns: {list(df.columns)}")
+                    raise KeyError(f"Group by columns not found: {missing_cols}")
 
-        logger.info(f"  Aggregated to {len(result)} rows")
-        return result
+                result = df.groupby(group_by, dropna=False).agg(**agg_dict).reset_index()
+            else:
+                result = df.agg(**agg_dict).to_frame().T
+
+            logger.info(f"  Aggregated to {len(result)} rows")
+            return result
+
+        except Exception as e:
+            logger.error(f"Error during aggregation: {e}")
+            logger.error(f"DataFrame shape: {df.shape}")
+            logger.error(f"DataFrame columns: {list(df.columns)}")
+            logger.error(f"Group by: {group_by}")
+            logger.error(f"Agg dict: {agg_dict}")
+            raise
 
     def _write_to_gold(self, df: pd.DataFrame, table_name: str):
         """Write DataFrame to gold table"""
@@ -234,11 +298,6 @@ class GoldLayer:
         table = table_name
 
         try:
-            # Log columns being written
-            logger.debug(f"  DataFrame columns: {list(df.columns)}")
-            logger.debug(f"  Writing {len(df)} rows to {schema}.{table}")
-
-            # Use save_to_db directly
             save_to_db(schema, table, df)
             logger.info(f"Successfully wrote {len(df)} rows to {schema}.{table}")
 

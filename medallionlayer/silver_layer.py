@@ -102,9 +102,7 @@ class SilverLayer:
         for transform in transforms:
             transform_type = transform.get('type')
 
-            if transform_type == 'deduplicate':
-                df = self._deduplicate(df, transform)
-            elif transform_type == 'clean':
+            if transform_type == 'clean':
                 df = self._clean(df, transform)
             elif transform_type == 'validate':
                 df = self._validate(df, transform)
@@ -125,7 +123,7 @@ class SilverLayer:
         df['source_id'] = df.get('id', None)  # Keep reference to Bronze ID
         df['created_at'] = datetime.now()
         df['updated_at'] = datetime.now()
-
+        print(len(df))
         # Write to silver
         save_to_db(self.target_schema, table_name, df)
         #target_table = f"{self.target_schema}.{table_name}"
@@ -238,18 +236,6 @@ class SilverLayer:
             return df
         finally:
             conn.close()
-
-    def _deduplicate(self, df: pd.DataFrame, config: Dict) -> pd.DataFrame:
-        """Remove duplicate rows"""
-        columns = config.get('columns', [])
-        keep = config.get('keep', 'last')
-
-        initial_count = len(df)
-        df = df.drop_duplicates(subset=columns, keep=keep)
-        removed = initial_count - len(df)
-
-        logger.info(f"  Deduplication: Removed {removed} duplicates on {columns}")
-        return df
 
     def _clean(self, df: pd.DataFrame, config: Dict) -> pd.DataFrame:
         """Clean column values"""

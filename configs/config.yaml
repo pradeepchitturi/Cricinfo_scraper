@@ -27,7 +27,7 @@ bronze:
 
     - name: match_events
       primary_key: id
-      business_key: [matchid, ball, innings]
+      business_key: [matchid, ball, innings,commentary]
       check_duplicates: true
       required_columns: [matchid, ball, innings, batsman, bowler]
 
@@ -47,10 +47,6 @@ silver:
 
   transformations:
     match_metadata:
-      - type: deduplicate
-        columns: [matchid]
-        keep: last
-
       - type: clean
         columns:
           venue: [trim, title_case]
@@ -65,10 +61,6 @@ silver:
           venue: not_null
 
     match_events:
-      - type: deduplicate
-        columns: [matchid, ball, innings]
-        keep: last
-
       - type: clean
         columns:
           bowler: [trim]
@@ -143,10 +135,11 @@ gold:
       source: match_metadata
       group_by:
         - series
-        - season  # Group by BOTH series and season
+        - season
       select_columns:
         - series
         - season
+        - total_matches
       metrics:
         - name: total_matches
           type: count
@@ -156,10 +149,11 @@ gold:
       source: match_metadata
       group_by:
         - venue
-        - season  # Add season for year-over-year comparison
+        - season
       select_columns:
         - venue
         - season
+        - total_matches
       metrics:
         - name: total_matches
           type: count
@@ -168,9 +162,6 @@ gold:
     match_ball_statistics:
       source: match_events
       group_by:
-        - matchid
-        - innings
-      select_columns:
         - matchid
         - innings
       metrics:
@@ -193,6 +184,8 @@ gold:
         - innings
         - total_runs
         - balls_faced
+      filters:  # ← NEW: Add filter configuration
+        exclude_extras: true  # Exclude wides, no-balls, leg-byes, byes
       metrics:
         - name: total_runs
           type: sum
@@ -207,10 +200,7 @@ gold:
         - matchid
         - bowler
         - innings
-      select_columns:
-        - matchid
-        - bowler
-        - innings
+      # For bowlers, we KEEP extras (they count against the bowler)
       metrics:
         - name: balls_bowled
           type: count

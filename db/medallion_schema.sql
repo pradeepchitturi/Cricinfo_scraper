@@ -119,7 +119,7 @@ CREATE TABLE silver.match_events (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
     -- Constraints
-    CONSTRAINT unique_match_ball UNIQUE (matchid, ball, innings)
+    CONSTRAINT unique_match_ball UNIQUE (matchid, ball, innings,commentary)
 );
 
 -- Indexes for Silver
