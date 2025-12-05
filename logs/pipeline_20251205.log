@@ -1,601 +1,599 @@
-2025-12-05 13:01:09 - configs.db_config - INFO - Initializing Medallion Architecture schemas...
-2025-12-05 13:01:09 - configs.db_config - INFO - Medallion schemas (Bronze, Silver, Gold) initialized
-2025-12-05 13:08:39 - pipeline.orchestrator - INFO - Pipeline Orchestrator initialized
-2025-12-05 13:08:39 - pipeline.orchestrator - INFO - 
+2025-12-05 14:22:39 - __main__ - INFO - Cricket Data Pipeline Started
+2025-12-05 14:22:39 - __main__ - INFO - STEP 1: Initializing database and schemas
+2025-12-05 14:22:40 - configs.db_config - INFO - Initializing Medallion Architecture schemas...
+2025-12-05 14:22:40 - configs.db_config - INFO - Medallion schemas (Bronze, Silver, Gold) initialized
+2025-12-05 14:22:40 - __main__ - INFO - Database initialization complete
+2025-12-05 14:22:40 - __main__ - INFO - STEP 2: Loading configuration
+2025-12-05 14:22:40 - __main__ - INFO - Configuration loaded successfully
+2025-12-05 14:22:40 - __main__ - INFO - STEP 3: Scraping data from Cricinfo
+2025-12-05 14:22:40 - __main__ - INFO - Initializing match tracker
+2025-12-05 14:22:40 - __main__ - INFO - Current Status: 0 matches already downloaded
+2025-12-05 14:22:40 - __main__ - INFO - Fetching match schedule from Cricinfo
+2025-12-05 14:22:40 - scraping.schedule_scraper - INFO - Initializing WebDriver for schedule scraping
+2025-12-05 14:22:43 - scraping.schedule_scraper - INFO - Loading schedule page - attempt 1
+2025-12-05 14:22:53 - scraping.schedule_scraper - INFO - Schedule page loaded successfully
+2025-12-05 14:22:53 - scraping.schedule_scraper - INFO - Parsing schedule page with BeautifulSoup
+2025-12-05 14:22:57 - scraping.schedule_scraper - INFO - Extracting match links from schedule
+2025-12-05 14:22:57 - scraping.schedule_scraper - INFO - Successfully extracted 109 match links
+2025-12-05 14:22:57 - scraping.schedule_scraper - INFO - Closing WebDriver
+2025-12-05 14:23:00 - __main__ - INFO - Found 109 total links
+2025-12-05 14:23:00 - __main__ - INFO - Found 1 match scorecards
+2025-12-05 14:23:00 - __main__ - INFO - Starting match scraping process
+2025-12-05 14:23:00 - __main__ - INFO - Processing match 1/1: https://www.espncricinfo.com/series/ipl-2025-1449924/kolkata-knight-riders-vs-royal-challengers-bengaluru-1st-match-1473438/full-scorecard
+2025-12-05 14:23:00 - __main__ - INFO - Downloading match 1473438
+2025-12-05 14:23:00 - scraping.match_scraper - INFO - Initializing WebDriver
+2025-12-05 14:23:05 - scraping.match_scraper - INFO - Loading full scorecard - attempt 1
+2025-12-05 14:23:15 - scraping.match_scraper - INFO - full scorecard loaded successfully
+2025-12-05 14:23:15 - scraping.match_scraper - INFO - Scrolling full scorecard page
+2025-12-05 14:23:15 - core.page_navigator - INFO - Scrolling page 5 times
+2025-12-05 14:23:40 - core.page_navigator - INFO - Page scrolling completed
+2025-12-05 14:23:43 - scraping.match_scraper - INFO - Extracting metadata
+2025-12-05 14:23:44 - core.metadata_extractor - INFO - Found 14 metadata rows for match 1473438
+2025-12-05 14:23:44 - core.metadata_extractor - INFO - Extracted 15 metadata fields for match 1473438
+2025-12-05 14:23:44 - scraping.match_scraper - INFO - Loading commentary page - attempt 1
+2025-12-05 14:23:54 - scraping.match_scraper - INFO - commentary page loaded successfully
+2025-12-05 14:23:54 - scraping.match_scraper - INFO - Scrolling commentary page
+2025-12-05 14:23:54 - core.page_navigator - INFO - Scrolling page 25 times
+2025-12-05 14:24:47 - core.page_navigator - INFO - Page scrolling completed
+2025-12-05 14:24:50 - scraping.match_scraper - INFO - Extracting first innings data
+2025-12-05 14:24:50 - scraping.match_scraper - INFO - Default batting team: RCB
+2025-12-05 14:24:51 - core.commentary_parser - INFO - Found 99 commentary blocks
+2025-12-05 14:24:51 - core.commentary_parser - INFO - Parsed 99 commentary entries
+2025-12-05 14:24:51 - core.commentary_parser - INFO - Created DataFrame with 99 rows
+2025-12-05 14:24:51 - scraping.match_scraper - INFO - First innings: 99 events
+2025-12-05 14:24:51 - core.page_navigator - INFO - Scrolling to top of page
+2025-12-05 14:24:57 - scraping.match_scraper - INFO - Switching to second innings
+2025-12-05 14:24:57 - core.page_navigator - INFO - Switching innings from: RCB
+2025-12-05 14:25:31 - core.page_navigator - INFO - Switching to innings: KKR
+2025-12-05 14:25:34 - core.page_navigator - INFO - Successfully switched to KKR
+2025-12-05 14:25:34 - scraping.match_scraper - INFO - Switched batting team: KKR
+2025-12-05 14:25:34 - scraping.match_scraper - INFO - Saving metadata to database
+2025-12-05 14:25:39 - core.page_navigator - INFO - Scrolling page 25 times
+2025-12-05 14:26:30 - core.page_navigator - INFO - Page scrolling completed
+2025-12-05 14:26:33 - core.commentary_parser - INFO - Found 124 commentary blocks
+2025-12-05 14:26:33 - core.commentary_parser - INFO - Parsed 124 commentary entries
+2025-12-05 14:26:33 - core.commentary_parser - INFO - Created DataFrame with 124 rows
+2025-12-05 14:26:33 - scraping.match_scraper - INFO - Second innings: 124 events
+2025-12-05 14:26:33 - scraping.match_scraper - INFO - Saving commentary to database
+2025-12-05 14:26:33 - scraping.match_scraper - INFO - Commentary saved: 223 total events
+2025-12-05 14:26:33 - scraping.match_scraper - INFO - Successfully completed scraping match 1473438
+2025-12-05 14:26:33 - scraping.match_scraper - INFO - Closing WebDriver
+2025-12-05 14:26:36 - __main__ - INFO - Successfully downloaded match 1473438
+2025-12-05 14:26:36 - __main__ - INFO - Scraping complete - Found: 1, Downloaded: 1, Skipped: 0, Failed: 0
+2025-12-05 14:26:36 - __main__ - INFO - STEP 4: Processing through Medallion Architecture
+2025-12-05 14:26:36 - __main__ - INFO - Starting Medallion Architecture pipeline
+2025-12-05 14:26:36 - pipeline.orchestrator - INFO - Pipeline Orchestrator initialized
+2025-12-05 14:26:36 - pipeline.orchestrator - INFO - 
 ================================================================================
-2025-12-05 13:08:39 - pipeline.orchestrator - INFO - MEDALLION ARCHITECTURE PIPELINE - STARTING
-2025-12-05 13:08:39 - pipeline.orchestrator - INFO - ================================================================================
-2025-12-05 13:08:39 - pipeline.orchestrator - INFO - Start Time: 2025-12-05 13:08:39.063700
-2025-12-05 13:08:39 - pipeline.orchestrator - INFO - Layers to execute: bronze, silver, gold
-2025-12-05 13:08:39 - pipeline.orchestrator - INFO - ================================================================================
-2025-12-05 13:08:39 - medallionlayer.bronze_layer - INFO - Bronze Layer initialized - Run ID: 5ff25e06-a59a-45a9-9ae0-def72fe46e06
-2025-12-05 13:08:39 - medallionlayer.bronze_layer - INFO - ======================================================================
-2025-12-05 13:08:39 - medallionlayer.bronze_layer - INFO - BRONZE LAYER - Starting
-2025-12-05 13:08:39 - medallionlayer.bronze_layer - INFO - ======================================================================
-2025-12-05 13:08:39 - medallionlayer.bronze_layer - INFO - 
+2025-12-05 14:26:36 - pipeline.orchestrator - INFO - MEDALLION ARCHITECTURE PIPELINE - STARTING
+2025-12-05 14:26:36 - pipeline.orchestrator - INFO - ================================================================================
+2025-12-05 14:26:36 - pipeline.orchestrator - INFO - Start Time: 2025-12-05 14:26:36.425018
+2025-12-05 14:26:36 - pipeline.orchestrator - INFO - Layers to execute: bronze, silver, gold
+2025-12-05 14:26:36 - pipeline.orchestrator - INFO - ================================================================================
+2025-12-05 14:26:36 - medallionlayer.bronze_layer - INFO - Bronze Layer initialized - Run ID: f4298731-f977-4417-b131-20719d8931c8
+2025-12-05 14:26:36 - medallionlayer.bronze_layer - INFO - ======================================================================
+2025-12-05 14:26:36 - medallionlayer.bronze_layer - INFO - BRONZE LAYER - Starting
+2025-12-05 14:26:36 - medallionlayer.bronze_layer - INFO - ======================================================================
+2025-12-05 14:26:36 - medallionlayer.bronze_layer - INFO - 
 Processing table: match_metadata
-2025-12-05 13:08:51 - medallionlayer.bronze_layer - INFO - Read 2 rows from raw.match_metadata
-2025-12-05 13:08:51 - medallionlayer.bronze_layer - INFO -   No duplicates found based on ['matchid']
-2025-12-05 13:08:51 - medallionlayer.bronze_layer - INFO - After quality checks: 2 rows (removed 0)
-2025-12-05 13:08:51 - medallionlayer.bronze_layer - INFO - match_metadata: 2 rows ingested
-2025-12-05 13:08:51 - medallionlayer.bronze_layer - INFO - 
+2025-12-05 14:26:36 - medallionlayer.bronze_layer - INFO - Read 1 rows from raw.match_metadata
+2025-12-05 14:26:36 - medallionlayer.bronze_layer - INFO -   No duplicates found based on ['matchid']
+2025-12-05 14:26:36 - medallionlayer.bronze_layer - INFO - After quality checks: 1 rows (removed 0)
+2025-12-05 14:26:36 - medallionlayer.bronze_layer - INFO - match_metadata: 1 rows ingested
+2025-12-05 14:26:36 - medallionlayer.bronze_layer - INFO - 
 Processing table: match_events
-2025-12-05 13:08:52 - medallionlayer.bronze_layer - INFO - Read 485 rows from raw.match_events
-2025-12-05 13:08:52 - medallionlayer.bronze_layer - WARNING -   Found 27 duplicate rows based on ['matchid', 'ball', 'innings']
-2025-12-05 13:08:52 - medallionlayer.bronze_layer - INFO - After quality checks: 458 rows (removed 27)
-2025-12-05 13:08:52 - medallionlayer.bronze_layer - INFO - match_events: 458 rows ingested
-2025-12-05 13:08:52 - medallionlayer.bronze_layer - INFO - 
+2025-12-05 14:26:36 - medallionlayer.bronze_layer - INFO - Read 223 rows from raw.match_events
+2025-12-05 14:26:36 - medallionlayer.bronze_layer - WARNING -   Found 5 duplicate rows based on ['matchid', 'ball', 'innings']
+2025-12-05 14:26:36 - medallionlayer.bronze_layer - INFO - After quality checks: 218 rows (removed 5)
+2025-12-05 14:26:36 - medallionlayer.bronze_layer - INFO - match_events: 218 rows ingested
+2025-12-05 14:26:36 - medallionlayer.bronze_layer - INFO - 
 Validating innings data...
-2025-12-05 13:08:52 - medallionlayer.bronze_layer - INFO - All matches have complete innings data
-2025-12-05 13:08:52 - medallionlayer.bronze_layer - INFO - 
+2025-12-05 14:26:36 - medallionlayer.bronze_layer - INFO - All matches have complete innings data
+2025-12-05 14:26:36 - medallionlayer.bronze_layer - INFO - 
 ======================================================================
-2025-12-05 13:08:52 - medallionlayer.bronze_layer - INFO - DATA QUALITY REPORT
-2025-12-05 13:08:52 - medallionlayer.bronze_layer - INFO - ======================================================================
-2025-12-05 13:08:52 - medallionlayer.bronze_layer - INFO - 
+2025-12-05 14:26:36 - medallionlayer.bronze_layer - INFO - DATA QUALITY REPORT
+2025-12-05 14:26:36 - medallionlayer.bronze_layer - INFO - ======================================================================
+2025-12-05 14:26:36 - medallionlayer.bronze_layer - INFO - 
 DUPLICATES REMOVED:
-2025-12-05 13:08:52 - medallionlayer.bronze_layer - INFO -   match_metadata: No duplicates found
-2025-12-05 13:08:52 - medallionlayer.bronze_layer - INFO -   match_events: 27 duplicate rows removed
-2025-12-05 13:08:52 - medallionlayer.bronze_layer - INFO - 
+2025-12-05 14:26:36 - medallionlayer.bronze_layer - INFO -   match_metadata: No duplicates found
+2025-12-05 14:26:36 - medallionlayer.bronze_layer - INFO -   match_events: 5 duplicate rows removed
+2025-12-05 14:26:36 - medallionlayer.bronze_layer - INFO - 
 NULL VALUES FOUND:
-2025-12-05 13:08:52 - medallionlayer.bronze_layer - INFO -   match_metadata: No null values in required columns
-2025-12-05 13:08:52 - medallionlayer.bronze_layer - INFO -   match_events: No null values in required columns
-2025-12-05 13:08:52 - medallionlayer.bronze_layer - INFO - 
+2025-12-05 14:26:36 - medallionlayer.bronze_layer - INFO -   match_metadata: No null values in required columns
+2025-12-05 14:26:36 - medallionlayer.bronze_layer - INFO -   match_events: No null values in required columns
+2025-12-05 14:26:36 - medallionlayer.bronze_layer - INFO - 
 INNINGS VALIDATION:
-2025-12-05 13:08:52 - medallionlayer.bronze_layer - INFO - All matches have complete innings data
-2025-12-05 13:08:52 - medallionlayer.bronze_layer - INFO - ======================================================================
+2025-12-05 14:26:36 - medallionlayer.bronze_layer - INFO - All matches have complete innings data
+2025-12-05 14:26:36 - medallionlayer.bronze_layer - INFO - ======================================================================
 
-2025-12-05 13:08:52 - medallionlayer.bronze_layer - INFO - 
+2025-12-05 14:26:36 - medallionlayer.bronze_layer - INFO - 
 ======================================================================
-2025-12-05 13:08:52 - medallionlayer.bronze_layer - INFO - BRONZE LAYER - Complete
-2025-12-05 13:08:52 - medallionlayer.bronze_layer - INFO - Tables Processed: 2/2
-2025-12-05 13:08:52 - medallionlayer.bronze_layer - INFO - Total Rows: 460
-2025-12-05 13:08:52 - medallionlayer.bronze_layer - INFO - ======================================================================
-2025-12-05 13:08:52 - medallionlayer.silver_layer - INFO - Silver Layer initialized
-2025-12-05 13:08:52 - medallionlayer.silver_layer - INFO - ======================================================================
-2025-12-05 13:08:52 - medallionlayer.silver_layer - INFO - SILVER LAYER - Starting
-2025-12-05 13:08:52 - medallionlayer.silver_layer - INFO - ======================================================================
-2025-12-05 13:08:52 - medallionlayer.silver_layer - INFO - 
+2025-12-05 14:26:36 - medallionlayer.bronze_layer - INFO - BRONZE LAYER - Complete
+2025-12-05 14:26:36 - medallionlayer.bronze_layer - INFO - Tables Processed: 2/2
+2025-12-05 14:26:36 - medallionlayer.bronze_layer - INFO - Total Rows: 219
+2025-12-05 14:26:36 - medallionlayer.bronze_layer - INFO - ======================================================================
+2025-12-05 14:26:36 - medallionlayer.silver_layer - INFO - Silver Layer initialized
+2025-12-05 14:26:36 - medallionlayer.silver_layer - INFO - ======================================================================
+2025-12-05 14:26:36 - medallionlayer.silver_layer - INFO - SILVER LAYER - Starting
+2025-12-05 14:26:36 - medallionlayer.silver_layer - INFO - ======================================================================
+2025-12-05 14:26:36 - medallionlayer.silver_layer - INFO - 
 Processing table: match_metadata
-2025-12-05 13:08:52 - medallionlayer.silver_layer - INFO - Read 2 rows from bronze.match_metadata
-2025-12-05 13:08:52 - medallionlayer.silver_layer - INFO -   Deduplication: Removed 0 duplicates on ['matchid']
-2025-12-05 13:08:52 - medallionlayer.silver_layer - INFO -   Cleaned columns: ['venue', 'series', 'toss', 'player_of_the_match']
-2025-12-05 13:08:52 - medallionlayer.silver_layer - INFO - After transformations: 2 rows (removed 0)
-2025-12-05 13:08:52 - medallionlayer.silver_layer - INFO -   Removed Bronze audit columns: ['ingestion_timestamp', 'source_system', 'pipeline_run_id', 'is_active']
-2025-12-05 13:08:52 - medallionlayer.silver_layer - INFO - match_metadata: 2 rows processed
-2025-12-05 13:08:52 - medallionlayer.silver_layer - INFO - 
+2025-12-05 14:26:37 - medallionlayer.silver_layer - INFO - Read 1 rows from bronze.match_metadata
+2025-12-05 14:26:37 - medallionlayer.silver_layer - INFO -   Deduplication: Removed 0 duplicates on ['matchid']
+2025-12-05 14:26:37 - medallionlayer.silver_layer - INFO -   Cleaned columns: ['venue', 'series', 'toss', 'player_of_the_match']
+2025-12-05 14:26:37 - medallionlayer.silver_layer - INFO - After transformations: 1 rows (removed 0)
+2025-12-05 14:26:37 - medallionlayer.silver_layer - INFO -   Removed Bronze audit columns: ['ingestion_timestamp', 'source_system', 'pipeline_run_id', 'is_active']
+2025-12-05 14:26:37 - medallionlayer.silver_layer - INFO - match_metadata: 1 rows processed
+2025-12-05 14:26:37 - medallionlayer.silver_layer - INFO - 
 Processing table: match_events
-2025-12-05 13:08:52 - medallionlayer.silver_layer - INFO - Read 458 rows from bronze.match_events
-2025-12-05 13:08:52 - medallionlayer.silver_layer - INFO -   Deduplication: Removed 0 duplicates on ['matchid', 'ball', 'innings']
-2025-12-05 13:08:52 - medallionlayer.silver_layer - INFO -   Cleaned columns: ['bowler', 'batsman', 'commentary', 'innings']
-2025-12-05 13:08:52 - medallionlayer.silver_layer - INFO -   Converting 'score' column to numeric...
-2025-12-05 13:08:52 - medallionlayer.silver_layer - INFO -   Score conversion: 435 converted, 23 not converted (set to 0)
-2025-12-05 13:08:52 - medallionlayer.silver_layer - INFO - After transformations: 458 rows (removed 0)
-2025-12-05 13:08:52 - medallionlayer.silver_layer - INFO -   Removed Bronze audit columns: ['ingestion_timestamp', 'source_system', 'pipeline_run_id', 'is_active']
-2025-12-05 13:08:52 - medallionlayer.silver_layer - INFO - match_events: 458 rows processed
-2025-12-05 13:08:52 - medallionlayer.silver_layer - INFO - 
+2025-12-05 14:26:37 - medallionlayer.silver_layer - INFO - Read 218 rows from bronze.match_events
+2025-12-05 14:26:37 - medallionlayer.silver_layer - INFO -   Deduplication: Removed 0 duplicates on ['matchid', 'ball', 'innings']
+2025-12-05 14:26:37 - medallionlayer.silver_layer - INFO -   Cleaned columns: ['bowler', 'batsman', 'commentary', 'innings']
+2025-12-05 14:26:37 - medallionlayer.silver_layer - INFO -   Converting 'score' column to numeric...
+2025-12-05 14:26:37 - medallionlayer.silver_layer - INFO -   Score conversion: 208 converted, 10 not converted (set to 0)
+2025-12-05 14:26:37 - medallionlayer.silver_layer - INFO - After transformations: 218 rows (removed 0)
+2025-12-05 14:26:37 - medallionlayer.silver_layer - INFO -   Removed Bronze audit columns: ['ingestion_timestamp', 'source_system', 'pipeline_run_id', 'is_active']
+2025-12-05 14:26:37 - medallionlayer.silver_layer - INFO - match_events: 218 rows processed
+2025-12-05 14:26:37 - medallionlayer.silver_layer - INFO - 
 ======================================================================
-2025-12-05 13:08:52 - medallionlayer.silver_layer - INFO - SILVER LAYER - Complete
-2025-12-05 13:08:52 - medallionlayer.silver_layer - INFO - Tables Processed: 2
-2025-12-05 13:08:52 - medallionlayer.silver_layer - INFO - Total Rows: 460
-2025-12-05 13:08:52 - medallionlayer.silver_layer - INFO - ======================================================================
-2025-12-05 13:08:52 - medallionlayer.gold_layer - INFO - Gold Layer initialized
-2025-12-05 13:08:52 - medallionlayer.gold_layer - INFO - ======================================================================
-2025-12-05 13:08:52 - medallionlayer.gold_layer - INFO - GOLD LAYER - Starting
-2025-12-05 13:08:52 - medallionlayer.gold_layer - INFO - ======================================================================
-2025-12-05 13:08:52 - medallionlayer.gold_layer - INFO - 
+2025-12-05 14:26:37 - medallionlayer.silver_layer - INFO - SILVER LAYER - Complete
+2025-12-05 14:26:37 - medallionlayer.silver_layer - INFO - Tables Processed: 2
+2025-12-05 14:26:37 - medallionlayer.silver_layer - INFO - Total Rows: 219
+2025-12-05 14:26:37 - medallionlayer.silver_layer - INFO - ======================================================================
+2025-12-05 14:26:37 - medallionlayer.gold_layer - INFO - Gold Layer initialized
+2025-12-05 14:26:37 - medallionlayer.gold_layer - INFO - ======================================================================
+2025-12-05 14:26:37 - medallionlayer.gold_layer - INFO - GOLD LAYER - Starting
+2025-12-05 14:26:37 - medallionlayer.gold_layer - INFO - ======================================================================
+2025-12-05 14:26:37 - medallionlayer.gold_layer - INFO - 
 Processing aggregation: match_summary
-2025-12-05 13:08:53 - medallionlayer.gold_layer - INFO - Read 2 rows from silver.match_metadata
-2025-12-05 13:08:53 - medallionlayer.gold_layer - INFO -   Aggregated to 2 rows
-2025-12-05 13:08:53 - medallionlayer.gold_layer - ERROR - Error processing match_summary: column "toss" of relation "match_summary" does not exist
-LINE 2: ...SERT INTO gold.match_summary (id, matchid, venue, toss, seri...
-                                                             ^
-
-2025-12-05 13:08:53 - medallionlayer.gold_layer - INFO - 
+2025-12-05 14:26:37 - medallionlayer.gold_layer - INFO - Read 1 rows from silver.match_metadata
+2025-12-05 14:26:37 - medallionlayer.gold_layer - INFO -   Selected 1 distinct rows (no aggregation)
+2025-12-05 14:26:37 - medallionlayer.gold_layer - INFO -   Selected 1 columns for Gold: ['matchid']
+2025-12-05 14:26:37 - medallionlayer.gold_layer - INFO - Final DataFrame columns: ['matchid', 'created_at', 'updated_at']
+2025-12-05 14:26:37 - medallionlayer.gold_layer - INFO - Successfully wrote 1 rows to gold.match_summary
+2025-12-05 14:26:37 - medallionlayer.gold_layer - INFO - Successfully created 1 rows for match_summary
+2025-12-05 14:26:37 - medallionlayer.gold_layer - INFO - 
 Processing aggregation: series_summary
-2025-12-05 13:08:53 - medallionlayer.gold_layer - INFO - Read 2 rows from silver.match_metadata
-2025-12-05 13:08:53 - medallionlayer.gold_layer - INFO -   Aggregated to 1 rows
-2025-12-05 13:08:53 - medallionlayer.gold_layer - ERROR - Error processing series_summary: column "matchid" of relation "series_summary" does not exist
-LINE 2:         INSERT INTO gold.series_summary (id, matchid, venue,...
-                                                     ^
-
-2025-12-05 13:08:53 - medallionlayer.gold_layer - INFO - 
+2025-12-05 14:26:37 - medallionlayer.gold_layer - INFO - Read 1 rows from silver.match_metadata
+2025-12-05 14:26:37 - medallionlayer.gold_layer - INFO -   Aggregated to 1 rows
+2025-12-05 14:26:37 - medallionlayer.gold_layer - INFO -   Selected 2 columns for Gold: ['series', 'season']
+2025-12-05 14:26:37 - medallionlayer.gold_layer - INFO - Final DataFrame columns: ['series', 'season', 'created_at', 'updated_at']
+2025-12-05 14:26:37 - medallionlayer.gold_layer - INFO - Successfully wrote 1 rows to gold.series_summary
+2025-12-05 14:26:37 - medallionlayer.gold_layer - INFO - Successfully created 1 rows for series_summary
+2025-12-05 14:26:37 - medallionlayer.gold_layer - INFO - 
 Processing aggregation: venue_statistics
-2025-12-05 13:08:53 - medallionlayer.gold_layer - INFO - Read 2 rows from silver.match_metadata
-2025-12-05 13:08:53 - medallionlayer.gold_layer - INFO -   Aggregated to 2 rows
-2025-12-05 13:08:53 - medallionlayer.gold_layer - ERROR - Error processing venue_statistics: column "matchid" of relation "venue_statistics" does not exist
-LINE 2:         INSERT INTO gold.venue_statistics (id, matchid, venu...
-                                                       ^
-
-2025-12-05 13:08:53 - medallionlayer.gold_layer - INFO - 
+2025-12-05 14:26:37 - medallionlayer.gold_layer - INFO - Read 1 rows from silver.match_metadata
+2025-12-05 14:26:37 - medallionlayer.gold_layer - INFO -   Aggregated to 1 rows
+2025-12-05 14:26:37 - medallionlayer.gold_layer - INFO -   Selected 2 columns for Gold: ['venue', 'season']
+2025-12-05 14:26:37 - medallionlayer.gold_layer - INFO - Final DataFrame columns: ['venue', 'season', 'created_at', 'updated_at']
+2025-12-05 14:26:37 - medallionlayer.gold_layer - INFO - Successfully wrote 1 rows to gold.venue_statistics
+2025-12-05 14:26:37 - medallionlayer.gold_layer - INFO - Successfully created 1 rows for venue_statistics
+2025-12-05 14:26:37 - medallionlayer.gold_layer - INFO - 
 Processing aggregation: match_ball_statistics
-2025-12-05 13:08:53 - medallionlayer.gold_layer - INFO - Read 458 rows from silver.match_events
-2025-12-05 13:08:53 - medallionlayer.gold_layer - INFO -   Aggregated to 4 rows
-2025-12-05 13:08:53 - medallionlayer.gold_layer - ERROR - Error processing match_ball_statistics: column "ball" of relation "match_ball_statistics" does not exist
-LINE 2: ...ERT INTO gold.match_ball_statistics (id, matchid, ball, inni...
-                                                             ^
-
-2025-12-05 13:08:53 - medallionlayer.gold_layer - INFO - 
+2025-12-05 14:26:38 - medallionlayer.gold_layer - INFO - Read 218 rows from silver.match_events
+2025-12-05 14:26:38 - medallionlayer.gold_layer - INFO -   Aggregated to 2 rows
+2025-12-05 14:26:38 - medallionlayer.gold_layer - INFO -   Selected 2 columns for Gold: ['matchid', 'innings']
+2025-12-05 14:26:38 - medallionlayer.gold_layer - INFO - Final DataFrame columns: ['matchid', 'innings', 'created_at', 'updated_at']
+2025-12-05 14:26:38 - medallionlayer.gold_layer - INFO - Successfully wrote 2 rows to gold.match_ball_statistics
+2025-12-05 14:26:38 - medallionlayer.gold_layer - INFO - Successfully created 2 rows for match_ball_statistics
+2025-12-05 14:26:38 - medallionlayer.gold_layer - INFO - 
 Processing aggregation: batsman_statistics
-2025-12-05 13:08:53 - medallionlayer.gold_layer - INFO - Read 458 rows from silver.match_events
-2025-12-05 13:08:53 - medallionlayer.gold_layer - INFO -   Aggregated to 31 rows
-2025-12-05 13:08:54 - medallionlayer.gold_layer - ERROR - Error processing batsman_statistics: column "ball" of relation "batsman_statistics" does not exist
-LINE 2: ...INSERT INTO gold.batsman_statistics (id, matchid, ball, inni...
-                                                             ^
-
-2025-12-05 13:08:54 - medallionlayer.gold_layer - INFO - 
+2025-12-05 14:26:38 - medallionlayer.gold_layer - INFO - Read 218 rows from silver.match_events
+2025-12-05 14:26:38 - medallionlayer.gold_layer - INFO -   Aggregated to 15 rows
+2025-12-05 14:26:38 - medallionlayer.gold_layer - INFO -   Selected 3 columns for Gold: ['matchid', 'batsman', 'innings']
+2025-12-05 14:26:38 - medallionlayer.gold_layer - INFO - Final DataFrame columns: ['matchid', 'batsman', 'innings', 'created_at', 'updated_at']
+2025-12-05 14:26:38 - medallionlayer.gold_layer - INFO - Successfully wrote 15 rows to gold.batsman_statistics
+2025-12-05 14:26:38 - medallionlayer.gold_layer - INFO - Successfully created 15 rows for batsman_statistics
+2025-12-05 14:26:38 - medallionlayer.gold_layer - INFO - 
 Processing aggregation: bowler_statistics
-2025-12-05 13:08:54 - medallionlayer.gold_layer - INFO - Read 458 rows from silver.match_events
-2025-12-05 13:08:54 - medallionlayer.gold_layer - INFO -   Aggregated to 23 rows
-2025-12-05 13:08:54 - medallionlayer.gold_layer - ERROR - Error processing bowler_statistics: column "ball" of relation "bowler_statistics" does not exist
-LINE 2: ... INSERT INTO gold.bowler_statistics (id, matchid, ball, inni...
-                                                             ^
-
-2025-12-05 13:08:54 - medallionlayer.gold_layer - INFO - 
+2025-12-05 14:26:38 - medallionlayer.gold_layer - INFO - Read 218 rows from silver.match_events
+2025-12-05 14:26:38 - medallionlayer.gold_layer - INFO -   Aggregated to 11 rows
+2025-12-05 14:26:38 - medallionlayer.gold_layer - INFO -   Selected 3 columns for Gold: ['matchid', 'bowler', 'innings']
+2025-12-05 14:26:38 - medallionlayer.gold_layer - INFO - Final DataFrame columns: ['matchid', 'bowler', 'innings', 'created_at', 'updated_at']
+2025-12-05 14:26:38 - medallionlayer.gold_layer - INFO - Successfully wrote 11 rows to gold.bowler_statistics
+2025-12-05 14:26:38 - medallionlayer.gold_layer - INFO - Successfully created 11 rows for bowler_statistics
+2025-12-05 14:26:38 - medallionlayer.gold_layer - INFO - 
 ======================================================================
-2025-12-05 13:08:54 - medallionlayer.gold_layer - INFO - GOLD LAYER - Complete
-2025-12-05 13:08:54 - medallionlayer.gold_layer - INFO - Aggregations Processed: 0
-2025-12-05 13:08:54 - medallionlayer.gold_layer - INFO - Total Rows: 0
-2025-12-05 13:08:54 - medallionlayer.gold_layer - INFO - ======================================================================
-2025-12-05 13:08:54 - pipeline.orchestrator - INFO - 
+2025-12-05 14:26:38 - medallionlayer.gold_layer - INFO - GOLD LAYER - Complete
+2025-12-05 14:26:38 - medallionlayer.gold_layer - INFO - Aggregations Processed: 6
+2025-12-05 14:26:38 - medallionlayer.gold_layer - INFO - Total Rows: 31
+2025-12-05 14:26:38 - medallionlayer.gold_layer - INFO - ======================================================================
+2025-12-05 14:26:38 - pipeline.orchestrator - INFO - 
 ================================================================================
-2025-12-05 13:08:54 - pipeline.orchestrator - INFO - PIPELINE EXECUTION SUMMARY
-2025-12-05 13:08:54 - pipeline.orchestrator - INFO - ================================================================================
-2025-12-05 13:08:54 - pipeline.orchestrator - INFO - Status: PARTIAL_SUCCESS
-2025-12-05 13:08:54 - pipeline.orchestrator - INFO - Duration: 15.26 seconds
-2025-12-05 13:08:54 - pipeline.orchestrator - INFO - 
+2025-12-05 14:26:38 - pipeline.orchestrator - INFO - PIPELINE EXECUTION SUMMARY
+2025-12-05 14:26:38 - pipeline.orchestrator - INFO - ================================================================================
+2025-12-05 14:26:38 - pipeline.orchestrator - INFO - Status: SUCCESS
+2025-12-05 14:26:38 - pipeline.orchestrator - INFO - Duration: 2.09 seconds
+2025-12-05 14:26:38 - pipeline.orchestrator - INFO - 
 BRONZE Layer:
-2025-12-05 13:08:54 - pipeline.orchestrator - INFO -   Status: success
-2025-12-05 13:08:54 - pipeline.orchestrator - INFO -   Tables Processed: 2
-2025-12-05 13:08:54 - pipeline.orchestrator - INFO -   Total Rows: 460
-2025-12-05 13:08:54 - pipeline.orchestrator - INFO - 
+2025-12-05 14:26:38 - pipeline.orchestrator - INFO -   Status: success
+2025-12-05 14:26:38 - pipeline.orchestrator - INFO -   Tables Processed: 2
+2025-12-05 14:26:38 - pipeline.orchestrator - INFO -   Total Rows: 219
+2025-12-05 14:26:38 - pipeline.orchestrator - INFO - 
 SILVER Layer:
-2025-12-05 13:08:54 - pipeline.orchestrator - INFO -   Status: success
-2025-12-05 13:08:54 - pipeline.orchestrator - INFO -   Tables Processed: 2
-2025-12-05 13:08:54 - pipeline.orchestrator - INFO -   Total Rows: 460
-2025-12-05 13:08:54 - pipeline.orchestrator - INFO - 
+2025-12-05 14:26:38 - pipeline.orchestrator - INFO -   Status: success
+2025-12-05 14:26:38 - pipeline.orchestrator - INFO -   Tables Processed: 2
+2025-12-05 14:26:38 - pipeline.orchestrator - INFO -   Total Rows: 219
+2025-12-05 14:26:38 - pipeline.orchestrator - INFO - 
 GOLD Layer:
-2025-12-05 13:08:54 - pipeline.orchestrator - INFO -   Status: failed
-2025-12-05 13:08:54 - pipeline.orchestrator - INFO -   Aggregations: 0
-2025-12-05 13:08:54 - pipeline.orchestrator - INFO -   Total Rows: 0
-2025-12-05 13:08:54 - pipeline.orchestrator - INFO -   Errors: 6
-2025-12-05 13:08:54 - pipeline.orchestrator - ERROR -     - Error processing match_summary: column "toss" of relation "match_summary" does not exist
-LINE 2: ...SERT INTO gold.match_summary (id, matchid, venue, toss, seri...
-                                                             ^
+2025-12-05 14:26:38 - pipeline.orchestrator - INFO -   Status: success
+2025-12-05 14:26:38 - pipeline.orchestrator - INFO -   Aggregations: 6
+2025-12-05 14:26:38 - pipeline.orchestrator - INFO -   Total Rows: 31
+2025-12-05 14:26:38 - pipeline.orchestrator - INFO - ================================================================================
 
-2025-12-05 13:08:54 - pipeline.orchestrator - ERROR -     - Error processing series_summary: column "matchid" of relation "series_summary" does not exist
-LINE 2:         INSERT INTO gold.series_summary (id, matchid, venue,...
-                                                     ^
-
-2025-12-05 13:08:54 - pipeline.orchestrator - ERROR -     - Error processing venue_statistics: column "matchid" of relation "venue_statistics" does not exist
-LINE 2:         INSERT INTO gold.venue_statistics (id, matchid, venu...
-                                                       ^
-
-2025-12-05 13:08:54 - pipeline.orchestrator - ERROR -     - Error processing match_ball_statistics: column "ball" of relation "match_ball_statistics" does not exist
-LINE 2: ...ERT INTO gold.match_ball_statistics (id, matchid, ball, inni...
-                                                             ^
-
-2025-12-05 13:08:54 - pipeline.orchestrator - ERROR -     - Error processing batsman_statistics: column "ball" of relation "batsman_statistics" does not exist
-LINE 2: ...INSERT INTO gold.batsman_statistics (id, matchid, ball, inni...
-                                                             ^
-
-2025-12-05 13:08:54 - pipeline.orchestrator - ERROR -     - Error processing bowler_statistics: column "ball" of relation "bowler_statistics" does not exist
-LINE 2: ... INSERT INTO gold.bowler_statistics (id, matchid, ball, inni...
-                                                             ^
-
-2025-12-05 13:08:54 - pipeline.orchestrator - INFO - ================================================================================
-
-2025-12-05 13:27:08 - __main__ - INFO - Cricket Data Pipeline Started
-2025-12-05 13:27:08 - __main__ - INFO - STEP 1: Initializing database and schemas
-2025-12-05 13:27:09 - configs.db_config - INFO - Initializing Medallion Architecture schemas...
-2025-12-05 13:27:10 - configs.db_config - INFO - Medallion schemas (Bronze, Silver, Gold) initialized
-2025-12-05 13:27:10 - __main__ - INFO - Database initialization complete
-2025-12-05 13:27:10 - __main__ - INFO - STEP 2: Loading configuration
-2025-12-05 13:27:10 - __main__ - INFO - Configuration loaded successfully
-2025-12-05 13:27:10 - __main__ - INFO - STEP 3: Scraping data from Cricinfo
-2025-12-05 13:27:10 - __main__ - INFO - Initializing match tracker
-2025-12-05 13:27:10 - __main__ - INFO - Current Status: 0 matches already downloaded
-2025-12-05 13:27:10 - __main__ - INFO - Fetching match schedule from Cricinfo
-2025-12-05 13:27:10 - scraping.schedule_scraper - INFO - Initializing WebDriver for schedule scraping
-2025-12-05 13:27:13 - scraping.schedule_scraper - INFO - Loading schedule page - attempt 1
-2025-12-05 13:27:28 - scraping.schedule_scraper - INFO - Schedule page loaded successfully
-2025-12-05 13:27:28 - scraping.schedule_scraper - INFO - Parsing schedule page with BeautifulSoup
-2025-12-05 13:27:36 - scraping.schedule_scraper - INFO - Extracting match links from schedule
-2025-12-05 13:27:36 - scraping.schedule_scraper - INFO - Successfully extracted 109 match links
-2025-12-05 13:27:36 - scraping.schedule_scraper - INFO - Closing WebDriver
-2025-12-05 13:27:39 - __main__ - INFO - Found 109 total links
-2025-12-05 13:27:39 - __main__ - INFO - Found 3 match scorecards
-2025-12-05 13:27:39 - __main__ - INFO - Starting match scraping process
-2025-12-05 13:27:39 - __main__ - INFO - Processing match 1/3: https://www.espncricinfo.com/series/ipl-2025-1449924/kolkata-knight-riders-vs-royal-challengers-bengaluru-1st-match-1473438/full-scorecard
-2025-12-05 13:27:39 - __main__ - INFO - Downloading match 1473438
-2025-12-05 13:27:39 - scraping.match_scraper - INFO - Initializing WebDriver
-2025-12-05 13:27:42 - scraping.match_scraper - INFO - Loading full scorecard - attempt 1
-2025-12-05 13:27:53 - scraping.match_scraper - INFO - full scorecard loaded successfully
-2025-12-05 13:27:53 - scraping.match_scraper - INFO - Scrolling full scorecard page
-2025-12-05 13:27:53 - core.page_navigator - INFO - Scrolling page 5 times
-2025-12-05 13:28:14 - core.page_navigator - INFO - Page scrolling completed
-2025-12-05 13:28:17 - scraping.match_scraper - INFO - Extracting metadata
-2025-12-05 13:28:18 - core.metadata_extractor - INFO - Found 14 metadata rows for match 1473438
-2025-12-05 13:28:18 - core.metadata_extractor - INFO - Extracted 15 metadata fields for match 1473438
-2025-12-05 13:28:18 - scraping.match_scraper - INFO - Loading commentary page - attempt 1
-2025-12-05 13:28:28 - scraping.match_scraper - INFO - commentary page loaded successfully
-2025-12-05 13:28:28 - scraping.match_scraper - INFO - Scrolling commentary page
-2025-12-05 13:28:28 - core.page_navigator - INFO - Scrolling page 25 times
-2025-12-05 13:29:19 - core.page_navigator - INFO - Page scrolling completed
-2025-12-05 13:29:22 - scraping.match_scraper - INFO - Extracting first innings data
-2025-12-05 13:29:22 - scraping.match_scraper - INFO - Default batting team: RCB
-2025-12-05 13:29:22 - core.commentary_parser - INFO - Found 99 commentary blocks
-2025-12-05 13:29:22 - core.commentary_parser - INFO - Parsed 99 commentary entries
-2025-12-05 13:29:22 - core.commentary_parser - INFO - Created DataFrame with 99 rows
-2025-12-05 13:29:22 - scraping.match_scraper - INFO - First innings: 99 events
-2025-12-05 13:29:22 - scraping.match_scraper - ERROR - Error scraping match 1473438: 'PageNavigator' object has no attribute 'scroll_to_top'
-Traceback (most recent call last):
-  File "C:\Users\prade\Pycharm\Cricinfo_scraper\scraping\match_scraper.py", line 195, in scrape
-    page_nav.scroll_to_top()
-    ^^^^^^^^^^^^^^^^^^^^^^
-AttributeError: 'PageNavigator' object has no attribute 'scroll_to_top'
-2025-12-05 13:29:22 - scraping.match_scraper - INFO - Closing WebDriver
-2025-12-05 13:29:25 - __main__ - ERROR - Error scraping match 1473438: 'PageNavigator' object has no attribute 'scroll_to_top'
-2025-12-05 13:29:25 - __main__ - INFO - Processing match 2/3: https://www.espncricinfo.com/series/ipl-2025-1449924/sunrisers-hyderabad-vs-rajasthan-royals-2nd-match-1473439/full-scorecard
-2025-12-05 13:29:25 - __main__ - INFO - Downloading match 1473439
-2025-12-05 13:29:25 - scraping.match_scraper - INFO - Initializing WebDriver
-2025-12-05 13:29:28 - scraping.match_scraper - INFO - Loading full scorecard - attempt 1
-2025-12-05 13:29:38 - scraping.match_scraper - INFO - full scorecard loaded successfully
-2025-12-05 13:29:38 - scraping.match_scraper - INFO - Scrolling full scorecard page
-2025-12-05 13:29:38 - core.page_navigator - INFO - Scrolling page 5 times
-2025-12-05 13:29:49 - core.page_navigator - INFO - Page scrolling completed
-2025-12-05 13:29:52 - scraping.match_scraper - INFO - Extracting metadata
-2025-12-05 13:29:52 - core.metadata_extractor - INFO - Found 14 metadata rows for match 1473439
-2025-12-05 13:29:52 - core.metadata_extractor - INFO - Extracted 15 metadata fields for match 1473439
-2025-12-05 13:29:52 - scraping.match_scraper - INFO - Loading commentary page - attempt 1
-2025-12-05 13:30:01 - scraping.match_scraper - INFO - commentary page loaded successfully
-2025-12-05 13:30:01 - scraping.match_scraper - INFO - Scrolling commentary page
-2025-12-05 13:30:01 - core.page_navigator - INFO - Scrolling page 25 times
-2025-12-05 13:30:52 - core.page_navigator - INFO - Page scrolling completed
-2025-12-05 13:30:55 - scraping.match_scraper - INFO - Extracting first innings data
-2025-12-05 13:30:55 - scraping.match_scraper - INFO - Default batting team: RR
-2025-12-05 13:30:55 - core.commentary_parser - INFO - Found 129 commentary blocks
-2025-12-05 13:30:55 - core.commentary_parser - INFO - Parsed 129 commentary entries
-2025-12-05 13:30:55 - core.commentary_parser - INFO - Created DataFrame with 129 rows
-2025-12-05 13:30:55 - scraping.match_scraper - INFO - First innings: 129 events
-2025-12-05 13:30:55 - scraping.match_scraper - ERROR - Error scraping match 1473439: 'PageNavigator' object has no attribute 'scroll_to_top'
-Traceback (most recent call last):
-  File "C:\Users\prade\Pycharm\Cricinfo_scraper\scraping\match_scraper.py", line 195, in scrape
-    page_nav.scroll_to_top()
-    ^^^^^^^^^^^^^^^^^^^^^^
-AttributeError: 'PageNavigator' object has no attribute 'scroll_to_top'
-2025-12-05 13:30:55 - scraping.match_scraper - INFO - Closing WebDriver
-2025-12-05 13:30:58 - __main__ - ERROR - Error scraping match 1473439: 'PageNavigator' object has no attribute 'scroll_to_top'
-2025-12-05 13:30:58 - __main__ - INFO - Processing match 3/3: https://www.espncricinfo.com/series/ipl-2025-1449924/chennai-super-kings-vs-mumbai-indians-3rd-match-1473440/full-scorecard
-2025-12-05 13:30:58 - __main__ - INFO - Downloading match 1473440
-2025-12-05 13:30:58 - scraping.match_scraper - INFO - Initializing WebDriver
-2025-12-05 13:31:01 - scraping.match_scraper - INFO - Closing WebDriver
-2025-12-05 13:32:25 - __main__ - INFO - Cricket Data Pipeline Started
-2025-12-05 13:32:25 - __main__ - INFO - STEP 1: Initializing database and schemas
-2025-12-05 13:32:26 - configs.db_config - INFO - Initializing Medallion Architecture schemas...
-2025-12-05 13:32:26 - configs.db_config - INFO - Medallion schemas (Bronze, Silver, Gold) initialized
-2025-12-05 13:32:26 - __main__ - INFO - Database initialization complete
-2025-12-05 13:32:26 - __main__ - INFO - STEP 2: Loading configuration
-2025-12-05 13:32:26 - __main__ - INFO - Configuration loaded successfully
-2025-12-05 13:32:26 - __main__ - INFO - STEP 3: Scraping data from Cricinfo
-2025-12-05 13:32:26 - __main__ - INFO - Initializing match tracker
-2025-12-05 13:32:26 - __main__ - INFO - Current Status: 0 matches already downloaded
-2025-12-05 13:32:26 - __main__ - INFO - Fetching match schedule from Cricinfo
-2025-12-05 13:32:26 - scraping.schedule_scraper - INFO - Initializing WebDriver for schedule scraping
-2025-12-05 13:32:29 - scraping.schedule_scraper - INFO - Loading schedule page - attempt 1
-2025-12-05 13:32:39 - scraping.schedule_scraper - INFO - Schedule page loaded successfully
-2025-12-05 13:32:39 - scraping.schedule_scraper - INFO - Parsing schedule page with BeautifulSoup
-2025-12-05 13:32:47 - scraping.schedule_scraper - INFO - Extracting match links from schedule
-2025-12-05 13:32:47 - scraping.schedule_scraper - INFO - Successfully extracted 109 match links
-2025-12-05 13:32:47 - scraping.schedule_scraper - INFO - Closing WebDriver
-2025-12-05 13:32:50 - __main__ - INFO - Found 109 total links
-2025-12-05 13:32:50 - __main__ - INFO - Found 3 match scorecards
-2025-12-05 13:32:50 - __main__ - INFO - Starting match scraping process
-2025-12-05 13:32:50 - __main__ - INFO - Processing match 1/3: https://www.espncricinfo.com/series/ipl-2025-1449924/kolkata-knight-riders-vs-royal-challengers-bengaluru-1st-match-1473438/full-scorecard
-2025-12-05 13:32:50 - __main__ - INFO - Downloading match 1473438
-2025-12-05 13:32:50 - scraping.match_scraper - INFO - Initializing WebDriver
-2025-12-05 13:32:54 - scraping.match_scraper - INFO - Loading full scorecard - attempt 1
-2025-12-05 13:33:05 - scraping.match_scraper - INFO - full scorecard loaded successfully
-2025-12-05 13:33:05 - scraping.match_scraper - INFO - Scrolling full scorecard page
-2025-12-05 13:33:05 - core.page_navigator - INFO - Scrolling page 5 times
-2025-12-05 13:33:29 - core.page_navigator - INFO - Page scrolling completed
-2025-12-05 13:33:32 - scraping.match_scraper - INFO - Extracting metadata
-2025-12-05 13:33:33 - core.metadata_extractor - INFO - Found 14 metadata rows for match 1473438
-2025-12-05 13:33:33 - core.metadata_extractor - INFO - Extracted 15 metadata fields for match 1473438
-2025-12-05 13:33:33 - scraping.match_scraper - INFO - Loading commentary page - attempt 1
-2025-12-05 13:33:42 - scraping.match_scraper - INFO - commentary page loaded successfully
-2025-12-05 13:33:42 - scraping.match_scraper - INFO - Scrolling commentary page
-2025-12-05 13:33:42 - core.page_navigator - INFO - Scrolling page 25 times
-2025-12-05 13:34:33 - core.page_navigator - INFO - Page scrolling completed
-2025-12-05 13:34:36 - scraping.match_scraper - INFO - Extracting first innings data
-2025-12-05 13:34:36 - scraping.match_scraper - INFO - Default batting team: RCB
-2025-12-05 13:34:37 - core.commentary_parser - INFO - Found 99 commentary blocks
-2025-12-05 13:34:37 - core.commentary_parser - INFO - Parsed 99 commentary entries
-2025-12-05 13:34:37 - core.commentary_parser - INFO - Created DataFrame with 99 rows
-2025-12-05 13:34:37 - scraping.match_scraper - INFO - First innings: 99 events
-2025-12-05 13:34:37 - core.page_navigator - INFO - Scrolling to top of page
-2025-12-05 13:34:43 - scraping.match_scraper - INFO - Switching to second innings
-2025-12-05 13:34:43 - core.page_navigator - INFO - Switching innings from: RCB
-2025-12-05 13:35:17 - core.page_navigator - INFO - Switching to innings: KKR
-2025-12-05 13:35:20 - core.page_navigator - INFO - Successfully switched to KKR
-2025-12-05 13:35:20 - scraping.match_scraper - INFO - Switched batting team: KKR
-2025-12-05 13:35:20 - scraping.match_scraper - INFO - Saving metadata to database
-2025-12-05 13:35:25 - core.page_navigator - INFO - Scrolling page 25 times
-2025-12-05 13:36:16 - core.page_navigator - INFO - Page scrolling completed
-2025-12-05 13:36:19 - core.commentary_parser - INFO - Found 124 commentary blocks
-2025-12-05 13:36:19 - core.commentary_parser - INFO - Parsed 124 commentary entries
-2025-12-05 13:36:19 - core.commentary_parser - INFO - Created DataFrame with 124 rows
-2025-12-05 13:36:19 - scraping.match_scraper - INFO - Second innings: 124 events
-2025-12-05 13:36:19 - scraping.match_scraper - INFO - Saving commentary to database
-2025-12-05 13:36:19 - scraping.match_scraper - INFO - Commentary saved: 223 total events
-2025-12-05 13:36:19 - scraping.match_scraper - INFO - Successfully completed scraping match 1473438
-2025-12-05 13:36:19 - scraping.match_scraper - INFO - Closing WebDriver
-2025-12-05 13:36:22 - __main__ - INFO - Successfully downloaded match 1473438
-2025-12-05 13:36:32 - __main__ - INFO - Processing match 2/3: https://www.espncricinfo.com/series/ipl-2025-1449924/sunrisers-hyderabad-vs-rajasthan-royals-2nd-match-1473439/full-scorecard
-2025-12-05 13:36:32 - __main__ - INFO - Downloading match 1473439
-2025-12-05 13:36:32 - scraping.match_scraper - INFO - Initializing WebDriver
-2025-12-05 13:36:35 - scraping.match_scraper - INFO - Loading full scorecard - attempt 1
-2025-12-05 13:36:45 - scraping.match_scraper - INFO - full scorecard loaded successfully
-2025-12-05 13:36:45 - scraping.match_scraper - INFO - Scrolling full scorecard page
-2025-12-05 13:36:45 - core.page_navigator - INFO - Scrolling page 5 times
-2025-12-05 13:36:56 - core.page_navigator - INFO - Page scrolling completed
-2025-12-05 13:36:59 - scraping.match_scraper - INFO - Extracting metadata
-2025-12-05 13:37:01 - core.metadata_extractor - INFO - Found 14 metadata rows for match 1473439
-2025-12-05 13:37:01 - core.metadata_extractor - INFO - Extracted 15 metadata fields for match 1473439
-2025-12-05 13:37:01 - scraping.match_scraper - INFO - Loading commentary page - attempt 1
-2025-12-05 13:37:14 - scraping.match_scraper - INFO - commentary page loaded successfully
-2025-12-05 13:37:14 - scraping.match_scraper - INFO - Scrolling commentary page
-2025-12-05 13:37:14 - core.page_navigator - INFO - Scrolling page 25 times
-2025-12-05 13:38:09 - core.page_navigator - INFO - Page scrolling completed
-2025-12-05 13:38:12 - scraping.match_scraper - INFO - Extracting first innings data
-2025-12-05 13:38:12 - scraping.match_scraper - INFO - Default batting team: RR
-2025-12-05 13:38:12 - core.commentary_parser - INFO - Found 129 commentary blocks
-2025-12-05 13:38:12 - core.commentary_parser - INFO - Parsed 129 commentary entries
-2025-12-05 13:38:12 - core.commentary_parser - INFO - Created DataFrame with 129 rows
-2025-12-05 13:38:12 - scraping.match_scraper - INFO - First innings: 129 events
-2025-12-05 13:38:12 - core.page_navigator - INFO - Scrolling to top of page
-2025-12-05 13:38:18 - scraping.match_scraper - INFO - Switching to second innings
-2025-12-05 13:38:18 - core.page_navigator - INFO - Switching innings from: RR
-2025-12-05 13:38:53 - core.page_navigator - INFO - Switching to innings: SRH
-2025-12-05 13:38:55 - core.page_navigator - INFO - Successfully switched to SRH
-2025-12-05 13:38:55 - scraping.match_scraper - INFO - Switched batting team: SRH
-2025-12-05 13:38:55 - scraping.match_scraper - INFO - Saving metadata to database
-2025-12-05 13:39:00 - core.page_navigator - INFO - Scrolling page 25 times
-2025-12-05 13:39:51 - core.page_navigator - INFO - Page scrolling completed
-2025-12-05 13:39:55 - core.commentary_parser - INFO - Found 133 commentary blocks
-2025-12-05 13:39:55 - core.commentary_parser - INFO - Parsed 133 commentary entries
-2025-12-05 13:39:55 - core.commentary_parser - INFO - Created DataFrame with 133 rows
-2025-12-05 13:39:55 - scraping.match_scraper - INFO - Second innings: 133 events
-2025-12-05 13:39:55 - scraping.match_scraper - INFO - Saving commentary to database
-2025-12-05 13:39:55 - scraping.match_scraper - INFO - Commentary saved: 262 total events
-2025-12-05 13:39:55 - scraping.match_scraper - INFO - Successfully completed scraping match 1473439
-2025-12-05 13:39:55 - scraping.match_scraper - INFO - Closing WebDriver
-2025-12-05 13:39:57 - __main__ - INFO - Successfully downloaded match 1473439
-2025-12-05 13:40:07 - __main__ - INFO - Processing match 3/3: https://www.espncricinfo.com/series/ipl-2025-1449924/chennai-super-kings-vs-mumbai-indians-3rd-match-1473440/full-scorecard
-2025-12-05 13:40:07 - __main__ - INFO - Downloading match 1473440
-2025-12-05 13:40:07 - scraping.match_scraper - INFO - Initializing WebDriver
-2025-12-05 13:40:10 - scraping.match_scraper - INFO - Loading full scorecard - attempt 1
-2025-12-05 13:40:21 - scraping.match_scraper - INFO - full scorecard loaded successfully
-2025-12-05 13:40:21 - scraping.match_scraper - INFO - Scrolling full scorecard page
-2025-12-05 13:40:21 - core.page_navigator - INFO - Scrolling page 5 times
-2025-12-05 13:40:31 - core.page_navigator - INFO - Page scrolling completed
-2025-12-05 13:40:34 - scraping.match_scraper - INFO - Extracting metadata
-2025-12-05 13:40:35 - core.metadata_extractor - INFO - Found 15 metadata rows for match 1473440
-2025-12-05 13:40:35 - core.metadata_extractor - INFO - Extracted 16 metadata fields for match 1473440
-2025-12-05 13:40:35 - scraping.match_scraper - INFO - Loading commentary page - attempt 1
-2025-12-05 13:40:45 - scraping.match_scraper - INFO - commentary page loaded successfully
-2025-12-05 13:40:45 - scraping.match_scraper - INFO - Scrolling commentary page
-2025-12-05 13:40:45 - core.page_navigator - INFO - Scrolling page 25 times
-2025-12-05 13:41:36 - core.page_navigator - INFO - Page scrolling completed
-2025-12-05 13:41:39 - scraping.match_scraper - INFO - Extracting first innings data
-2025-12-05 13:41:39 - scraping.match_scraper - INFO - Default batting team: CSK
-2025-12-05 13:41:40 - core.commentary_parser - INFO - Found 118 commentary blocks
-2025-12-05 13:41:40 - core.commentary_parser - INFO - Parsed 118 commentary entries
-2025-12-05 13:41:40 - core.commentary_parser - INFO - Created DataFrame with 118 rows
-2025-12-05 13:41:40 - scraping.match_scraper - INFO - First innings: 118 events
-2025-12-05 13:41:40 - core.page_navigator - INFO - Scrolling to top of page
-2025-12-05 13:41:46 - scraping.match_scraper - INFO - Switching to second innings
-2025-12-05 13:41:46 - core.page_navigator - INFO - Switching innings from: CSK
-2025-12-05 13:42:20 - core.page_navigator - INFO - Switching to innings: MI
-2025-12-05 13:42:23 - core.page_navigator - INFO - Successfully switched to MI
-2025-12-05 13:42:23 - scraping.match_scraper - INFO - Switched batting team: MI
-2025-12-05 13:42:23 - scraping.match_scraper - INFO - Saving metadata to database
-2025-12-05 13:42:28 - core.page_navigator - INFO - Scrolling page 25 times
-2025-12-05 13:43:19 - core.page_navigator - INFO - Page scrolling completed
-2025-12-05 13:43:22 - core.commentary_parser - INFO - Found 124 commentary blocks
-2025-12-05 13:43:22 - core.commentary_parser - INFO - Parsed 124 commentary entries
-2025-12-05 13:43:22 - core.commentary_parser - INFO - Created DataFrame with 124 rows
-2025-12-05 13:43:22 - scraping.match_scraper - INFO - Second innings: 124 events
-2025-12-05 13:43:22 - scraping.match_scraper - INFO - Saving commentary to database
-2025-12-05 13:43:23 - scraping.match_scraper - INFO - Commentary saved: 242 total events
-2025-12-05 13:43:23 - scraping.match_scraper - INFO - Successfully completed scraping match 1473440
-2025-12-05 13:43:23 - scraping.match_scraper - INFO - Closing WebDriver
-2025-12-05 13:43:25 - __main__ - INFO - Successfully downloaded match 1473440
-2025-12-05 13:43:25 - __main__ - INFO - Scraping complete - Found: 3, Downloaded: 3, Skipped: 0, Failed: 0
-2025-12-05 13:43:25 - __main__ - INFO - STEP 4: Processing through Medallion Architecture
-2025-12-05 13:43:25 - __main__ - INFO - Starting Medallion Architecture pipeline
-2025-12-05 13:43:25 - pipeline.orchestrator - INFO - Pipeline Orchestrator initialized
-2025-12-05 13:43:25 - pipeline.orchestrator - INFO - 
+2025-12-05 14:26:38 - __main__ - INFO - Pipeline completed - Status: success, Duration: 2.09s
+2025-12-05 14:26:38 - __main__ - INFO - Pipeline completed successfully
+2025-12-05 14:39:47 - __main__ - INFO - Cricket Data Pipeline Started
+2025-12-05 14:39:47 - __main__ - INFO - STEP 1: Initializing database and schemas
+2025-12-05 14:39:47 - configs.db_config - INFO - Initializing Medallion Architecture schemas...
+2025-12-05 14:39:48 - configs.db_config - INFO - Medallion schemas (Bronze, Silver, Gold) initialized
+2025-12-05 14:39:48 - __main__ - INFO - Database initialization complete
+2025-12-05 14:39:48 - __main__ - INFO - STEP 2: Loading configuration
+2025-12-05 14:39:48 - __main__ - INFO - Configuration loaded successfully
+2025-12-05 14:39:48 - __main__ - INFO - STEP 3: Scraping data from Cricinfo
+2025-12-05 14:39:48 - __main__ - INFO - Initializing match tracker
+2025-12-05 14:39:48 - __main__ - INFO - Current Status: 1 matches already downloaded
+2025-12-05 14:39:48 - __main__ - INFO - Fetching match schedule from Cricinfo
+2025-12-05 14:39:48 - scraping.schedule_scraper - INFO - Initializing WebDriver for schedule scraping
+2025-12-05 14:39:51 - scraping.schedule_scraper - INFO - Loading schedule page - attempt 1
+2025-12-05 14:40:02 - scraping.schedule_scraper - INFO - Schedule page loaded successfully
+2025-12-05 14:40:02 - scraping.schedule_scraper - INFO - Parsing schedule page with BeautifulSoup
+2025-12-05 14:40:06 - scraping.schedule_scraper - INFO - Extracting match links from schedule
+2025-12-05 14:40:06 - scraping.schedule_scraper - INFO - Successfully extracted 109 match links
+2025-12-05 14:40:06 - scraping.schedule_scraper - INFO - Closing WebDriver
+2025-12-05 14:40:09 - __main__ - INFO - Found 109 total links
+2025-12-05 14:40:09 - __main__ - INFO - Found 1 match scorecards
+2025-12-05 14:40:09 - __main__ - INFO - Starting match scraping process
+2025-12-05 14:40:09 - __main__ - INFO - Processing match 1/1: https://www.espncricinfo.com/series/ipl-2025-1449924/kolkata-knight-riders-vs-royal-challengers-bengaluru-1st-match-1473438/full-scorecard
+2025-12-05 14:40:09 - __main__ - INFO - Match 1473438 already downloaded - skipping
+2025-12-05 14:40:09 - __main__ - INFO - Scraping complete - Found: 1, Downloaded: 0, Skipped: 1, Failed: 0
+2025-12-05 14:40:09 - __main__ - INFO - STEP 4: Processing through Medallion Architecture
+2025-12-05 14:40:09 - __main__ - INFO - Starting Medallion Architecture pipeline
+2025-12-05 14:40:09 - pipeline.orchestrator - INFO - Pipeline Orchestrator initialized
+2025-12-05 14:40:09 - pipeline.orchestrator - INFO - 
 ================================================================================
-2025-12-05 13:43:25 - pipeline.orchestrator - INFO - MEDALLION ARCHITECTURE PIPELINE - STARTING
-2025-12-05 13:43:25 - pipeline.orchestrator - INFO - ================================================================================
-2025-12-05 13:43:25 - pipeline.orchestrator - INFO - Start Time: 2025-12-05 13:43:25.627299
-2025-12-05 13:43:25 - pipeline.orchestrator - INFO - Layers to execute: bronze, silver, gold
-2025-12-05 13:43:25 - pipeline.orchestrator - INFO - ================================================================================
-2025-12-05 13:43:25 - medallionlayer.bronze_layer - INFO - Bronze Layer initialized - Run ID: 37d3773c-8944-4fa6-81c6-1f64af403fc9
-2025-12-05 13:43:25 - medallionlayer.bronze_layer - INFO - ======================================================================
-2025-12-05 13:43:25 - medallionlayer.bronze_layer - INFO - BRONZE LAYER - Starting
-2025-12-05 13:43:25 - medallionlayer.bronze_layer - INFO - ======================================================================
-2025-12-05 13:43:25 - medallionlayer.bronze_layer - INFO - 
+2025-12-05 14:40:09 - pipeline.orchestrator - INFO - MEDALLION ARCHITECTURE PIPELINE - STARTING
+2025-12-05 14:40:09 - pipeline.orchestrator - INFO - ================================================================================
+2025-12-05 14:40:09 - pipeline.orchestrator - INFO - Start Time: 2025-12-05 14:40:09.706403
+2025-12-05 14:40:09 - pipeline.orchestrator - INFO - Layers to execute: bronze, silver, gold
+2025-12-05 14:40:09 - pipeline.orchestrator - INFO - ================================================================================
+2025-12-05 14:40:09 - medallionlayer.bronze_layer - INFO - Bronze Layer initialized - Run ID: edd86dbf-dc5a-4b7d-9c89-f6390edd332c
+2025-12-05 14:40:09 - medallionlayer.bronze_layer - INFO - ======================================================================
+2025-12-05 14:40:09 - medallionlayer.bronze_layer - INFO - BRONZE LAYER - Starting
+2025-12-05 14:40:09 - medallionlayer.bronze_layer - INFO - ======================================================================
+2025-12-05 14:40:09 - medallionlayer.bronze_layer - INFO - 
 Processing table: match_metadata
-2025-12-05 13:43:25 - medallionlayer.bronze_layer - INFO - Read 3 rows from raw.match_metadata
-2025-12-05 13:43:25 - medallionlayer.bronze_layer - INFO -   No duplicates found based on ['matchid']
-2025-12-05 13:43:25 - medallionlayer.bronze_layer - INFO - After quality checks: 3 rows (removed 0)
-2025-12-05 13:43:25 - medallionlayer.bronze_layer - INFO - match_metadata: 3 rows ingested
-2025-12-05 13:43:25 - medallionlayer.bronze_layer - INFO - 
+2025-12-05 14:40:10 - medallionlayer.bronze_layer - INFO - Read 1 rows from raw.match_metadata
+2025-12-05 14:40:10 - medallionlayer.bronze_layer - INFO -   No duplicates found based on ['matchid']
+2025-12-05 14:40:10 - medallionlayer.bronze_layer - INFO - After quality checks: 1 rows (removed 0)
+2025-12-05 14:40:10 - medallionlayer.bronze_layer - INFO - match_metadata: 1 rows ingested
+2025-12-05 14:40:10 - medallionlayer.bronze_layer - INFO - 
 Processing table: match_events
-2025-12-05 13:43:26 - medallionlayer.bronze_layer - INFO - Read 727 rows from raw.match_events
-2025-12-05 13:43:26 - medallionlayer.bronze_layer - WARNING -   Found 35 duplicate rows based on ['matchid', 'ball', 'innings']
-2025-12-05 13:43:26 - medallionlayer.bronze_layer - INFO - After quality checks: 692 rows (removed 35)
-2025-12-05 13:43:26 - medallionlayer.bronze_layer - INFO - match_events: 692 rows ingested
-2025-12-05 13:43:26 - medallionlayer.bronze_layer - INFO - 
+2025-12-05 14:40:10 - medallionlayer.bronze_layer - INFO - Read 223 rows from raw.match_events
+2025-12-05 14:40:10 - medallionlayer.bronze_layer - WARNING -   Found 5 duplicate rows based on ['matchid', 'ball', 'innings']
+2025-12-05 14:40:10 - medallionlayer.bronze_layer - INFO - After quality checks: 218 rows (removed 5)
+2025-12-05 14:40:10 - medallionlayer.bronze_layer - INFO - match_events: 218 rows ingested
+2025-12-05 14:40:10 - medallionlayer.bronze_layer - INFO - 
 Validating innings data...
-2025-12-05 13:43:26 - medallionlayer.bronze_layer - INFO - All matches have complete innings data
-2025-12-05 13:43:26 - medallionlayer.bronze_layer - INFO - 
+2025-12-05 14:40:10 - medallionlayer.bronze_layer - INFO - All matches have complete innings data
+2025-12-05 14:40:10 - medallionlayer.bronze_layer - INFO - 
 ======================================================================
-2025-12-05 13:43:26 - medallionlayer.bronze_layer - INFO - DATA QUALITY REPORT
-2025-12-05 13:43:26 - medallionlayer.bronze_layer - INFO - ======================================================================
-2025-12-05 13:43:26 - medallionlayer.bronze_layer - INFO - 
+2025-12-05 14:40:10 - medallionlayer.bronze_layer - INFO - DATA QUALITY REPORT
+2025-12-05 14:40:10 - medallionlayer.bronze_layer - INFO - ======================================================================
+2025-12-05 14:40:10 - medallionlayer.bronze_layer - INFO - 
 DUPLICATES REMOVED:
-2025-12-05 13:43:26 - medallionlayer.bronze_layer - INFO -   match_metadata: No duplicates found
-2025-12-05 13:43:26 - medallionlayer.bronze_layer - INFO -   match_events: 35 duplicate rows removed
-2025-12-05 13:43:26 - medallionlayer.bronze_layer - INFO - 
+2025-12-05 14:40:10 - medallionlayer.bronze_layer - INFO -   match_metadata: No duplicates found
+2025-12-05 14:40:10 - medallionlayer.bronze_layer - INFO -   match_events: 5 duplicate rows removed
+2025-12-05 14:40:10 - medallionlayer.bronze_layer - INFO - 
 NULL VALUES FOUND:
-2025-12-05 13:43:26 - medallionlayer.bronze_layer - INFO -   match_metadata: No null values in required columns
-2025-12-05 13:43:26 - medallionlayer.bronze_layer - INFO -   match_events: No null values in required columns
-2025-12-05 13:43:26 - medallionlayer.bronze_layer - INFO - 
+2025-12-05 14:40:10 - medallionlayer.bronze_layer - INFO -   match_metadata: No null values in required columns
+2025-12-05 14:40:10 - medallionlayer.bronze_layer - INFO -   match_events: No null values in required columns
+2025-12-05 14:40:10 - medallionlayer.bronze_layer - INFO - 
 INNINGS VALIDATION:
-2025-12-05 13:43:26 - medallionlayer.bronze_layer - INFO - All matches have complete innings data
-2025-12-05 13:43:26 - medallionlayer.bronze_layer - INFO - ======================================================================
+2025-12-05 14:40:10 - medallionlayer.bronze_layer - INFO - All matches have complete innings data
+2025-12-05 14:40:10 - medallionlayer.bronze_layer - INFO - ======================================================================
 
-2025-12-05 13:43:26 - medallionlayer.bronze_layer - INFO - 
+2025-12-05 14:40:10 - medallionlayer.bronze_layer - INFO - 
 ======================================================================
-2025-12-05 13:43:26 - medallionlayer.bronze_layer - INFO - BRONZE LAYER - Complete
-2025-12-05 13:43:26 - medallionlayer.bronze_layer - INFO - Tables Processed: 2/2
-2025-12-05 13:43:26 - medallionlayer.bronze_layer - INFO - Total Rows: 695
-2025-12-05 13:43:26 - medallionlayer.bronze_layer - INFO - ======================================================================
-2025-12-05 13:43:26 - medallionlayer.silver_layer - INFO - Silver Layer initialized
-2025-12-05 13:43:26 - medallionlayer.silver_layer - INFO - ======================================================================
-2025-12-05 13:43:26 - medallionlayer.silver_layer - INFO - SILVER LAYER - Starting
-2025-12-05 13:43:26 - medallionlayer.silver_layer - INFO - ======================================================================
-2025-12-05 13:43:26 - medallionlayer.silver_layer - INFO - 
+2025-12-05 14:40:10 - medallionlayer.bronze_layer - INFO - BRONZE LAYER - Complete
+2025-12-05 14:40:10 - medallionlayer.bronze_layer - INFO - Tables Processed: 2/2
+2025-12-05 14:40:10 - medallionlayer.bronze_layer - INFO - Total Rows: 219
+2025-12-05 14:40:10 - medallionlayer.bronze_layer - INFO - ======================================================================
+2025-12-05 14:40:10 - medallionlayer.silver_layer - INFO - Silver Layer initialized
+2025-12-05 14:40:10 - medallionlayer.silver_layer - INFO - ======================================================================
+2025-12-05 14:40:10 - medallionlayer.silver_layer - INFO - SILVER LAYER - Starting
+2025-12-05 14:40:10 - medallionlayer.silver_layer - INFO - ======================================================================
+2025-12-05 14:40:10 - medallionlayer.silver_layer - INFO - 
 Processing table: match_metadata
-2025-12-05 13:43:26 - medallionlayer.silver_layer - INFO - Read 3 rows from bronze.match_metadata
-2025-12-05 13:43:26 - medallionlayer.silver_layer - INFO -   Deduplication: Removed 0 duplicates on ['matchid']
-2025-12-05 13:43:26 - medallionlayer.silver_layer - INFO -   Cleaned columns: ['venue', 'series', 'toss', 'player_of_the_match']
-2025-12-05 13:43:26 - medallionlayer.silver_layer - INFO - After transformations: 3 rows (removed 0)
-2025-12-05 13:43:26 - medallionlayer.silver_layer - INFO -   Removed Bronze audit columns: ['ingestion_timestamp', 'source_system', 'pipeline_run_id', 'is_active']
-2025-12-05 13:43:26 - medallionlayer.silver_layer - INFO - match_metadata: 3 rows processed
-2025-12-05 13:43:26 - medallionlayer.silver_layer - INFO - 
+2025-12-05 14:40:10 - medallionlayer.silver_layer - INFO - Read 1 rows from bronze.match_metadata
+2025-12-05 14:40:10 - medallionlayer.silver_layer - INFO -   Deduplication: Removed 0 duplicates on ['matchid']
+2025-12-05 14:40:10 - medallionlayer.silver_layer - INFO -   Cleaned columns: ['venue', 'series', 'toss', 'player_of_the_match']
+2025-12-05 14:40:10 - medallionlayer.silver_layer - INFO - After transformations: 1 rows (removed 0)
+2025-12-05 14:40:10 - medallionlayer.silver_layer - INFO -   Removed Bronze audit columns: ['ingestion_timestamp', 'source_system', 'pipeline_run_id', 'is_active']
+2025-12-05 14:40:10 - medallionlayer.silver_layer - INFO - match_metadata: 1 rows processed
+2025-12-05 14:40:10 - medallionlayer.silver_layer - INFO - 
 Processing table: match_events
-2025-12-05 13:43:26 - medallionlayer.silver_layer - INFO - Read 692 rows from bronze.match_events
-2025-12-05 13:43:26 - medallionlayer.silver_layer - INFO -   Deduplication: Removed 0 duplicates on ['matchid', 'ball', 'innings']
-2025-12-05 13:43:26 - medallionlayer.silver_layer - INFO -   Cleaned columns: ['bowler', 'batsman', 'commentary', 'innings']
-2025-12-05 13:43:26 - medallionlayer.silver_layer - INFO -   Converting 'score' column to numeric...
-2025-12-05 13:43:26 - medallionlayer.silver_layer - INFO -   Score conversion: 653 converted, 39 not converted (set to 0)
-2025-12-05 13:43:26 - medallionlayer.silver_layer - INFO - After transformations: 692 rows (removed 0)
-2025-12-05 13:43:26 - medallionlayer.silver_layer - INFO -   Removed Bronze audit columns: ['ingestion_timestamp', 'source_system', 'pipeline_run_id', 'is_active']
-2025-12-05 13:43:26 - medallionlayer.silver_layer - INFO - match_events: 692 rows processed
-2025-12-05 13:43:26 - medallionlayer.silver_layer - INFO - 
+2025-12-05 14:40:10 - medallionlayer.silver_layer - INFO - Read 218 rows from bronze.match_events
+2025-12-05 14:40:10 - medallionlayer.silver_layer - INFO -   Deduplication: Removed 0 duplicates on ['matchid', 'ball', 'innings']
+2025-12-05 14:40:10 - medallionlayer.silver_layer - INFO -   Cleaned columns: ['bowler', 'batsman', 'commentary', 'innings']
+2025-12-05 14:40:10 - medallionlayer.silver_layer - INFO -   Converting 'score' column to numeric...
+2025-12-05 14:40:10 - medallionlayer.silver_layer - INFO -   Score conversion: 208 converted, 10 not converted (set to 0)
+2025-12-05 14:40:10 - medallionlayer.silver_layer - INFO - After transformations: 218 rows (removed 0)
+2025-12-05 14:40:10 - medallionlayer.silver_layer - INFO -   Removed Bronze audit columns: ['ingestion_timestamp', 'source_system', 'pipeline_run_id', 'is_active']
+2025-12-05 14:40:10 - medallionlayer.silver_layer - INFO - match_events: 218 rows processed
+2025-12-05 14:40:10 - medallionlayer.silver_layer - INFO - 
 ======================================================================
-2025-12-05 13:43:26 - medallionlayer.silver_layer - INFO - SILVER LAYER - Complete
-2025-12-05 13:43:26 - medallionlayer.silver_layer - INFO - Tables Processed: 2
-2025-12-05 13:43:26 - medallionlayer.silver_layer - INFO - Total Rows: 695
-2025-12-05 13:43:26 - medallionlayer.silver_layer - INFO - ======================================================================
-2025-12-05 13:43:26 - medallionlayer.gold_layer - INFO - Gold Layer initialized
-2025-12-05 13:43:26 - medallionlayer.gold_layer - INFO - ======================================================================
-2025-12-05 13:43:26 - medallionlayer.gold_layer - INFO - GOLD LAYER - Starting
-2025-12-05 13:43:26 - medallionlayer.gold_layer - INFO - ======================================================================
-2025-12-05 13:43:26 - medallionlayer.gold_layer - INFO - 
+2025-12-05 14:40:10 - medallionlayer.silver_layer - INFO - SILVER LAYER - Complete
+2025-12-05 14:40:10 - medallionlayer.silver_layer - INFO - Tables Processed: 2
+2025-12-05 14:40:10 - medallionlayer.silver_layer - INFO - Total Rows: 219
+2025-12-05 14:40:10 - medallionlayer.silver_layer - INFO - ======================================================================
+2025-12-05 14:40:10 - medallionlayer.gold_layer - INFO - Gold Layer initialized
+2025-12-05 14:40:10 - medallionlayer.gold_layer - INFO - ======================================================================
+2025-12-05 14:40:10 - medallionlayer.gold_layer - INFO - GOLD LAYER - Starting
+2025-12-05 14:40:10 - medallionlayer.gold_layer - INFO - ======================================================================
+2025-12-05 14:40:10 - medallionlayer.gold_layer - INFO - 
 Processing aggregation: match_summary
-2025-12-05 13:43:27 - medallionlayer.gold_layer - INFO - Read 3 rows from silver.match_metadata
-2025-12-05 13:43:27 - medallionlayer.gold_layer - INFO -   Aggregated to 3 rows
-2025-12-05 13:43:27 - medallionlayer.gold_layer - ERROR - Error processing match_summary: column "toss" of relation "match_summary" does not exist
-LINE 2: ...SERT INTO gold.match_summary (id, matchid, venue, toss, seri...
-                                                             ^
-
-2025-12-05 13:43:27 - medallionlayer.gold_layer - INFO - 
+2025-12-05 14:40:10 - medallionlayer.gold_layer - INFO - Read 1 rows from silver.match_metadata
+2025-12-05 14:40:10 - medallionlayer.gold_layer - INFO -   Selected 1 distinct rows (no aggregation)
+2025-12-05 14:40:10 - medallionlayer.gold_layer - INFO -   Selected 7 columns for Gold: ['matchid', 'venue', 'series', 'season', 'player_of_the_match', 'first_innings', 'second_innings']
+2025-12-05 14:40:10 - medallionlayer.gold_layer - INFO - Final DataFrame columns: ['matchid', 'venue', 'series', 'season', 'player_of_the_match', 'first_innings', 'second_innings', 'created_at', 'updated_at']
+2025-12-05 14:40:11 - medallionlayer.gold_layer - INFO - Successfully wrote 1 rows to gold.match_summary
+2025-12-05 14:40:11 - medallionlayer.gold_layer - INFO - Successfully created 1 rows for match_summary
+2025-12-05 14:40:11 - medallionlayer.gold_layer - INFO - 
 Processing aggregation: series_summary
-2025-12-05 13:43:27 - medallionlayer.gold_layer - INFO - Read 3 rows from silver.match_metadata
-2025-12-05 13:43:27 - medallionlayer.gold_layer - INFO -   Aggregated to 1 rows
-2025-12-05 13:43:27 - medallionlayer.gold_layer - ERROR - Error processing series_summary: column "matchid" of relation "series_summary" does not exist
-LINE 2:         INSERT INTO gold.series_summary (id, matchid, venue,...
-                                                     ^
-
-2025-12-05 13:43:27 - medallionlayer.gold_layer - INFO - 
+2025-12-05 14:40:11 - medallionlayer.gold_layer - INFO - Read 1 rows from silver.match_metadata
+2025-12-05 14:40:11 - medallionlayer.gold_layer - INFO -   Aggregated to 1 rows
+2025-12-05 14:40:11 - medallionlayer.gold_layer - INFO -   Selected 2 columns for Gold: ['series', 'season']
+2025-12-05 14:40:11 - medallionlayer.gold_layer - INFO - Final DataFrame columns: ['series', 'season', 'created_at', 'updated_at']
+2025-12-05 14:40:11 - medallionlayer.gold_layer - INFO - Successfully wrote 1 rows to gold.series_summary
+2025-12-05 14:40:11 - medallionlayer.gold_layer - INFO - Successfully created 1 rows for series_summary
+2025-12-05 14:40:11 - medallionlayer.gold_layer - INFO - 
 Processing aggregation: venue_statistics
-2025-12-05 13:43:27 - medallionlayer.gold_layer - INFO - Read 3 rows from silver.match_metadata
-2025-12-05 13:43:27 - medallionlayer.gold_layer - INFO -   Aggregated to 3 rows
-2025-12-05 13:43:27 - medallionlayer.gold_layer - ERROR - Error processing venue_statistics: column "matchid" of relation "venue_statistics" does not exist
-LINE 2:         INSERT INTO gold.venue_statistics (id, matchid, venu...
-                                                       ^
-
-2025-12-05 13:43:27 - medallionlayer.gold_layer - INFO - 
+2025-12-05 14:40:11 - medallionlayer.gold_layer - INFO - Read 1 rows from silver.match_metadata
+2025-12-05 14:40:11 - medallionlayer.gold_layer - INFO -   Aggregated to 1 rows
+2025-12-05 14:40:11 - medallionlayer.gold_layer - INFO -   Selected 2 columns for Gold: ['venue', 'season']
+2025-12-05 14:40:11 - medallionlayer.gold_layer - INFO - Final DataFrame columns: ['venue', 'season', 'created_at', 'updated_at']
+2025-12-05 14:40:11 - medallionlayer.gold_layer - INFO - Successfully wrote 1 rows to gold.venue_statistics
+2025-12-05 14:40:11 - medallionlayer.gold_layer - INFO - Successfully created 1 rows for venue_statistics
+2025-12-05 14:40:11 - medallionlayer.gold_layer - INFO - 
 Processing aggregation: match_ball_statistics
-2025-12-05 13:43:27 - medallionlayer.gold_layer - INFO - Read 692 rows from silver.match_events
-2025-12-05 13:43:27 - medallionlayer.gold_layer - INFO -   Aggregated to 6 rows
-2025-12-05 13:43:27 - medallionlayer.gold_layer - ERROR - Error processing match_ball_statistics: column "ball" of relation "match_ball_statistics" does not exist
-LINE 2: ...ERT INTO gold.match_ball_statistics (id, matchid, ball, inni...
-                                                             ^
-
-2025-12-05 13:43:27 - medallionlayer.gold_layer - INFO - 
+2025-12-05 14:40:11 - medallionlayer.gold_layer - INFO - Read 218 rows from silver.match_events
+2025-12-05 14:40:11 - medallionlayer.gold_layer - INFO -   Aggregated to 2 rows
+2025-12-05 14:40:11 - medallionlayer.gold_layer - INFO -   Selected 2 columns for Gold: ['matchid', 'innings']
+2025-12-05 14:40:11 - medallionlayer.gold_layer - INFO - Final DataFrame columns: ['matchid', 'innings', 'created_at', 'updated_at']
+2025-12-05 14:40:11 - medallionlayer.gold_layer - INFO - Successfully wrote 2 rows to gold.match_ball_statistics
+2025-12-05 14:40:11 - medallionlayer.gold_layer - INFO - Successfully created 2 rows for match_ball_statistics
+2025-12-05 14:40:11 - medallionlayer.gold_layer - INFO - 
 Processing aggregation: batsman_statistics
-2025-12-05 13:43:27 - medallionlayer.gold_layer - INFO - Read 692 rows from silver.match_events
-2025-12-05 13:43:27 - medallionlayer.gold_layer - INFO -   Aggregated to 50 rows
-2025-12-05 13:43:28 - medallionlayer.gold_layer - ERROR - Error processing batsman_statistics: column "ball" of relation "batsman_statistics" does not exist
-LINE 2: ...INSERT INTO gold.batsman_statistics (id, matchid, ball, inni...
-                                                             ^
-
-2025-12-05 13:43:28 - medallionlayer.gold_layer - INFO - 
+2025-12-05 14:40:11 - medallionlayer.gold_layer - INFO - Read 218 rows from silver.match_events
+2025-12-05 14:40:11 - medallionlayer.gold_layer - INFO -   Aggregated to 15 rows
+2025-12-05 14:40:11 - medallionlayer.gold_layer - INFO -   Selected 3 columns for Gold: ['matchid', 'batsman', 'innings']
+2025-12-05 14:40:11 - medallionlayer.gold_layer - INFO - Final DataFrame columns: ['matchid', 'batsman', 'innings', 'created_at', 'updated_at']
+2025-12-05 14:40:11 - medallionlayer.gold_layer - INFO - Successfully wrote 15 rows to gold.batsman_statistics
+2025-12-05 14:40:11 - medallionlayer.gold_layer - INFO - Successfully created 15 rows for batsman_statistics
+2025-12-05 14:40:11 - medallionlayer.gold_layer - INFO - 
 Processing aggregation: bowler_statistics
-2025-12-05 13:43:28 - medallionlayer.gold_layer - INFO - Read 692 rows from silver.match_events
-2025-12-05 13:43:28 - medallionlayer.gold_layer - INFO -   Aggregated to 36 rows
-2025-12-05 13:43:28 - medallionlayer.gold_layer - ERROR - Error processing bowler_statistics: column "ball" of relation "bowler_statistics" does not exist
-LINE 2: ... INSERT INTO gold.bowler_statistics (id, matchid, ball, inni...
-                                                             ^
-
-2025-12-05 13:43:28 - medallionlayer.gold_layer - INFO - 
+2025-12-05 14:40:12 - medallionlayer.gold_layer - INFO - Read 218 rows from silver.match_events
+2025-12-05 14:40:12 - medallionlayer.gold_layer - INFO -   Aggregated to 11 rows
+2025-12-05 14:40:12 - medallionlayer.gold_layer - INFO -   Selected 3 columns for Gold: ['matchid', 'bowler', 'innings']
+2025-12-05 14:40:12 - medallionlayer.gold_layer - INFO - Final DataFrame columns: ['matchid', 'bowler', 'innings', 'created_at', 'updated_at']
+2025-12-05 14:40:12 - medallionlayer.gold_layer - INFO - Successfully wrote 11 rows to gold.bowler_statistics
+2025-12-05 14:40:12 - medallionlayer.gold_layer - INFO - Successfully created 11 rows for bowler_statistics
+2025-12-05 14:40:12 - medallionlayer.gold_layer - INFO - 
 ======================================================================
-2025-12-05 13:43:28 - medallionlayer.gold_layer - INFO - GOLD LAYER - Complete
-2025-12-05 13:43:28 - medallionlayer.gold_layer - INFO - Aggregations Processed: 0
-2025-12-05 13:43:28 - medallionlayer.gold_layer - INFO - Total Rows: 0
-2025-12-05 13:43:28 - medallionlayer.gold_layer - INFO - ======================================================================
-2025-12-05 13:43:28 - pipeline.orchestrator - INFO - 
+2025-12-05 14:40:12 - medallionlayer.gold_layer - INFO - GOLD LAYER - Complete
+2025-12-05 14:40:12 - medallionlayer.gold_layer - INFO - Aggregations Processed: 6
+2025-12-05 14:40:12 - medallionlayer.gold_layer - INFO - Total Rows: 31
+2025-12-05 14:40:12 - medallionlayer.gold_layer - INFO - ======================================================================
+2025-12-05 14:40:12 - pipeline.orchestrator - INFO - 
 ================================================================================
-2025-12-05 13:43:28 - pipeline.orchestrator - INFO - PIPELINE EXECUTION SUMMARY
-2025-12-05 13:43:28 - pipeline.orchestrator - INFO - ================================================================================
-2025-12-05 13:43:28 - pipeline.orchestrator - INFO - Status: PARTIAL_SUCCESS
-2025-12-05 13:43:28 - pipeline.orchestrator - INFO - Duration: 2.71 seconds
-2025-12-05 13:43:28 - pipeline.orchestrator - INFO - 
+2025-12-05 14:40:12 - pipeline.orchestrator - INFO - PIPELINE EXECUTION SUMMARY
+2025-12-05 14:40:12 - pipeline.orchestrator - INFO - ================================================================================
+2025-12-05 14:40:12 - pipeline.orchestrator - INFO - Status: SUCCESS
+2025-12-05 14:40:12 - pipeline.orchestrator - INFO - Duration: 2.51 seconds
+2025-12-05 14:40:12 - pipeline.orchestrator - INFO - 
 BRONZE Layer:
-2025-12-05 13:43:28 - pipeline.orchestrator - INFO -   Status: success
-2025-12-05 13:43:28 - pipeline.orchestrator - INFO -   Tables Processed: 2
-2025-12-05 13:43:28 - pipeline.orchestrator - INFO -   Total Rows: 695
-2025-12-05 13:43:28 - pipeline.orchestrator - INFO - 
+2025-12-05 14:40:12 - pipeline.orchestrator - INFO -   Status: success
+2025-12-05 14:40:12 - pipeline.orchestrator - INFO -   Tables Processed: 2
+2025-12-05 14:40:12 - pipeline.orchestrator - INFO -   Total Rows: 219
+2025-12-05 14:40:12 - pipeline.orchestrator - INFO - 
 SILVER Layer:
-2025-12-05 13:43:28 - pipeline.orchestrator - INFO -   Status: success
-2025-12-05 13:43:28 - pipeline.orchestrator - INFO -   Tables Processed: 2
-2025-12-05 13:43:28 - pipeline.orchestrator - INFO -   Total Rows: 695
-2025-12-05 13:43:28 - pipeline.orchestrator - INFO - 
+2025-12-05 14:40:12 - pipeline.orchestrator - INFO -   Status: success
+2025-12-05 14:40:12 - pipeline.orchestrator - INFO -   Tables Processed: 2
+2025-12-05 14:40:12 - pipeline.orchestrator - INFO -   Total Rows: 219
+2025-12-05 14:40:12 - pipeline.orchestrator - INFO - 
 GOLD Layer:
-2025-12-05 13:43:28 - pipeline.orchestrator - INFO -   Status: failed
-2025-12-05 13:43:28 - pipeline.orchestrator - INFO -   Aggregations: 0
-2025-12-05 13:43:28 - pipeline.orchestrator - INFO -   Total Rows: 0
-2025-12-05 13:43:28 - pipeline.orchestrator - INFO -   Errors: 6
-2025-12-05 13:43:28 - pipeline.orchestrator - ERROR -     - Error processing match_summary: column "toss" of relation "match_summary" does not exist
-LINE 2: ...SERT INTO gold.match_summary (id, matchid, venue, toss, seri...
-                                                             ^
+2025-12-05 14:40:12 - pipeline.orchestrator - INFO -   Status: success
+2025-12-05 14:40:12 - pipeline.orchestrator - INFO -   Aggregations: 6
+2025-12-05 14:40:12 - pipeline.orchestrator - INFO -   Total Rows: 31
+2025-12-05 14:40:12 - pipeline.orchestrator - INFO - ================================================================================
 
-2025-12-05 13:43:28 - pipeline.orchestrator - ERROR -     - Error processing series_summary: column "matchid" of relation "series_summary" does not exist
-LINE 2:         INSERT INTO gold.series_summary (id, matchid, venue,...
-                                                     ^
+2025-12-05 14:40:12 - __main__ - INFO - Pipeline completed - Status: success, Duration: 2.51s
+2025-12-05 14:40:12 - __main__ - INFO - Pipeline completed successfully
+2025-12-05 14:49:14 - __main__ - INFO - Cricket Data Pipeline Started
+2025-12-05 14:49:14 - __main__ - INFO - STEP 1: Initializing database and schemas
+2025-12-05 14:49:14 - configs.db_config - INFO - Initializing Medallion Architecture schemas...
+2025-12-05 14:49:15 - configs.db_config - INFO - Medallion schemas (Bronze, Silver, Gold) initialized
+2025-12-05 14:49:15 - __main__ - INFO - Database initialization complete
+2025-12-05 14:49:15 - __main__ - INFO - STEP 2: Loading configuration
+2025-12-05 14:49:15 - __main__ - INFO - Configuration loaded successfully
+2025-12-05 14:49:15 - __main__ - INFO - STEP 3: Scraping data from Cricinfo
+2025-12-05 14:49:15 - __main__ - INFO - Initializing match tracker
+2025-12-05 14:49:15 - __main__ - INFO - Current Status: 1 matches already downloaded
+2025-12-05 14:49:15 - __main__ - INFO - Fetching match schedule from Cricinfo
+2025-12-05 14:49:15 - scraping.schedule_scraper - INFO - Initializing WebDriver for schedule scraping
+2025-12-05 14:49:18 - scraping.schedule_scraper - INFO - Loading schedule page - attempt 1
+2025-12-05 14:49:29 - scraping.schedule_scraper - INFO - Schedule page loaded successfully
+2025-12-05 14:49:29 - scraping.schedule_scraper - INFO - Parsing schedule page with BeautifulSoup
+2025-12-05 14:49:30 - scraping.schedule_scraper - INFO - Extracting match links from schedule
+2025-12-05 14:49:30 - scraping.schedule_scraper - INFO - Successfully extracted 109 match links
+2025-12-05 14:49:30 - scraping.schedule_scraper - INFO - Closing WebDriver
+2025-12-05 14:49:32 - __main__ - INFO - Found 109 total links
+2025-12-05 14:49:32 - __main__ - INFO - Found 1 match scorecards
+2025-12-05 14:49:32 - __main__ - INFO - Starting match scraping process
+2025-12-05 14:49:32 - __main__ - INFO - Processing match 1/1: https://www.espncricinfo.com/series/ipl-2025-1449924/kolkata-knight-riders-vs-royal-challengers-bengaluru-1st-match-1473438/full-scorecard
+2025-12-05 14:49:32 - __main__ - INFO - Match 1473438 already downloaded - skipping
+2025-12-05 14:49:32 - __main__ - INFO - Scraping complete - Found: 1, Downloaded: 0, Skipped: 1, Failed: 0
+2025-12-05 14:49:32 - __main__ - INFO - STEP 4: Processing through Medallion Architecture
+2025-12-05 14:49:32 - __main__ - INFO - Starting Medallion Architecture pipeline
+2025-12-05 14:49:32 - pipeline.orchestrator - INFO - Pipeline Orchestrator initialized
+2025-12-05 14:49:32 - pipeline.orchestrator - INFO - 
+================================================================================
+2025-12-05 14:49:32 - pipeline.orchestrator - INFO - MEDALLION ARCHITECTURE PIPELINE - STARTING
+2025-12-05 14:49:32 - pipeline.orchestrator - INFO - ================================================================================
+2025-12-05 14:49:32 - pipeline.orchestrator - INFO - Start Time: 2025-12-05 14:49:32.787241
+2025-12-05 14:49:32 - pipeline.orchestrator - INFO - Layers to execute: bronze, silver, gold
+2025-12-05 14:49:32 - pipeline.orchestrator - INFO - ================================================================================
+2025-12-05 14:49:32 - medallionlayer.bronze_layer - INFO - Bronze Layer initialized - Run ID: c1e57e94-3dc7-4b4a-9633-a14436b37be5
+2025-12-05 14:49:32 - medallionlayer.bronze_layer - INFO - ======================================================================
+2025-12-05 14:49:32 - medallionlayer.bronze_layer - INFO - BRONZE LAYER - Starting
+2025-12-05 14:49:32 - medallionlayer.bronze_layer - INFO - ======================================================================
+2025-12-05 14:49:32 - medallionlayer.bronze_layer - INFO - 
+Processing table: match_metadata
+2025-12-05 14:49:33 - medallionlayer.bronze_layer - INFO - Read 1 rows from raw.match_metadata
+2025-12-05 14:49:33 - medallionlayer.bronze_layer - INFO -   No duplicates found based on ['matchid']
+2025-12-05 14:49:33 - medallionlayer.bronze_layer - INFO - After quality checks: 1 rows (removed 0)
+2025-12-05 14:49:33 - medallionlayer.bronze_layer - INFO - match_metadata: 1 rows ingested
+2025-12-05 14:49:33 - medallionlayer.bronze_layer - INFO - 
+Processing table: match_events
+2025-12-05 14:49:33 - medallionlayer.bronze_layer - INFO - Read 223 rows from raw.match_events
+2025-12-05 14:49:33 - medallionlayer.bronze_layer - WARNING -   Found 5 duplicate rows based on ['matchid', 'ball', 'innings']
+2025-12-05 14:49:33 - medallionlayer.bronze_layer - INFO - After quality checks: 218 rows (removed 5)
+2025-12-05 14:49:33 - medallionlayer.bronze_layer - INFO - match_events: 218 rows ingested
+2025-12-05 14:49:33 - medallionlayer.bronze_layer - INFO - 
+Validating innings data...
+2025-12-05 14:49:33 - medallionlayer.bronze_layer - INFO - All matches have complete innings data
+2025-12-05 14:49:33 - medallionlayer.bronze_layer - INFO - 
+======================================================================
+2025-12-05 14:49:33 - medallionlayer.bronze_layer - INFO - DATA QUALITY REPORT
+2025-12-05 14:49:33 - medallionlayer.bronze_layer - INFO - ======================================================================
+2025-12-05 14:49:33 - medallionlayer.bronze_layer - INFO - 
+DUPLICATES REMOVED:
+2025-12-05 14:49:33 - medallionlayer.bronze_layer - INFO -   match_metadata: No duplicates found
+2025-12-05 14:49:33 - medallionlayer.bronze_layer - INFO -   match_events: 5 duplicate rows removed
+2025-12-05 14:49:33 - medallionlayer.bronze_layer - INFO - 
+NULL VALUES FOUND:
+2025-12-05 14:49:33 - medallionlayer.bronze_layer - INFO -   match_metadata: No null values in required columns
+2025-12-05 14:49:33 - medallionlayer.bronze_layer - INFO -   match_events: No null values in required columns
+2025-12-05 14:49:33 - medallionlayer.bronze_layer - INFO - 
+INNINGS VALIDATION:
+2025-12-05 14:49:33 - medallionlayer.bronze_layer - INFO - All matches have complete innings data
+2025-12-05 14:49:33 - medallionlayer.bronze_layer - INFO - ======================================================================
 
-2025-12-05 13:43:28 - pipeline.orchestrator - ERROR -     - Error processing venue_statistics: column "matchid" of relation "venue_statistics" does not exist
-LINE 2:         INSERT INTO gold.venue_statistics (id, matchid, venu...
-                                                       ^
+2025-12-05 14:49:33 - medallionlayer.bronze_layer - INFO - 
+======================================================================
+2025-12-05 14:49:33 - medallionlayer.bronze_layer - INFO - BRONZE LAYER - Complete
+2025-12-05 14:49:33 - medallionlayer.bronze_layer - INFO - Tables Processed: 2/2
+2025-12-05 14:49:33 - medallionlayer.bronze_layer - INFO - Total Rows: 219
+2025-12-05 14:49:33 - medallionlayer.bronze_layer - INFO - ======================================================================
+2025-12-05 14:49:33 - medallionlayer.silver_layer - INFO - Silver Layer initialized
+2025-12-05 14:49:33 - medallionlayer.silver_layer - INFO - ======================================================================
+2025-12-05 14:49:33 - medallionlayer.silver_layer - INFO - SILVER LAYER - Starting
+2025-12-05 14:49:33 - medallionlayer.silver_layer - INFO - ======================================================================
+2025-12-05 14:49:33 - medallionlayer.silver_layer - INFO - 
+Processing table: match_metadata
+2025-12-05 14:49:33 - medallionlayer.silver_layer - INFO - Read 1 rows from bronze.match_metadata
+2025-12-05 14:49:33 - medallionlayer.silver_layer - INFO -   Deduplication: Removed 0 duplicates on ['matchid']
+2025-12-05 14:49:33 - medallionlayer.silver_layer - INFO -   Cleaned columns: ['venue', 'series', 'toss', 'player_of_the_match']
+2025-12-05 14:49:33 - medallionlayer.silver_layer - INFO - After transformations: 1 rows (removed 0)
+2025-12-05 14:49:33 - medallionlayer.silver_layer - INFO -   Removed Bronze audit columns: ['ingestion_timestamp', 'source_system', 'pipeline_run_id', 'is_active']
+2025-12-05 14:49:33 - medallionlayer.silver_layer - INFO - match_metadata: 1 rows processed
+2025-12-05 14:49:33 - medallionlayer.silver_layer - INFO - 
+Processing table: match_events
+2025-12-05 14:49:34 - medallionlayer.silver_layer - INFO - Read 218 rows from bronze.match_events
+2025-12-05 14:49:34 - medallionlayer.silver_layer - INFO -   Deduplication: Removed 0 duplicates on ['matchid', 'ball', 'innings']
+2025-12-05 14:49:34 - medallionlayer.silver_layer - INFO -   Cleaned columns: ['bowler', 'batsman', 'commentary', 'innings']
+2025-12-05 14:49:34 - medallionlayer.silver_layer - INFO -   Converting 'score' column to numeric...
+2025-12-05 14:49:34 - medallionlayer.silver_layer - INFO -   Score conversion: 208 converted, 10 not converted (set to 0)
+2025-12-05 14:49:34 - medallionlayer.silver_layer - INFO - After transformations: 218 rows (removed 0)
+2025-12-05 14:49:34 - medallionlayer.silver_layer - INFO -   Removed Bronze audit columns: ['ingestion_timestamp', 'source_system', 'pipeline_run_id', 'is_active']
+2025-12-05 14:49:34 - medallionlayer.silver_layer - INFO - match_events: 218 rows processed
+2025-12-05 14:49:34 - medallionlayer.silver_layer - INFO - 
+======================================================================
+2025-12-05 14:49:34 - medallionlayer.silver_layer - INFO - SILVER LAYER - Complete
+2025-12-05 14:49:34 - medallionlayer.silver_layer - INFO - Tables Processed: 2
+2025-12-05 14:49:34 - medallionlayer.silver_layer - INFO - Total Rows: 219
+2025-12-05 14:49:34 - medallionlayer.silver_layer - INFO - ======================================================================
+2025-12-05 14:49:34 - medallionlayer.gold_layer - INFO - Gold Layer initialized
+2025-12-05 14:49:34 - medallionlayer.gold_layer - INFO - ======================================================================
+2025-12-05 14:49:34 - medallionlayer.gold_layer - INFO - GOLD LAYER - Starting
+2025-12-05 14:49:34 - medallionlayer.gold_layer - INFO - ======================================================================
+2025-12-05 14:49:34 - medallionlayer.gold_layer - INFO - 
+Processing aggregation: match_summary
+2025-12-05 14:49:34 - medallionlayer.gold_layer - INFO - Read 1 rows from silver.match_metadata
+2025-12-05 14:49:34 - medallionlayer.gold_layer - INFO -   Selected 1 distinct rows (no aggregation)
+2025-12-05 14:49:34 - medallionlayer.gold_layer - INFO -   Selected 7 columns for Gold: ['matchid', 'venue', 'series', 'season', 'player_of_the_match', 'first_innings', 'second_innings']
+2025-12-05 14:49:34 - medallionlayer.gold_layer - INFO - Final DataFrame columns: ['matchid', 'venue', 'series', 'season', 'player_of_the_match', 'first_innings', 'second_innings', 'created_at', 'updated_at']
+2025-12-05 14:49:34 - medallionlayer.gold_layer - INFO - Successfully wrote 1 rows to gold.match_summary
+2025-12-05 14:49:34 - medallionlayer.gold_layer - INFO - Successfully created 1 rows for match_summary
+2025-12-05 14:49:34 - medallionlayer.gold_layer - INFO - 
+Processing aggregation: series_summary
+2025-12-05 14:49:34 - medallionlayer.gold_layer - INFO - Read 1 rows from silver.match_metadata
+2025-12-05 14:49:34 - medallionlayer.gold_layer - INFO -   Aggregated to 1 rows
+2025-12-05 14:49:34 - medallionlayer.gold_layer - INFO -   Selected 2 columns for Gold: ['series', 'season']
+2025-12-05 14:49:34 - medallionlayer.gold_layer - INFO - Final DataFrame columns: ['series', 'season', 'created_at', 'updated_at']
+2025-12-05 14:49:34 - medallionlayer.gold_layer - INFO - Successfully wrote 1 rows to gold.series_summary
+2025-12-05 14:49:34 - medallionlayer.gold_layer - INFO - Successfully created 1 rows for series_summary
+2025-12-05 14:49:34 - medallionlayer.gold_layer - INFO - 
+Processing aggregation: venue_statistics
+2025-12-05 14:49:34 - medallionlayer.gold_layer - INFO - Read 1 rows from silver.match_metadata
+2025-12-05 14:49:34 - medallionlayer.gold_layer - INFO -   Aggregated to 1 rows
+2025-12-05 14:49:34 - medallionlayer.gold_layer - INFO -   Selected 2 columns for Gold: ['venue', 'season']
+2025-12-05 14:49:34 - medallionlayer.gold_layer - INFO - Final DataFrame columns: ['venue', 'season', 'created_at', 'updated_at']
+2025-12-05 14:49:34 - medallionlayer.gold_layer - INFO - Successfully wrote 1 rows to gold.venue_statistics
+2025-12-05 14:49:34 - medallionlayer.gold_layer - INFO - Successfully created 1 rows for venue_statistics
+2025-12-05 14:49:34 - medallionlayer.gold_layer - INFO - 
+Processing aggregation: match_ball_statistics
+2025-12-05 14:49:34 - medallionlayer.gold_layer - INFO - Read 218 rows from silver.match_events
+2025-12-05 14:49:34 - medallionlayer.gold_layer - INFO -   Aggregated to 2 rows
+2025-12-05 14:49:34 - medallionlayer.gold_layer - INFO -   Selected 2 columns for Gold: ['matchid', 'innings']
+2025-12-05 14:49:34 - medallionlayer.gold_layer - INFO - Final DataFrame columns: ['matchid', 'innings', 'created_at', 'updated_at']
+2025-12-05 14:49:35 - medallionlayer.gold_layer - INFO - Successfully wrote 2 rows to gold.match_ball_statistics
+2025-12-05 14:49:35 - medallionlayer.gold_layer - INFO - Successfully created 2 rows for match_ball_statistics
+2025-12-05 14:49:35 - medallionlayer.gold_layer - INFO - 
+Processing aggregation: batsman_statistics
+2025-12-05 14:49:35 - medallionlayer.gold_layer - INFO - Read 218 rows from silver.match_events
+2025-12-05 14:49:35 - medallionlayer.gold_layer - INFO -   Aggregated to 15 rows
+2025-12-05 14:49:35 - medallionlayer.gold_layer - INFO -   Selected 5 columns for Gold: ['matchid', 'batsman', 'innings', 'total_runs', 'balls_faced']
+2025-12-05 14:49:35 - medallionlayer.gold_layer - INFO - Final DataFrame columns: ['matchid', 'batsman', 'innings', 'total_runs', 'balls_faced', 'created_at', 'updated_at']
+2025-12-05 14:49:35 - medallionlayer.gold_layer - INFO - Successfully wrote 15 rows to gold.batsman_statistics
+2025-12-05 14:49:35 - medallionlayer.gold_layer - INFO - Successfully created 15 rows for batsman_statistics
+2025-12-05 14:49:35 - medallionlayer.gold_layer - INFO - 
+Processing aggregation: bowler_statistics
+2025-12-05 14:49:35 - medallionlayer.gold_layer - INFO - Read 218 rows from silver.match_events
+2025-12-05 14:49:35 - medallionlayer.gold_layer - INFO -   Aggregated to 11 rows
+2025-12-05 14:49:35 - medallionlayer.gold_layer - INFO -   Selected 3 columns for Gold: ['matchid', 'bowler', 'innings']
+2025-12-05 14:49:35 - medallionlayer.gold_layer - INFO - Final DataFrame columns: ['matchid', 'bowler', 'innings', 'created_at', 'updated_at']
+2025-12-05 14:49:35 - medallionlayer.gold_layer - INFO - Successfully wrote 11 rows to gold.bowler_statistics
+2025-12-05 14:49:35 - medallionlayer.gold_layer - INFO - Successfully created 11 rows for bowler_statistics
+2025-12-05 14:49:35 - medallionlayer.gold_layer - INFO - 
+======================================================================
+2025-12-05 14:49:35 - medallionlayer.gold_layer - INFO - GOLD LAYER - Complete
+2025-12-05 14:49:35 - medallionlayer.gold_layer - INFO - Aggregations Processed: 6
+2025-12-05 14:49:35 - medallionlayer.gold_layer - INFO - Total Rows: 31
+2025-12-05 14:49:35 - medallionlayer.gold_layer - INFO - ======================================================================
+2025-12-05 14:49:35 - pipeline.orchestrator - INFO - 
+================================================================================
+2025-12-05 14:49:35 - pipeline.orchestrator - INFO - PIPELINE EXECUTION SUMMARY
+2025-12-05 14:49:35 - pipeline.orchestrator - INFO - ================================================================================
+2025-12-05 14:49:35 - pipeline.orchestrator - INFO - Status: SUCCESS
+2025-12-05 14:49:35 - pipeline.orchestrator - INFO - Duration: 2.75 seconds
+2025-12-05 14:49:35 - pipeline.orchestrator - INFO - 
+BRONZE Layer:
+2025-12-05 14:49:35 - pipeline.orchestrator - INFO -   Status: success
+2025-12-05 14:49:35 - pipeline.orchestrator - INFO -   Tables Processed: 2
+2025-12-05 14:49:35 - pipeline.orchestrator - INFO -   Total Rows: 219
+2025-12-05 14:49:35 - pipeline.orchestrator - INFO - 
+SILVER Layer:
+2025-12-05 14:49:35 - pipeline.orchestrator - INFO -   Status: success
+2025-12-05 14:49:35 - pipeline.orchestrator - INFO -   Tables Processed: 2
+2025-12-05 14:49:35 - pipeline.orchestrator - INFO -   Total Rows: 219
+2025-12-05 14:49:35 - pipeline.orchestrator - INFO - 
+GOLD Layer:
+2025-12-05 14:49:35 - pipeline.orchestrator - INFO -   Status: success
+2025-12-05 14:49:35 - pipeline.orchestrator - INFO -   Aggregations: 6
+2025-12-05 14:49:35 - pipeline.orchestrator - INFO -   Total Rows: 31
+2025-12-05 14:49:35 - pipeline.orchestrator - INFO - ================================================================================
 
-2025-12-05 13:43:28 - pipeline.orchestrator - ERROR -     - Error processing match_ball_statistics: column "ball" of relation "match_ball_statistics" does not exist
-LINE 2: ...ERT INTO gold.match_ball_statistics (id, matchid, ball, inni...
-                                                             ^
-
-2025-12-05 13:43:28 - pipeline.orchestrator - ERROR -     - Error processing batsman_statistics: column "ball" of relation "batsman_statistics" does not exist
-LINE 2: ...INSERT INTO gold.batsman_statistics (id, matchid, ball, inni...
-                                                             ^
-
-2025-12-05 13:43:28 - pipeline.orchestrator - ERROR -     - Error processing bowler_statistics: column "ball" of relation "bowler_statistics" does not exist
-LINE 2: ... INSERT INTO gold.bowler_statistics (id, matchid, ball, inni...
-                                                             ^
-
-2025-12-05 13:43:28 - pipeline.orchestrator - INFO - ================================================================================
-
-2025-12-05 13:43:28 - __main__ - INFO - Pipeline completed - Status: partial_success, Duration: 2.71s
-2025-12-05 13:43:28 - __main__ - WARNING - Pipeline completed with some errors
+2025-12-05 14:49:35 - __main__ - INFO - Pipeline completed - Status: success, Duration: 2.75s
+2025-12-05 14:49:35 - __main__ - INFO - Pipeline completed successfully

@@ -4,14 +4,12 @@ Gold Layer - Business aggregations and metrics
 import pandas as pd
 from typing import Dict, Any
 from datetime import datetime
-from configs.db_config import save_to_db,get_connection
+from configs.db_config import get_connection, save_to_db
 from utils.logger import setup_logger
-import os
 import warnings
 
 # Suppress pandas SQLAlchemy warning for psycopg2 connections
 warnings.filterwarnings('ignore', message='.*pandas only supports SQLAlchemy.*')
-
 
 logger = setup_logger(__name__)
 
@@ -60,7 +58,7 @@ class GoldLayer:
                 results['aggregations_processed'] += 1
                 results['total_rows'] += rows_created
 
-                logger.info(f"{agg_name}: {rows_created} rows created")
+                logger.info(f"Successfully created {rows_created} rows for {agg_name}")
 
             except Exception as e:
                 error_msg = f"Error processing {agg_name}: {str(e)}"
@@ -90,6 +88,7 @@ class GoldLayer:
         source_table = agg_config.get('source')
         group_by = agg_config.get('group_by', [])
         metrics = agg_config.get('metrics', [])
+        select_columns = agg_config.get('select_columns', [])
 
         # Read from silver
         source_full = f"{self.source_schema}.{source_table}"
@@ -104,16 +103,71 @@ class GoldLayer:
         # Build aggregation
         agg_df = self._build_aggregation(df, group_by, metrics)
 
-        # Add metadata
+        # Select only specific columns for Gold (if specified)
+        if select_columns:
+            agg_df = self._select_gold_columns(agg_df, select_columns)
+
+        # Remove unwanted columns
+        agg_df = self._clean_for_gold(agg_df)
+
+        # Add Gold metadata
         agg_df['created_at'] = datetime.now()
         agg_df['updated_at'] = datetime.now()
 
+        logger.info(f"Final DataFrame columns: {list(agg_df.columns)}")
+
         # Write to gold
-        save_to_db(self.target_schema, agg_name, df)
-        #target_table = f"{self.target_schema}.{agg_name}"
-        #self._write_to_gold(agg_df, target_table)
+        self._write_to_gold(agg_df, agg_name)
 
         return len(agg_df)
+
+    def _select_gold_columns(self, df: pd.DataFrame, select_columns: list) -> pd.DataFrame:
+        """
+        Select only specified columns for Gold layer
+
+        Args:
+            df: DataFrame with all columns
+            select_columns: List of columns to keep
+
+        Returns:
+            DataFrame with only selected columns
+        """
+        # Keep only columns that exist in both the DataFrame and select list
+        columns_to_keep = [col for col in select_columns if col in df.columns]
+
+        if columns_to_keep:
+            df = df[columns_to_keep]
+            logger.info(f"  Selected {len(columns_to_keep)} columns for Gold: {columns_to_keep}")
+
+        return df
+
+    def _clean_for_gold(self, df: pd.DataFrame) -> pd.DataFrame:
+        """
+        Remove Silver-specific columns before writing to Gold
+
+        Args:
+            df: DataFrame with aggregated data
+
+        Returns:
+            Cleaned DataFrame
+        """
+        # Columns to remove (Silver-specific audit columns)
+        columns_to_remove = [
+            'id',
+            'source_id',
+            'processed_at',
+            'is_valid',
+            'validation_errors'
+        ]
+
+        # Remove columns that exist in the DataFrame
+        columns_to_drop = [col for col in columns_to_remove if col in df.columns]
+
+        if columns_to_drop:
+            df = df.drop(columns=columns_to_drop)
+            logger.info(f"  Removed Silver audit columns: {columns_to_drop}")
+
+        return df
 
     def _read_silver_table(self, table_name: str) -> pd.DataFrame:
         """Read data from silver table"""
@@ -128,6 +182,20 @@ class GoldLayer:
 
     def _build_aggregation(self, df: pd.DataFrame, group_by: list, metrics: list) -> pd.DataFrame:
         """Build aggregation based on configuration"""
+
+        # Special case: No metrics means just select distinct rows (no aggregation)
+        if not metrics or len(metrics) == 0:
+            if group_by:
+                # Just get unique combinations of group_by columns
+                result = df[group_by].drop_duplicates().reset_index(drop=True)
+                logger.info(f"  Selected {len(result)} distinct rows (no aggregation)")
+            else:
+                # No grouping, just return the dataframe
+                result = df.copy()
+                logger.info(f"  Returned {len(result)} rows (no aggregation)")
+            return result
+
+        # Normal case: Build aggregation with metrics
         agg_dict = {}
 
         for metric in metrics:
@@ -159,3 +227,23 @@ class GoldLayer:
 
         logger.info(f"  Aggregated to {len(result)} rows")
         return result
+
+    def _write_to_gold(self, df: pd.DataFrame, table_name: str):
+        """Write DataFrame to gold table"""
+        schema = self.target_schema
+        table = table_name
+
+        try:
+            # Log columns being written
+            logger.debug(f"  DataFrame columns: {list(df.columns)}")
+            logger.debug(f"  Writing {len(df)} rows to {schema}.{table}")
+
+            # Use save_to_db directly
+            save_to_db(schema, table, df)
+            logger.info(f"Successfully wrote {len(df)} rows to {schema}.{table}")
+
+        except Exception as e:
+            logger.error(f"Error writing to {schema}.{table}: {e}")
+            logger.error(f"DataFrame columns: {list(df.columns)}")
+            logger.error(f"DataFrame shape: {df.shape}")
+            raise

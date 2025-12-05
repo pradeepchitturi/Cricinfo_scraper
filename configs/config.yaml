@@ -118,73 +118,103 @@ silver:
 gold:
   source_schema: silver
   target_schema: gold
-
   aggregations:
     match_summary:
       source: match_metadata
-      group_by: [matchid, series, season, venue]
-      metrics:
-        - name: match_count
-          type: count
+      group_by:
+        - matchid
+        - venue
+        - series
+        - season
+        - player_of_the_match
+        - first_innings
+        - second_innings
+      select_columns:
+        - matchid
+        - venue
+        - series
+        - season
+        - player_of_the_match
+        - first_innings
+        - second_innings
+      metrics: []
 
     series_summary:
       source: match_metadata
-      group_by: [series, season]
+      group_by:
+        - series
+        - season  # Group by BOTH series and season
+      select_columns:
+        - series
+        - season
       metrics:
         - name: total_matches
           type: count
-        - name: unique_venues
-          type: count_distinct
-          column: venue
+          column: matchid
 
     venue_statistics:
       source: match_metadata
-      group_by: [venue, season]
+      group_by:
+        - venue
+        - season  # Add season for year-over-year comparison
+      select_columns:
+        - venue
+        - season
       metrics:
-        - name: matches_played
+        - name: total_matches
           type: count
-        - name: series_count
-          type: count_distinct
-          column: series
+          column: matchid
 
     match_ball_statistics:
       source: match_events
-      group_by: [matchid, innings]
+      group_by:
+        - matchid
+        - innings
+      select_columns:
+        - matchid
+        - innings
       metrics:
         - name: total_balls
           type: count
+          column: ball
         - name: total_runs
           type: sum
           column: runs_scored
-        - name: unique_batsmen
-          type: count_distinct
-          column: batsman
-        - name: unique_bowlers
-          type: count_distinct
-          column: bowler
 
     batsman_statistics:
       source: match_events
-      group_by: [batsman, matchid]
+      group_by:
+        - matchid
+        - batsman
+        - innings
+      select_columns:
+        - matchid
+        - batsman
+        - innings
+        - total_runs
+        - balls_faced
       metrics:
-        - name: balls_faced
-          type: count
-        - name: runs_scored
+        - name: total_runs
           type: sum
           column: runs_scored
-        - name: matches_played
-          type: count_distinct
-          column: matchid
+        - name: balls_faced
+          type: count
+          column: ball
 
     bowler_statistics:
       source: match_events
-      group_by: [bowler, matchid]
+      group_by:
+        - matchid
+        - bowler
+        - innings
+      select_columns:
+        - matchid
+        - bowler
+        - innings
       metrics:
         - name: balls_bowled
           type: count
+          column: ball
         - name: runs_conceded
           type: sum
           column: runs_scored
-        - name: matches_played
-          type: count_distinct
-          column: matchid

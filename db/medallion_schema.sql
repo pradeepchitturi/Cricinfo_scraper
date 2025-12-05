@@ -130,7 +130,7 @@ CREATE INDEX idx_silver_events_batsman ON silver.match_events(batsman);
 CREATE INDEX idx_silver_events_bowler ON silver.match_events(bowler);
 
 -- ============================================================================
--- GOLD LAYER TABLES (Aggregations and metrics)
+-- GOLD LAYER - Business Aggregations
 -- ============================================================================
 
 -- Match Summary
@@ -138,38 +138,38 @@ DROP TABLE IF EXISTS gold.match_summary CASCADE;
 CREATE TABLE gold.match_summary (
     id SERIAL PRIMARY KEY,
     matchid BIGINT NOT NULL UNIQUE,
+    venue VARCHAR(255),
     series VARCHAR(255),
     season INT,
-    venue VARCHAR(255),
-    match_count INT DEFAULT 1,
+    player_of_the_match VARCHAR(255),
+    first_innings VARCHAR(100),
+    second_innings VARCHAR(100),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Series Summary
+-- Series Summary (per season)
 DROP TABLE IF EXISTS gold.series_summary CASCADE;
 CREATE TABLE gold.series_summary (
     id SERIAL PRIMARY KEY,
     series VARCHAR(255) NOT NULL,
     season INT NOT NULL,
     total_matches INT,
-    unique_venues INT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT unique_series_season UNIQUE (series, season)
+    UNIQUE(series, season)  -- One row per series per season
 );
 
--- Venue Statistics
+-- Venue Statistics (per season)
 DROP TABLE IF EXISTS gold.venue_statistics CASCADE;
 CREATE TABLE gold.venue_statistics (
     id SERIAL PRIMARY KEY,
     venue VARCHAR(255) NOT NULL,
     season INT NOT NULL,
-    matches_played INT,
-    series_count INT,
+    total_matches INT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT unique_venue_season UNIQUE (venue, season)
+    UNIQUE(venue, season)  -- One row per venue per season
 );
 
 -- Match Ball Statistics
@@ -180,41 +180,38 @@ CREATE TABLE gold.match_ball_statistics (
     innings VARCHAR(50) NOT NULL,
     total_balls INT,
     total_runs INT,
-    unique_batsmen INT,
-    unique_bowlers INT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT unique_match_innings UNIQUE (matchid, innings)
+    UNIQUE(matchid, innings)  -- One row per match per innings
 );
 
 -- Batsman Statistics
 DROP TABLE IF EXISTS gold.batsman_statistics CASCADE;
 CREATE TABLE gold.batsman_statistics (
     id SERIAL PRIMARY KEY,
-    batsman VARCHAR(100) NOT NULL,
     matchid BIGINT NOT NULL,
+    batsman VARCHAR(100) NOT NULL,
+    innings VARCHAR(50) NOT NULL,
+    total_runs INT,
     balls_faced INT,
-    runs_scored INT,
-    matches_played INT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT unique_batsman_match UNIQUE (batsman, matchid)
+    UNIQUE(matchid, batsman, innings)  -- One row per batsman per match per innings
 );
 
 -- Bowler Statistics
 DROP TABLE IF EXISTS gold.bowler_statistics CASCADE;
 CREATE TABLE gold.bowler_statistics (
     id SERIAL PRIMARY KEY,
-    bowler VARCHAR(100) NOT NULL,
     matchid BIGINT NOT NULL,
+    bowler VARCHAR(100) NOT NULL,
+    innings VARCHAR(50) NOT NULL,
     balls_bowled INT,
     runs_conceded INT,
-    matches_played INT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT unique_bowler_match UNIQUE (bowler, matchid)
+    UNIQUE(matchid, bowler, innings)  -- One row per bowler per match per innings
 );
-
 -- Indexes for Gold
 CREATE INDEX idx_gold_series_summary ON gold.series_summary(series, season);
 CREATE INDEX idx_gold_venue_stats ON gold.venue_statistics(venue, season);

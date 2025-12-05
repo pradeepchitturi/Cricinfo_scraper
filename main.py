@@ -101,7 +101,7 @@ def scrape_cricket_data():
         if "full-scorecard" in url and "ipl-2025" in url:
             scorecard_links.append(url)
             count += 1
-            if count >= 3:  # REMOVE THIS LIMIT FOR PRODUCTION
+            if count >= 1:  # REMOVE THIS LIMIT FOR PRODUCTION
                 break
 
     print(f"Found {len(scorecard_links)} match scorecards")
