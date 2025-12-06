@@ -5,7 +5,7 @@ import pandas as pd
 import re
 from typing import List, Dict, Any
 from datetime import datetime
-from configs.db_config import save_to_db,get_connection
+from configs.db_config import save_to_db, get_connection
 from utils.logger import setup_logger
 import os
 import warnings
@@ -108,6 +108,8 @@ class SilverLayer:
                 df = self._validate(df, transform)
             elif transform_type == 'convert_score':
                 df = self._convert_score(df, transform)
+            elif transform_type == 'extract_dismissal':  # NEW
+                df = self._extract_dismissal_info(df, transform)
 
         logger.info(f"After transformations: {len(df)} rows (removed {initial_count - len(df)})")
 
@@ -123,11 +125,11 @@ class SilverLayer:
         df['source_id'] = df.get('id', None)  # Keep reference to Bronze ID
         df['created_at'] = datetime.now()
         df['updated_at'] = datetime.now()
-        print(len(df))
+
+        print(f"Processed {len(df)} rows")
+
         # Write to silver
         save_to_db(self.target_schema, table_name, df)
-        #target_table = f"{self.target_schema}.{table_name}"
-        #self._write_to_silver(df, target_table)
 
         return len(df)
 
@@ -157,6 +159,146 @@ class SilverLayer:
             logger.info(f"  Removed Bronze audit columns: {columns_to_drop}")
 
         return df
+
+    def _extract_dismissal_info(self, df: pd.DataFrame, config: Dict) -> pd.DataFrame:
+        """
+        Extract dismissal method and fielder from commentary
+
+        Parses dismissal information from commentary text after #**# pattern
+        Example: "#**#Angkrish Raghuvanshi c †Sharma b Yash Dayal 30..."
+
+        Args:
+            df: DataFrame to process
+            config: Configuration (optional)
+
+        Returns:
+            DataFrame with new columns: dismissal_method, fielder_name
+        """
+        score_column = config.get('score_column', 'score')
+        commentary_column = config.get('commentary_column', 'commentary')
+
+        if score_column not in df.columns or commentary_column not in df.columns:
+            logger.warning(f"  Required columns not found for dismissal extraction")
+            return df
+
+        logger.info(f"  Extracting dismissal information...")
+
+        # Initialize new columns
+        df['dismissal_method'] = None
+        df['fielder_name'] = None
+
+        extracted_count = 0
+
+        for idx, row in df.iterrows():
+            score = str(row[score_column]).strip().upper() if pd.notna(row[score_column]) else ''
+            commentary = str(row[commentary_column]) if pd.notna(row[commentary_column]) else ''
+
+            # Only process OUT entries
+            if 'OUT' not in score:
+                continue
+
+            # Extract dismissal details from commentary after #**#
+            if '#**#' in commentary:
+                dismissal_text = commentary.split('#**#')[1].strip()
+
+                # Parse dismissal information
+                method, fielder = self._parse_dismissal_text(dismissal_text)
+
+                df.at[idx, 'dismissal_method'] = method
+                df.at[idx, 'fielder_name'] = fielder
+
+                if method:
+                    extracted_count += 1
+
+        logger.info(f"  Extracted dismissal info for {extracted_count} wickets")
+
+        return df
+
+    def _parse_dismissal_text(self, dismissal_text: str) -> tuple:
+        """
+        Parse dismissal text to extract method and fielder
+
+        Examples:
+        - "c †Sharma b Yash Dayal" -> ("caught", "Sharma")
+        - "b Yash Dayal" -> ("bowled", None)
+        - "lbw b Bumrah" -> ("lbw", None)
+        - "st †Dhoni b Chahal" -> ("stumped", "Dhoni")
+        - "run out (Jadeja)" -> ("run out", "Jadeja")
+
+        Args:
+            dismissal_text: Text containing dismissal information
+
+        Returns:
+            Tuple of (dismissal_method, fielder_name)
+        """
+        method = None
+        fielder = None
+
+        try:
+            # Remove extra whitespace
+            text = ' '.join(dismissal_text.split())
+
+            # Caught (c or caught)
+            if re.search(r'\bc\s+', text) or 'caught' in text.lower():
+                method = 'caught'
+                # Extract fielder name after 'c' or 'caught'
+                # Pattern: c †FielderName or c FielderName
+                match = re.search(r'c\s+†?([A-Za-z\s]+?)\s+b\s+', text)
+                if match:
+                    fielder = match.group(1).strip()
+
+            # Stumped (st)
+            elif re.search(r'\bst\s+', text) or 'stumped' in text.lower():
+                method = 'stumped'
+                # Extract wicketkeeper name
+                match = re.search(r'st\s+†?([A-Za-z\s]+?)\s+b\s+', text)
+                if match:
+                    fielder = match.group(1).strip()
+
+            # Run out
+            elif 'run out' in text.lower():
+                method = 'run out'
+                # Extract fielder name in parentheses
+                match = re.search(r'run out\s*\(([^)]+)\)', text, re.IGNORECASE)
+                if match:
+                    fielder = match.group(1).strip()
+
+            # Bowled
+            elif re.search(r'\bb\s+', text) and not method:
+                method = 'bowled'
+
+            # LBW
+            elif 'lbw' in text.lower():
+                method = 'lbw'
+
+            # Hit wicket
+            elif 'hit wicket' in text.lower():
+                method = 'hit wicket'
+
+            # Obstructing the field
+            elif 'obstructing' in text.lower():
+                method = 'obstructing the field'
+
+            # Handled the ball
+            elif 'handled' in text.lower():
+                method = 'handled the ball'
+
+            # Hit the ball twice
+            elif 'hit the ball twice' in text.lower():
+                method = 'hit the ball twice'
+
+            # Timed out
+            elif 'timed out' in text.lower():
+                method = 'timed out'
+
+            # Retired hurt (not a dismissal but tracked)
+            elif 'retired' in text.lower():
+                method = 'retired hurt'
+
+        except Exception as e:
+            logger.debug(f"  Error parsing dismissal text '{dismissal_text}': {e}")
+
+        return method, fielder
 
     def _convert_score(self, df: pd.DataFrame, config: Dict) -> pd.DataFrame:
         """

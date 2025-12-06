@@ -104,22 +104,25 @@ CREATE TABLE silver.match_events (
     id SERIAL PRIMARY KEY,
     matchid BIGINT NOT NULL,
     ball VARCHAR(10) NOT NULL,
-    innings VARCHAR(50) NOT NULL,
+    innings VARCHAR(50),
     event TEXT,
     score VARCHAR(50),
     runs_scored INT DEFAULT 0,
     commentary TEXT,
     bowler VARCHAR(100),
     batsman VARCHAR(100),
+    dismissal_method VARCHAR(50),      -- NEW: Method of dismissal
+    fielder_name VARCHAR(100),         -- NEW: Fielder who took catch/stumping
+
+    -- Silver audit columns
     is_valid BOOLEAN DEFAULT TRUE,
     validation_errors TEXT,
-    source_id INT,
-    processed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    source_id BIGINT,
+    processed_at TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-    -- Constraints
-    CONSTRAINT unique_match_ball UNIQUE (matchid, ball, innings,commentary)
+    CONSTRAINT unique_silver_match_ball UNIQUE (matchid, ball, innings)
 );
 
 -- Indexes for Silver
