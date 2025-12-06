@@ -37,7 +37,14 @@ class CommentaryParser:
                 # Extract all text from spans and paragraphs
                 span_texts = [span.get_text(strip=True) for span in block.find_all("span")]
                 p_texts = [p.get_text(strip=True) for p in block.find_all("p")]
-                all_text = span_texts + p_texts
+                strong_texts = [strong.get_text(strip=True) for strong in block.find_all("strong")]
+
+                # Combine p_texts and strong_texts into one element
+                p_and_strong_combined = '#**#'.join(p_texts + strong_texts)
+
+                # Add to all_text
+                all_text = span_texts + [p_and_strong_combined]
+
 
                 if all_text:  # Only add non-empty blocks
                     data.append(all_text)
