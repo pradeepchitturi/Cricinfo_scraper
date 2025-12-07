@@ -112,6 +112,13 @@ silver:
           ball: not_null
           innings: not_null
 
+      # NEW: Enrich player names with full names from match_players
+      - type: enrich_player_names
+        columns:
+          - batsman
+          - bowler
+          - fielder_name
+
     match_players:
       - type: clean
         columns:
