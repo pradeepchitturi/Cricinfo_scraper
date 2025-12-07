@@ -1,5 +1,5 @@
 # ============================================================================
-# Cricket Data Pipeline - Medallion Architecture Configuration
+# Cricket Data Pipeline - Medallion Architecture Configuration (Enhanced)
 # ============================================================================
 
 # Schema Configuration
@@ -106,13 +106,6 @@ silver:
         score_column: score
         commentary_column: commentary
 
-      # NEW: Enrich player names with full names from match_players
-      - type: enrich_player_names
-        columns:
-          - batsman
-          - bowler
-          - fielder_name
-
       - type: validate
         rules:
           matchid: not_null
@@ -130,97 +123,62 @@ silver:
           matchid: not_null
           player_name: not_null
           team: not_null
+
 # ============================================================================
-# Gold Layer Configuration
+# Gold Layer Configuration (Enhanced)
 # ============================================================================
 gold:
   source_schema: silver
   target_schema: gold
 
   aggregations:
+    # 1. Enhanced Match Summary (with scores and winner)
     match_summary:
-      source: match_metadata
-      group_by:
-        - matchid
-        - venue
-        - series
-        - season
-        - player_of_the_match
-        - first_innings
-        - second_innings
-      select_columns:
-        - matchid
-        - venue
-        - series
-        - season
-        - player_of_the_match
-        - first_innings
-        - second_innings
-      metrics: []
+      type: custom
+      description: "Match summary with innings scores and winner determination"
 
+    # 2. Enhanced Series Summary (with series_id)
     series_summary:
-      source: match_metadata
-      group_by:
-        - series
-        - season
-      select_columns:
-        - series
-        - season
-        - total_matches
-      metrics:
-        - name: total_matches
-          type: count
-          column: matchid
+      type: custom
+      description: "Series summary with Cricinfo series ID"
 
+    # 3. Venue Statistics (standard)
     venue_statistics:
       source: match_metadata
       group_by:
         - venue
         - season
-      select_columns:
-        - venue
-        - season
-        - total_matches
       metrics:
         - name: total_matches
           type: count
           column: matchid
 
+    # 4. Match Ball Statistics (with wickets)
     match_ball_statistics:
-      source: match_events
-      group_by:
-        - matchid
-        - innings
-      metrics:
-        - name: total_balls
-          type: count
-          column: ball
-        - name: total_runs
-          type: sum
-          column: runs_scored
+      type: custom
+      description: "Match ball statistics per innings with wickets"
 
+    # 5. Match Batsman Statistics (with run distribution)
+    match_batsman_statistics:
+      type: custom
+      description: "Per-match batting statistics with run distribution (1s, 2s, 3s, 4s, 6s)"
+
+    # 6. Match Bowler Statistics (with wickets, extras, run distribution)
+    match_bowler_statistics:
+      type: custom
+      description: "Per-match bowling statistics with wickets, extras, and run distribution"
+
+    # 7. Batsman Statistics (Career - NEW)
     batsman_statistics:
-      source: match_events
-      group_by:
-        - matchid
-        - batsman
-        - innings
-      select_columns:
-        - matchid
-        - batsman
-        - innings
-        - total_runs
-        - balls_faced
-      filters:
-        exclude_extras: true
-      metrics:
-        - name: total_runs
-          type: sum
-          column: runs_scored
-        - name: balls_faced
-          type: count
-          column: ball
+      type: custom
+      description: "Career batting statistics with 50s, 100s, not outs, and run distribution"
 
+    # 8. Bowler Statistics (Career - NEW)
+    bowler_statistics:
+      type: custom
+      description: "Career bowling statistics with wickets, extras, and run distribution"
+
+    # 9. Player Team History (SCD Type 2)
     player_team_history:
       type: scd_type2
       source: match_players
@@ -229,17 +187,3 @@ gold:
         - team
         - season
       description: "Track player-team associations over time with SCD Type 2"
-
-    bowler_statistics:
-      source: match_events
-      group_by:
-        - matchid
-        - bowler
-        - innings
-      metrics:
-        - name: balls_bowled
-          type: count
-          column: ball
-        - name: runs_conceded
-          type: sum
-          column: runs_scored

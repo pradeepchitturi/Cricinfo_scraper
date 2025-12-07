@@ -1,5 +1,5 @@
 -- ============================================================================
--- Medallion Architecture Schema - Bronze, Silver, Gold
+-- Medallion Architecture Schema - Bronze, Silver, Gold (Enhanced)
 -- ============================================================================
 
 -- Create Schemas
@@ -195,29 +195,34 @@ CREATE INDEX idx_silver_players_player ON silver.match_players(player_name);
 CREATE INDEX idx_silver_players_type ON silver.match_players(player_type);
 
 -- ============================================================================
--- GOLD LAYER TABLES
+-- GOLD LAYER TABLES (ENHANCED)
 -- ============================================================================
 
--- Match Summary
+-- Match Summary (Enhanced)
 DROP TABLE IF EXISTS gold.match_summary CASCADE;
 CREATE TABLE gold.match_summary (
     id SERIAL PRIMARY KEY,
     matchid BIGINT NOT NULL UNIQUE,
     venue VARCHAR(255),
     series VARCHAR(255),
+    series_id VARCHAR(100),
     season INT,
     player_of_the_match VARCHAR(255),
     first_innings VARCHAR(100),
     second_innings VARCHAR(100),
+    first_innings_score INT,
+    second_innings_score INT,
+    winner VARCHAR(100),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Series Summary
+-- Series Summary (Enhanced)
 DROP TABLE IF EXISTS gold.series_summary CASCADE;
 CREATE TABLE gold.series_summary (
     id SERIAL PRIMARY KEY,
     series VARCHAR(255) NOT NULL,
+    series_id VARCHAR(100),
     season INT NOT NULL,
     total_matches INT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -237,7 +242,7 @@ CREATE TABLE gold.venue_statistics (
     UNIQUE(venue, season)
 );
 
--- Match Ball Statistics
+-- Match Ball Statistics (Enhanced with Wickets)
 DROP TABLE IF EXISTS gold.match_ball_statistics CASCADE;
 CREATE TABLE gold.match_ball_statistics (
     id SERIAL PRIMARY KEY,
@@ -245,37 +250,96 @@ CREATE TABLE gold.match_ball_statistics (
     innings VARCHAR(50) NOT NULL,
     total_balls INT,
     total_runs INT,
+    total_wickets INT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     UNIQUE(matchid, innings)
 );
 
--- Batsman Statistics
-DROP TABLE IF EXISTS gold.batsman_statistics CASCADE;
-CREATE TABLE gold.batsman_statistics (
+-- Match Batsman Statistics (Enhanced with Run Distribution)
+DROP TABLE IF EXISTS gold.match_batsman_statistics CASCADE;
+CREATE TABLE gold.match_batsman_statistics (
     id SERIAL PRIMARY KEY,
     matchid BIGINT NOT NULL,
     batsman VARCHAR(100) NOT NULL,
     innings VARCHAR(50) NOT NULL,
     total_runs INT,
     balls_faced INT,
+    ones INT DEFAULT 0,
+    twos INT DEFAULT 0,
+    threes INT DEFAULT 0,
+    fours INT DEFAULT 0,
+    sixes INT DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     UNIQUE(matchid, batsman, innings)
 );
 
--- Bowler Statistics
-DROP TABLE IF EXISTS gold.bowler_statistics CASCADE;
-CREATE TABLE gold.bowler_statistics (
+-- Match Bowler Statistics (Enhanced with Wickets, Extras, Run Distribution)
+DROP TABLE IF EXISTS gold.match_bowler_statistics CASCADE;
+CREATE TABLE gold.match_bowler_statistics (
     id SERIAL PRIMARY KEY,
     matchid BIGINT NOT NULL,
     bowler VARCHAR(100) NOT NULL,
     innings VARCHAR(50) NOT NULL,
     balls_bowled INT,
     runs_conceded INT,
+    wickets_taken INT DEFAULT 0,
+    wides INT DEFAULT 0,
+    no_balls INT DEFAULT 0,
+    ones_conceded INT DEFAULT 0,
+    twos_conceded INT DEFAULT 0,
+    threes_conceded INT DEFAULT 0,
+    fours_conceded INT DEFAULT 0,
+    sixes_conceded INT DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     UNIQUE(matchid, bowler, innings)
+);
+
+-- Batsman Statistics (Career Aggregation)
+DROP TABLE IF EXISTS gold.batsman_statistics CASCADE;
+CREATE TABLE gold.batsman_statistics (
+    id SERIAL PRIMARY KEY,
+    batsman VARCHAR(100) NOT NULL UNIQUE,
+    total_runs_scored INT,
+    total_balls_faced INT,
+    not_outs INT DEFAULT 0,
+    ones INT DEFAULT 0,
+    twos INT DEFAULT 0,
+    threes INT DEFAULT 0,
+    fours INT DEFAULT 0,
+    sixes INT DEFAULT 0,
+    fifties INT DEFAULT 0,
+    hundreds INT DEFAULT 0,
+    matches_played INT,
+    batting_average DECIMAL(5,2),
+    strike_rate DECIMAL(5,2),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Bowler Statistics (Career Aggregation)
+DROP TABLE IF EXISTS gold.bowler_statistics CASCADE;
+CREATE TABLE gold.bowler_statistics (
+    id SERIAL PRIMARY KEY,
+    bowler VARCHAR(100) NOT NULL UNIQUE,
+    total_balls_bowled INT,
+    total_runs_conceded INT,
+    total_wickets_taken INT,
+    total_wides INT DEFAULT 0,
+    total_no_balls INT DEFAULT 0,
+    ones_conceded INT DEFAULT 0,
+    twos_conceded INT DEFAULT 0,
+    threes_conceded INT DEFAULT 0,
+    fours_conceded INT DEFAULT 0,
+    sixes_conceded INT DEFAULT 0,
+    matches_bowled INT,
+    economy_rate DECIMAL(5,2),
+    bowling_average DECIMAL(5,2),
+    strike_rate DECIMAL(5,2),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Player Team History (SCD Type 2)
@@ -290,25 +354,30 @@ CREATE TABLE gold.player_team_history (
     last_match_date DATE,
     matches_played INT DEFAULT 0,
     is_impact_player BOOLEAN DEFAULT FALSE,
-
-    -- SCD Type 2 columns
     effective_from DATE NOT NULL,
     effective_to DATE,
     is_current BOOLEAN DEFAULT TRUE,
     version INT DEFAULT 1,
-
-    -- Audit columns
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Create partial unique index for current records
--- This ensures only one current record per player-team combination
 CREATE UNIQUE INDEX idx_gold_player_team_unique_current
 ON gold.player_team_history(player_name, team, season)
 WHERE is_current = TRUE;
 
--- Indexes for efficient querying
+-- Gold Indexes
+CREATE INDEX idx_gold_match_summary_matchid ON gold.match_summary(matchid);
+CREATE INDEX idx_gold_match_summary_series ON gold.match_summary(series, season);
+CREATE INDEX idx_gold_series_summary ON gold.series_summary(series, season);
+CREATE INDEX idx_gold_series_id ON gold.series_summary(series_id);
+CREATE INDEX idx_gold_venue_stats ON gold.venue_statistics(venue, season);
+CREATE INDEX idx_gold_match_ball ON gold.match_ball_statistics(matchid, innings);
+CREATE INDEX idx_gold_match_batsman ON gold.match_batsman_statistics(batsman);
+CREATE INDEX idx_gold_match_bowler ON gold.match_bowler_statistics(bowler);
+CREATE INDEX idx_gold_batsman_stats ON gold.batsman_statistics(batsman);
+CREATE INDEX idx_gold_bowler_stats ON gold.bowler_statistics(bowler);
 CREATE INDEX idx_gold_player_team_player ON gold.player_team_history(player_name);
 CREATE INDEX idx_gold_player_team_team ON gold.player_team_history(team);
 CREATE INDEX idx_gold_player_team_season ON gold.player_team_history(season);
@@ -316,17 +385,10 @@ CREATE INDEX idx_gold_player_team_current ON gold.player_team_history(is_current
 CREATE INDEX idx_gold_player_team_effective ON gold.player_team_history(effective_from, effective_to);
 CREATE INDEX idx_gold_player_team_composite ON gold.player_team_history(player_name, team, season);
 
--- Gold Indexes
-CREATE INDEX idx_gold_series_summary ON gold.series_summary(series, season);
-CREATE INDEX idx_gold_venue_stats ON gold.venue_statistics(venue, season);
-CREATE INDEX idx_gold_match_ball ON gold.match_ball_statistics(matchid, innings);
-CREATE INDEX idx_gold_batsman ON gold.batsman_statistics(batsman);
-CREATE INDEX idx_gold_bowler ON gold.bowler_statistics(bowler);
-
 -- Success Message
 DO $$
 BEGIN
     RAISE NOTICE 'Medallion Architecture schema created successfully!';
     RAISE NOTICE 'Schemas: bronze, silver, gold';
-    RAISE NOTICE 'Player Team History table added with SCD Type 2 support';
+    RAISE NOTICE 'Enhanced Gold layer with cricket analytics';
 END $$;
