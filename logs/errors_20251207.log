@@ -1,0 +1,39 @@
+2025-12-07 12:48:47 - configs.db_config - ERROR - Error initializing medallion schema: syntax error at or near "WHERE"
+LINE 306:         WHERE is_current = TRUE
+                  ^
+
+2025-12-07 12:48:47 - __main__ - ERROR - Fatal error: syntax error at or near "WHERE"
+LINE 306:         WHERE is_current = TRUE
+                  ^
+Traceback (most recent call last):
+  File "C:\Users\prade\Pycharm\Cricinfo_scraper\main.py", line 311, in main
+    initialize_medallion_schema()
+  File "C:\Users\prade\Pycharm\Cricinfo_scraper\configs\db_config.py", line 76, in initialize_medallion_schema
+    cursor.execute(sql)
+psycopg2.errors.SyntaxError: syntax error at or near "WHERE"
+LINE 306:         WHERE is_current = TRUE
+                  ^
+
+2025-12-07 12:53:47 - core.page_navigator - ERROR - Error during page scroll: HTTPConnectionPool(host='localhost', port=58448): Read timed out. (read timeout=120)
+2025-12-07 12:58:15 - medallionlayer.gold_layer - ERROR - Error processing player_team_history: Must provide 'func' or tuples of '(column, aggfunc).
+2025-12-07 12:58:15 - medallionlayer.gold_layer - ERROR - Full error details:
+Traceback (most recent call last):
+  File "C:\Users\prade\Pycharm\Cricinfo_scraper\medallionlayer\gold_layer.py", line 46, in run
+    rows_created = self._process_aggregation(agg_name, agg_config)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\Pycharm\Cricinfo_scraper\medallionlayer\gold_layer.py", line 73, in _process_aggregation
+    return self._process_scd_type2(agg_name, agg_config)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\Pycharm\Cricinfo_scraper\medallionlayer\gold_layer.py", line 144, in _process_scd_type2
+    df_new = self._build_player_team_dimension(df_source)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\Pycharm\Cricinfo_scraper\medallionlayer\gold_layer.py", line 195, in _build_player_team_dimension
+    df_agg = df.groupby(group_cols, dropna=False).agg(**agg_dict).reset_index()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\pandas\core\groupby\generic.py", line 1435, in aggregate
+    relabeling, func, columns, order = reconstruct_func(func, **kwargs)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\pandas\core\apply.py", line 1478, in reconstruct_func
+    raise TypeError("Must provide 'func' or tuples of '(column, aggfunc).")
+TypeError: Must provide 'func' or tuples of '(column, aggfunc).
+2025-12-07 12:58:16 - pipeline.orchestrator - ERROR -     - Error processing player_team_history: Must provide 'func' or tuples of '(column, aggfunc).

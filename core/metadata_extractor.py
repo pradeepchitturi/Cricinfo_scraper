@@ -227,33 +227,51 @@ class MetadataExtractor:
                 # Player name is between "Impact Player Sub:" and " in"
 
                 team_match = re.search(r'^(.+?)\s+Impact Player Sub:', text, re.IGNORECASE)
-                player_match = re.search(r'Impact Player Sub:\s*(.+?)\s+in\s+for', text, re.IGNORECASE)
+                player_in_name  = re.search(r'Impact Player Sub:\s*(.+?)\s+in\s+for', text, re.IGNORECASE)
+                player_out_match = re.search(r'in\s+for\s+(.+?)\s*\(', text, re.IGNORECASE)
 
-                if team_match and player_match:
+                if team_match and player_in_name :
                     team_name = team_match.group(1).strip()
-                    player_name = player_match.group(1).strip()
+                    player_in_name  = player_in_name .group(1).strip()
 
                     # Clean names
                     team_name = MetadataExtractor._clean_team_name(team_name)
                     if not team_name:
                         team_name = "Unknown Team"
 
-                    player_name = MetadataExtractor._clean_player_name(player_name)
+                    player_in_name  = MetadataExtractor._clean_player_name(player_in_name )
 
 
-                    if player_name:
+                    if player_in_name :
                         players.append({
                             'matchid': int(match_id),
                             'innings': None,
                             'team': str(team_name),
-                            'player_name': str(player_name),
+                            'player_name': str(player_in_name ),
                             'batted': False,
                             'batting_position': None,
                             'player_type': 'impact'
                         })
 
-                        logger.debug(f"Parsed impact player (used): {player_name} for {team_name}")
+                        logger.debug(f"Parsed impact player (used): {player_in_name } for {team_name}")
 
+                        # Add the player being replaced (if captured)
+                        if player_out_match:
+                            player_out_name = player_out_match.group(1).strip()
+                            player_out_name = MetadataExtractor._clean_player_name(player_out_name)
+
+                            if player_out_name:
+                                players.append({
+                                    'matchid': int(match_id),
+                                    'innings': None,
+                                    'team': str(team_name),
+                                    'player_name': str(player_out_name),
+                                    'batted': False,
+                                    'batting_position': None,
+                                    'player_type': 'regular'
+                                })
+
+                                logger.debug(f"Parsed replaced player (out): {player_out_name} for {team_name}")
             else:
                 # Format 1: "Team Impact Player Subs: Player1, Player2, Player3..."
                 match = re.search(r'(.+?)\s+Impact Player Subs?:\s*(.+)', text, re.IGNORECASE)

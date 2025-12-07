@@ -278,6 +278,44 @@ CREATE TABLE gold.bowler_statistics (
     UNIQUE(matchid, bowler, innings)
 );
 
+-- Player Team History (SCD Type 2)
+DROP TABLE IF EXISTS gold.player_team_history CASCADE;
+CREATE TABLE gold.player_team_history (
+    id SERIAL PRIMARY KEY,
+    player_name VARCHAR(100) NOT NULL,
+    team VARCHAR(100) NOT NULL,
+    season INT NOT NULL,
+    series VARCHAR(255),
+    first_match_date DATE,
+    last_match_date DATE,
+    matches_played INT DEFAULT 0,
+    is_impact_player BOOLEAN DEFAULT FALSE,
+
+    -- SCD Type 2 columns
+    effective_from DATE NOT NULL,
+    effective_to DATE,
+    is_current BOOLEAN DEFAULT TRUE,
+    version INT DEFAULT 1,
+
+    -- Audit columns
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Create partial unique index for current records
+-- This ensures only one current record per player-team combination
+CREATE UNIQUE INDEX idx_gold_player_team_unique_current
+ON gold.player_team_history(player_name, team, season)
+WHERE is_current = TRUE;
+
+-- Indexes for efficient querying
+CREATE INDEX idx_gold_player_team_player ON gold.player_team_history(player_name);
+CREATE INDEX idx_gold_player_team_team ON gold.player_team_history(team);
+CREATE INDEX idx_gold_player_team_season ON gold.player_team_history(season);
+CREATE INDEX idx_gold_player_team_current ON gold.player_team_history(is_current) WHERE is_current = TRUE;
+CREATE INDEX idx_gold_player_team_effective ON gold.player_team_history(effective_from, effective_to);
+CREATE INDEX idx_gold_player_team_composite ON gold.player_team_history(player_name, team, season);
+
 -- Gold Indexes
 CREATE INDEX idx_gold_series_summary ON gold.series_summary(series, season);
 CREATE INDEX idx_gold_venue_stats ON gold.venue_statistics(venue, season);
@@ -290,5 +328,5 @@ DO $$
 BEGIN
     RAISE NOTICE 'Medallion Architecture schema created successfully!';
     RAISE NOTICE 'Schemas: bronze, silver, gold';
-    RAISE NOTICE 'Player tables added to all layers with player_type support';
+    RAISE NOTICE 'Player Team History table added with SCD Type 2 support';
 END $$;

@@ -221,6 +221,15 @@ gold:
           type: count
           column: ball
 
+    player_team_history:
+      type: scd_type2
+      source: match_players
+      dimension_keys:
+        - player_name
+        - team
+        - season
+      description: "Track player-team associations over time with SCD Type 2"
+
     bowler_statistics:
       source: match_events
       group_by:
