@@ -7,7 +7,7 @@ import uuid
 from datetime import datetime
 from configs.db_config import save_to_db,get_connection
 from utils.logger import setup_logger
-import os
+import numpy as np
 import warnings
 
 # Suppress pandas SQLAlchemy warning for psycopg2 connections
@@ -136,13 +136,13 @@ class BronzeLayer:
             self.data_quality_report['missing_columns'][table_name] = missing_cols
 
         logger.info(f"After quality checks: {len(df)} rows (removed {initial_count - len(df)})")
-
         # Add audit columns
+
+        df = df.replace(np.nan, None)
         if self.settings.get('add_audit_columns', True):
             df = self._add_audit_columns(df)
 
         # Write to bronze
-
         # Save commentary to DB
         save_to_db(self.target_schema, table_name, df)
         #target_table = f"{self.target_schema}.{table_name}"

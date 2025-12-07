@@ -7,7 +7,7 @@ from typing import List, Dict, Any
 from datetime import datetime
 from configs.db_config import save_to_db, get_connection
 from utils.logger import setup_logger
-import os
+import numpy as np
 import warnings
 
 # Suppress pandas SQLAlchemy warning for psycopg2 connections
@@ -108,8 +108,10 @@ class SilverLayer:
                 df = self._validate(df, transform)
             elif transform_type == 'convert_score':
                 df = self._convert_score(df, transform)
-            elif transform_type == 'extract_dismissal':  # NEW
+            elif transform_type == 'extract_dismissal':
                 df = self._extract_dismissal_info(df, transform)
+            elif transform_type == 'enrich_player_names':  # NEW
+                df = self._enrich_player_names(df, transform)
 
         logger.info(f"After transformations: {len(df)} rows (removed {initial_count - len(df)})")
 
@@ -126,12 +128,245 @@ class SilverLayer:
         df['created_at'] = datetime.now()
         df['updated_at'] = datetime.now()
 
+        df = df.replace(np.nan, None)
         print(f"Processed {len(df)} rows")
+
 
         # Write to silver
         save_to_db(self.target_schema, table_name, df)
 
         return len(df)
+
+    def _enrich_player_names(self, df: pd.DataFrame, config: Dict) -> pd.DataFrame:
+        """
+        Enrich player names by joining with match_players table
+        Replaces abbreviated/inconsistent names with full official names
+
+        Args:
+            df: DataFrame from match_events
+            config: Configuration with columns to enrich
+
+        Returns:
+            DataFrame with enriched player names
+        """
+        columns_to_enrich = config.get('columns', ['batsman', 'bowler', 'fielder_name'])
+
+        logger.info(f"  Enriching player names for columns: {columns_to_enrich}")
+
+        try:
+            # Load match_players lookup table
+            players_df = self._load_match_players_lookup()
+
+            if players_df.empty:
+                logger.warning("  No match_players data available for enrichment")
+                return df
+
+            logger.info(f"  Loaded {len(players_df)} player records for enrichment")
+
+            # Track enrichment statistics
+            enrichment_stats = {col: {'enriched': 0, 'not_found': 0, 'null': 0} for col in columns_to_enrich}
+
+            # Enrich each configured column
+            for column in columns_to_enrich:
+                if column not in df.columns:
+                    logger.warning(f"  Column '{column}' not found in DataFrame, skipping")
+                    continue
+
+                logger.info(f"  Enriching column: {column}")
+
+                # Apply enrichment
+                df, stats = self._enrich_column(df, column, players_df)
+                enrichment_stats[column] = stats
+
+            # Log enrichment results
+            logger.info("  Enrichment results:")
+            for column, stats in enrichment_stats.items():
+                if column in df.columns:
+                    logger.info(f"    {column}: {stats['enriched']} enriched, "
+                              f"{stats['not_found']} not found, {stats['null']} null")
+
+            return df
+
+        except Exception as e:
+            logger.error(f"  Error during player name enrichment: {e}", exc_info=True)
+            logger.warning("  Continuing without enrichment")
+            return df
+
+    def _load_match_players_lookup(self) -> pd.DataFrame:
+        """
+        Load match_players table for name lookup
+        Creates a mapping of abbreviated names to full names
+
+        Returns:
+            DataFrame with player name mappings
+        """
+        query = f"""
+            SELECT DISTINCT
+                matchid,
+                team,
+                player_name,
+                innings
+            FROM {self.source_schema}.match_players
+            WHERE is_active = TRUE
+        """
+
+        conn = get_connection()
+        try:
+            df = pd.read_sql(query, conn)
+            logger.debug(f"  Loaded {len(df)} player records from {self.source_schema}.match_players")
+            return df
+        except Exception as e:
+            logger.error(f"  Error loading match_players: {e}")
+            return pd.DataFrame()
+        finally:
+            conn.close()
+
+    def _enrich_column(self, df: pd.DataFrame, column: str, players_df: pd.DataFrame) -> tuple:
+        """
+        Enrich a single column with full player names
+
+        Args:
+            df: Match events DataFrame
+            column: Column name to enrich (batsman, bowler, fielder_name)
+            players_df: Player lookup DataFrame
+
+        Returns:
+            Tuple of (enriched DataFrame, statistics dict)
+        """
+        stats = {'enriched': 0, 'not_found': 0, 'null': 0}
+
+        # Create enriched column name
+        enriched_col = f"{column}_enriched"
+        df[enriched_col] = df[column]  # Start with original values
+
+        for idx, row in df.iterrows():
+            original_name = row[column]
+
+            # Skip if null or empty
+            if pd.isna(original_name) or original_name == '' or original_name is None:
+                stats['null'] += 1
+                continue
+
+            matchid = row.get('matchid')
+            innings = row.get('innings')
+
+            # Try to find full name
+            full_name = self._find_full_player_name(
+                original_name,
+                matchid,
+                innings,
+                players_df
+            )
+
+            if full_name and full_name != original_name:
+                df.at[idx, enriched_col] = full_name
+                stats['enriched'] += 1
+                logger.debug(f"    Enriched: '{original_name}' -> '{full_name}'")
+            elif not full_name:
+                stats['not_found'] += 1
+                logger.debug(f"    Not found: '{original_name}'")
+            else:
+                # Already full name (exact match)
+                stats['enriched'] += 1
+
+        # Replace original column with enriched version
+        df[column] = df[enriched_col]
+        df.drop(columns=[enriched_col], inplace=True)
+
+        return df, stats
+
+    def _find_full_player_name(self, short_name: str, matchid: int, innings: str,
+                               players_df: pd.DataFrame) -> str:
+        """
+        Find full player name from match_players lookup
+
+        Matching strategy:
+        1. Exact match (case-insensitive)
+        2. Last name match
+        3. Contains match (for abbreviated names like "Conway" -> "Devon Conway")
+
+        Args:
+            short_name: Abbreviated or partial name from match_events
+            matchid: Match ID for filtering
+            innings: Innings for filtering
+            players_df: Player lookup DataFrame
+
+        Returns:
+            Full player name or original name if not found
+        """
+        if not short_name or pd.isna(short_name):
+            return None
+
+        short_name = str(short_name).strip()
+
+        # Filter players by matchid and innings
+        match_players = players_df[
+            (players_df['matchid'] == matchid) &
+            (players_df['innings'] == innings)
+        ]
+
+        if match_players.empty:
+            # Try without innings filter (player might be in opposite innings)
+            match_players = players_df[players_df['matchid'] == matchid]
+
+        if match_players.empty:
+            return None
+
+        # Strategy 1: Exact match (case-insensitive)
+        exact_match = match_players[
+            match_players['player_name'].str.lower() == short_name.lower()
+        ]
+        if not exact_match.empty:
+            return exact_match.iloc[0]['player_name']
+
+        # Strategy 2: Last name match
+        # Extract last name from short_name
+        short_name_parts = short_name.split()
+        if short_name_parts:
+            last_name = short_name_parts[-1].lower()
+
+            # Find players where last name matches
+            last_name_matches = match_players[
+                match_players['player_name'].str.lower().str.split().str[-1] == last_name
+            ]
+
+            if len(last_name_matches) == 1:
+                # Only one match, use it
+                return last_name_matches.iloc[0]['player_name']
+            elif len(last_name_matches) > 1:
+                # Multiple matches, try to narrow down
+                # Check if short_name contains first initial
+                if len(short_name_parts) > 1:
+                    first_initial = short_name_parts[0][0].lower()
+
+                    initial_matches = last_name_matches[
+                        last_name_matches['player_name'].str.lower().str[0] == first_initial
+                    ]
+
+                    if len(initial_matches) == 1:
+                        return initial_matches.iloc[0]['player_name']
+
+        # Strategy 3: Contains match (short name is contained in full name)
+        contains_matches = match_players[
+            match_players['player_name'].str.lower().str.contains(short_name.lower(), na=False)
+        ]
+
+        if len(contains_matches) == 1:
+            return contains_matches.iloc[0]['player_name']
+
+        # Strategy 4: Full name contains short name parts (reverse check)
+        # e.g., "Gaikwad" should match "Ruturaj Gaikwad"
+        for part in short_name.split():
+            if len(part) > 2:  # Only check meaningful parts
+                part_matches = match_players[
+                    match_players['player_name'].str.lower().str.contains(part.lower(), na=False)
+                ]
+
+                if len(part_matches) == 1:
+                    return part_matches.iloc[0]['player_name']
+
+        # No match found
+        return None
 
     def _remove_bronze_audit_columns(self, df: pd.DataFrame) -> pd.DataFrame:
         """

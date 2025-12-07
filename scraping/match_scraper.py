@@ -15,6 +15,7 @@ from configs.db_config import save_to_db
 import json
 from selenium.common.exceptions import TimeoutException, WebDriverException, NoSuchElementException
 from utils.logger import setup_logger
+from scraping.player_extractor import PlayerExtractor
 
 logger = setup_logger(__name__)
 
@@ -34,6 +35,7 @@ class MatchScraper:
         self.base_dir = base_dir
         self.page_load_timeout = page_load_timeout
         self.max_retries = max_retries
+        self.player_extractor = PlayerExtractor(schema='raw')
 
     def get_folder_name(self, metadata):
         """Generate folder name from metadata"""
@@ -164,6 +166,20 @@ class MatchScraper:
             keys_to_merge = [k for k in metadata if pattern.match(k)]
             metadata["player_replacements"] = json.dumps({k: metadata.pop(k) for k in keys_to_merge})
 
+            #Extracting player names
+            logger.info("Extracting player rosters...")
+            player_results = self.player_extractor.extract_and_store(
+                html_content=driver.page_source,
+                match_id=match_id
+            )
+
+            if player_results['status'] == 'success':
+                logger.info(f"Stored {player_results['total_players']} players")
+                for team in player_results['teams']:
+                    logger.info(f"  - {team}")
+            else:
+                logger.warning("Player extraction failed")
+
             # Navigate to commentary page
             commentary_url = self.url.replace("/full-scorecard", "/ball-by-ball-commentary")
             self._navigate_with_retry(driver, commentary_url, "commentary page")
@@ -216,10 +232,10 @@ class MatchScraper:
             )
 
             # Save metadata to DB
-            print(f"    Saving metadata to database...")
+            print(f"Saving metadata to database...")
             logger.info("Saving metadata to database")
             save_to_db("raw", "match_metadata", metadata_df)
-            print(f"    ✓ Metadata saved ({len(metadata_df)} rows)")
+            print(f"Metadata saved ({len(metadata_df)} rows)")
 
             time.sleep(5)
             page_nav.scroll_full_page()
@@ -247,14 +263,16 @@ class MatchScraper:
             )
 
             # Save commentary to DB
-            print(f"    Saving commentary to database...")
+            print(f"Saving commentary to database...")
             logger.info("Saving commentary to database")
             save_to_db("raw", "match_events", final_df)
-            print(f"    ✓ Commentary saved ({len(final_df)} events)")
+            print(f"Commentary saved ({len(final_df)} events)")
             logger.info(f"Commentary saved: {len(final_df)} total events")
 
             print(f"    ✓ Successfully scraped match {match_id}")
             logger.info(f"Successfully completed scraping match {match_id}")
+
+
 
         except TimeoutException as e:
             error_msg = f"Timeout error after {self.max_retries} retries: {str(e)[:200]}"

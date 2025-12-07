@@ -1,15 +1,13 @@
 # ============================================================================
 # Cricket Data Pipeline - Medallion Architecture Configuration
 # ============================================================================
-# Note: Database credentials are read from .env file
-# ============================================================================
 
 # Schema Configuration
 schemas:
-  raw: raw          # Source data from scraper
-  bronze: bronze    # Raw copy with audit columns
-  silver: silver    # Cleaned and validated data
-  gold: gold        # Business aggregations
+  raw: raw
+  bronze: bronze
+  silver: silver
+  gold: gold
 
 # ============================================================================
 # Bronze Layer Configuration
@@ -30,6 +28,12 @@ bronze:
       business_key: [matchid, ball, innings, commentary]
       check_duplicates: true
       required_columns: [matchid, ball, innings, batsman, bowler]
+
+    - name: match_players
+      primary_key: id
+      business_key: [matchid, innings, player_name]
+      check_duplicates: true
+      required_columns: [matchid, team, player_name]
 
   settings:
     batch_size: 1000
@@ -98,13 +102,16 @@ silver:
           "3 byes": 3
           "4 byes": 4
 
-      # ========================================================================
-      # NEW: Extract Dismissal Information
-      # ========================================================================
       - type: extract_dismissal
         score_column: score
         commentary_column: commentary
-      # ========================================================================
+
+      # NEW: Enrich player names with full names from match_players
+      - type: enrich_player_names
+        columns:
+          - batsman
+          - bowler
+          - fielder_name
 
       - type: validate
         rules:
@@ -112,12 +119,24 @@ silver:
           ball: not_null
           innings: not_null
 
+    match_players:
+      - type: clean
+        columns:
+          player_name: [trim]
+          team: [trim, title_case]
+
+      - type: validate
+        rules:
+          matchid: not_null
+          player_name: not_null
+          team: not_null
 # ============================================================================
 # Gold Layer Configuration
 # ============================================================================
 gold:
   source_schema: silver
   target_schema: gold
+
   aggregations:
     match_summary:
       source: match_metadata
@@ -193,7 +212,7 @@ gold:
         - total_runs
         - balls_faced
       filters:
-        exclude_extras: true  # Exclude wides, no-balls, leg-byes, byes
+        exclude_extras: true
       metrics:
         - name: total_runs
           type: sum
@@ -208,7 +227,6 @@ gold:
         - matchid
         - bowler
         - innings
-      # For bowlers, we KEEP extras (they count against the bowler)
       metrics:
         - name: balls_bowled
           type: count
