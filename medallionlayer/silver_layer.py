@@ -112,6 +112,8 @@ class SilverLayer:
                 df = self._extract_dismissal_info(df, transform)
             elif transform_type == 'enrich_player_names':  # NEW
                 df = self._enrich_player_names(df, transform)
+            elif transform_type == 'enrich_team_names':  # NEW
+                df = self._enrich_team_names(df, table_name)
 
         logger.info(f"After transformations: {len(df)} rows (removed {initial_count - len(df)})")
 
@@ -652,5 +654,206 @@ class SilverLayer:
                 removed = initial_count - len(df)
                 if removed > 0:
                     logger.info(f"  Validation: Removed {removed} rows with null {column}")
+
+        return df
+
+    def _enrich_team_names(self, df: pd.DataFrame, table_name: str) -> pd.DataFrame:
+        """
+        Enrich innings column with actual team names from bronze.match_players
+
+        The innings column in bronze.match_events contains abbreviated team names like
+        "innings_1", "innings_2", "1st innings", "2nd innings", or team abbreviations.
+        This method replaces them with full team names from bronze.match_players.
+
+        Example:
+            innings_1 -> "Kolkata Knight Riders"
+            innings_2 -> "Royal Challengers Bengaluru"
+            KKR -> "Kolkata Knight Riders"
+        """
+        if table_name != 'match_events':
+            return df
+
+        if 'innings' not in df.columns or 'matchid' not in df.columns:
+            logger.warning("Cannot enrich team names - required columns missing")
+            return df
+
+        logger.info("Enriching innings with team names from bronze.match_players...")
+
+        # First, let's check what innings values exist in the dataframe
+        unique_innings = df['innings'].unique()
+        logger.info(f"Unique innings values in match_events: {unique_innings}")
+
+        # Get team-innings mappings from bronze.match_players
+        query = f"""
+            SELECT DISTINCT
+                matchid,
+                innings,
+                team
+            FROM {self.source_schema}.match_players
+            WHERE innings IS NOT NULL
+              AND team IS NOT NULL
+              AND innings != ''
+              AND team != ''
+              AND is_active = TRUE
+            ORDER BY matchid, innings
+        """
+
+        conn = get_connection()
+        try:
+            df_team_innings = pd.read_sql(query, conn)
+            logger.info(f"Loaded {len(df_team_innings)} team-innings mappings from bronze.match_players")
+
+            # Log the mappings for debugging
+            if not df_team_innings.empty:
+                logger.info("Team-innings mappings from bronze:")
+                for _, row in df_team_innings.iterrows():
+                    logger.info(f"  Match {row['matchid']}, innings='{row['innings']}' -> team='{row['team']}'")
+
+        except Exception as e:
+            logger.warning(f"Could not load team-innings mappings: {e}")
+            return df
+        finally:
+            conn.close()
+
+        if df_team_innings.empty:
+            logger.warning("No team-innings mappings found in bronze.match_players")
+            return df
+
+        # Create multiple mapping strategies
+        # Strategy 1: Direct mapping (matchid, innings) -> team
+        direct_mapping = {}
+        for _, row in df_team_innings.iterrows():
+            key = (row['matchid'], row['innings'])
+            direct_mapping[key] = row['team']
+
+        # Strategy 2: Create team abbreviation mapping
+        team_abbrev_mapping = {}
+        for _, row in df_team_innings.iterrows():
+            team = row['team']
+            matchid = row['matchid']
+
+            # Common abbreviations
+            abbrevs = []
+
+            # For "Kolkata Knight Riders" -> ["KKR", "Kolkata"]
+            team_parts = team.split()
+            if len(team_parts) >= 2:
+                initials = ''.join([p[0] for p in team_parts])
+                abbrevs.append(initials)
+                abbrevs.append(team_parts[0])  # First word
+
+            # Map each abbreviation to team
+            for abbrev in abbrevs:
+                team_abbrev_mapping[(matchid, abbrev.lower())] = team
+
+        # Strategy 3: Map innings numbers to teams
+        # Group by matchid and get first/second team
+        match_teams = {}
+        for matchid, group in df_team_innings.groupby('matchid'):
+            teams = group.sort_values('innings')['team'].tolist()
+            if len(teams) >= 1:
+                match_teams[(matchid, 1)] = teams[0]
+            if len(teams) >= 2:
+                match_teams[(matchid, 2)] = teams[1]
+
+        logger.info(f"Created {len(direct_mapping)} direct mappings")
+        logger.info(f"Created {len(team_abbrev_mapping)} abbreviation mappings")
+        logger.info(f"Created {len(match_teams)} match-team mappings")
+
+        # Map innings to team names using multiple strategies
+        def map_innings_to_team(row):
+            if pd.isna(row['innings']) or row['innings'] == '':
+                return row['innings']
+
+            matchid = row['matchid']
+            innings_str = str(row['innings']).strip()
+            innings_lower = innings_str.lower()
+
+            # Strategy 1: Direct match (matchid, innings) -> team
+            key = (matchid, innings_str)
+            if key in direct_mapping:
+                return direct_mapping[key]
+
+            # Try case-insensitive direct match
+            for (mid, inn), team in direct_mapping.items():
+                if mid == matchid and inn.lower() == innings_lower:
+                    return team
+
+            # Strategy 2: Check if innings is already a full team name
+            for (mid, inn), team in direct_mapping.items():
+                if mid == matchid and team.lower() == innings_lower:
+                    return team  # Already enriched
+
+            # Strategy 3: Handle innings_1, innings_2, 1st innings, 2nd innings formats
+            if 'innings_1' in innings_lower or '1st innings' in innings_lower or innings_lower == '1':
+                # Try direct key
+                for suffix in ['innings_1', '1st innings', 'first innings']:
+                    key = (matchid, suffix)
+                    if key in direct_mapping:
+                        return direct_mapping[key]
+                # Try match_teams mapping
+                if (matchid, 1) in match_teams:
+                    return match_teams[(matchid, 1)]
+
+            if 'innings_2' in innings_lower or '2nd innings' in innings_lower or innings_lower == '2':
+                # Try direct key
+                for suffix in ['innings_2', '2nd innings', 'second innings']:
+                    key = (matchid, suffix)
+                    if key in direct_mapping:
+                        return direct_mapping[key]
+                # Try match_teams mapping
+                if (matchid, 2) in match_teams:
+                    return match_teams[(matchid, 2)]
+
+            # Strategy 4: Check team abbreviations
+            key = (matchid, innings_lower)
+            if key in team_abbrev_mapping:
+                return team_abbrev_mapping[key]
+
+            # Strategy 5: Fuzzy match - check if innings contains team name
+            for (mid, inn), team in direct_mapping.items():
+                if mid == matchid:
+                    # Check if innings contains any part of team name
+                    team_words = team.lower().split()
+                    innings_words = innings_lower.split()
+                    if any(word in team_words for word in innings_words):
+                        return team
+
+            # No match found - log for debugging
+            logger.debug(f"No mapping found for matchid={matchid}, innings='{innings_str}'")
+            return innings_str  # Return original
+
+        # Store original for comparison
+        original_innings = df['innings'].copy()
+
+        # Apply mapping
+        df['innings'] = df.apply(map_innings_to_team, axis=1)
+
+        # Count enriched records
+        enriched_count = (df['innings'] != original_innings).sum()
+        logger.info(f"Enriched {enriched_count} records with team names from bronze.match_players")
+
+        # Show sample of enrichment
+        if enriched_count > 0:
+            sample_df = df[df['innings'] != original_innings][['matchid', 'ball', 'innings', 'batsman']].head(5)
+            logger.info(f"Sample enriched records:\n{sample_df.to_string()}")
+
+            # Show before/after comparison
+            logger.info("Before/After comparison:")
+            for idx in sample_df.head(3).index:
+                logger.info(f"  '{original_innings[idx]}' -> '{df.loc[idx, 'innings']}'")
+        else:
+            logger.warning("No records were enriched - debugging info:")
+            logger.warning(f"  Innings values in events: {df['innings'].unique()[:5]}")
+            logger.warning(f"  Available team mappings: {list(direct_mapping.values())[:5]}")
+            logger.warning(f"  Sample mapping keys: {list(direct_mapping.keys())[:5]}")
+
+            # Show sample records that weren't enriched
+            sample_unenriched = df[['matchid', 'innings']].drop_duplicates().head(5)
+            logger.warning(f"Sample unenriched records:\n{sample_unenriched.to_string()}")
+
+        # Show final innings distribution
+        innings_dist = df.groupby(['matchid', 'innings']).size().reset_index(name='ball_count')
+        logger.info(f"Final innings distribution:\n{innings_dist.to_string()}")
 
         return df

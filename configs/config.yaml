@@ -119,6 +119,11 @@ silver:
           - bowler
           - fielder_name
 
+      # NEW: Enrich team names with full names from match_players
+      - type: enrich_team_names
+        columns:
+          - innings
+
     match_players:
       - type: clean
         columns:
