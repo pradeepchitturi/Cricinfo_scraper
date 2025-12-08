@@ -604,7 +604,14 @@ class GoldLayer:
         return records_processed
 
     def _execute_scd_merge(self, df_new: pd.DataFrame, table_name: str) -> int:
-        """Execute SCD Type 2 merge using SQL"""
+        """
+        Execute SCD Type 2 merge using SQL
+
+        Correct Order:
+        1. Expire old records (player changed teams)
+        2. Update existing records (same player-team-season, accumulate stats)
+        3. Insert new records (new player-team-season combinations)
+        """
         conn = get_connection()
         cursor = conn.cursor()
 
@@ -634,6 +641,7 @@ class GoldLayer:
                 );
             """)
             conn.commit()
+            logger.info("Staging table created successfully")
 
             # Step 2: Load data into staging
             logger.info("Loading data into staging table...")
@@ -660,11 +668,14 @@ class GoldLayer:
             conn.commit()
             logger.info(f"Loaded {len(df_staging)} records into staging")
 
-            # Step 3: Close old records
-            logger.info("Closing old records...")
-            close_query = f"""
+            # Step 3: Expire old records (player changed teams or left)
+            logger.info("Step 1/3: Expiring old records where player changed teams...")
+            expire_query = f"""
                 UPDATE {target_table} tgt
-                SET is_current = FALSE, effective_to = CURRENT_DATE, updated_at = CURRENT_TIMESTAMP
+                SET 
+                    is_current = FALSE, 
+                    effective_to = CURRENT_DATE, 
+                    updated_at = CURRENT_TIMESTAMP
                 WHERE tgt.is_current = TRUE
                   AND NOT EXISTS (
                       SELECT 1 FROM {staging_table} stg
@@ -673,19 +684,65 @@ class GoldLayer:
                         AND stg.season = tgt.season
                   );
             """
-            cursor.execute(close_query)
-            closed_count = cursor.rowcount
-            logger.info(f"Closed {closed_count} old records")
+            cursor.execute(expire_query)
+            expired_count = cursor.rowcount
+            conn.commit()
+            logger.info(f"✓ Expired {expired_count} old records")
 
-            # Step 4: Insert new records
-            logger.info("Inserting new records...")
+            # Step 4: Update existing current records (same player-team-season)
+            logger.info("Step 2/3: Updating existing current records...")
+            update_query = f"""
+                UPDATE {target_table} tgt
+                SET 
+                    matches_played = tgt.matches_played + stg.matches_played,
+                    last_match_date = GREATEST(tgt.last_match_date, stg.last_match_date),
+                    first_match_date = LEAST(tgt.first_match_date, stg.first_match_date),
+                    series = CASE 
+                        WHEN tgt.series IS NULL THEN stg.series
+                        WHEN stg.series IS NULL THEN tgt.series
+                        WHEN tgt.series = stg.series THEN tgt.series
+                        ELSE tgt.series || ', ' || stg.series
+                    END,
+                    is_impact_player = CASE 
+                        WHEN stg.is_impact_player = TRUE THEN TRUE 
+                        ELSE tgt.is_impact_player 
+                    END,
+                    updated_at = CURRENT_TIMESTAMP
+                FROM {staging_table} stg
+                WHERE tgt.player_name = stg.player_name
+                  AND tgt.team = stg.team
+                  AND tgt.season = stg.season
+                  AND tgt.is_current = TRUE;
+            """
+            cursor.execute(update_query)
+            updated_count = cursor.rowcount
+            conn.commit()
+            logger.info(f"✓ Updated {updated_count} existing records")
+
+            # Step 5: Insert new records (only if not exists)
+            logger.info("Step 3/3: Inserting new records...")
             insert_query = f"""
                 INSERT INTO {target_table} (
                     player_name, team, season, series, first_match_date, last_match_date,
                     matches_played, is_impact_player, effective_from, effective_to,
                     is_current, version, created_at, updated_at
                 )
-                SELECT stg.* FROM {staging_table} stg
+                SELECT 
+                    stg.player_name,
+                    stg.team,
+                    stg.season,
+                    stg.series,
+                    stg.first_match_date,
+                    stg.last_match_date,
+                    stg.matches_played,
+                    stg.is_impact_player,
+                    stg.effective_from,
+                    stg.effective_to,
+                    stg.is_current,
+                    stg.version,
+                    stg.created_at,
+                    stg.updated_at
+                FROM {staging_table} stg
                 WHERE NOT EXISTS (
                     SELECT 1 FROM {target_table} tgt
                     WHERE tgt.player_name = stg.player_name
@@ -696,36 +753,25 @@ class GoldLayer:
             """
             cursor.execute(insert_query)
             inserted_count = cursor.rowcount
-            logger.info(f"Inserted {inserted_count} new records")
-
-            # Step 5: Update existing records
-            logger.info("Updating existing records...")
-            update_query = f"""
-                UPDATE {target_table} tgt
-                SET matches_played = tgt.matches_played + stg.matches_played,
-                    last_match_date = stg.last_match_date,
-                    is_impact_player = CASE WHEN stg.is_impact_player = TRUE THEN TRUE ELSE tgt.is_impact_player END,
-                    updated_at = CURRENT_TIMESTAMP
-                FROM {staging_table} stg
-                WHERE tgt.player_name = stg.player_name
-                  AND tgt.team = stg.team
-                  AND tgt.season = stg.season
-                  AND tgt.is_current = TRUE;
-            """
-            cursor.execute(update_query)
-            updated_count = cursor.rowcount
-            logger.info(f"Updated {updated_count} existing records")
-
             conn.commit()
+            logger.info(f"✓ Inserted {inserted_count} new records")
 
-            total_processed = closed_count + inserted_count + updated_count
-            logger.info(f"SCD Type 2 merge complete: {closed_count} closed, {inserted_count} inserted, {updated_count} updated")
+            # Summary
+            total_processed = expired_count + updated_count + inserted_count
+            logger.info("=" * 70)
+            logger.info("SCD TYPE 2 MERGE COMPLETE")
+            logger.info(f"  Expired: {expired_count} records (player changed teams)")
+            logger.info(f"  Updated: {updated_count} records (accumulated stats)")
+            logger.info(f"  Inserted: {inserted_count} records (new combinations)")
+            logger.info(f"  Total: {total_processed} records processed")
+            logger.info("=" * 70)
 
             return total_processed
 
         except Exception as e:
             conn.rollback()
             logger.error(f"Error during SCD merge: {e}")
+            logger.error(f"Full error details:", exc_info=True)
             raise
         finally:
             cursor.close()
@@ -741,23 +787,43 @@ class GoldLayer:
             logger.error(f"Missing required columns: {missing_cols}")
             return pd.DataFrame()
 
+        # Enrich with season if not present
         if 'season' not in df.columns:
             logger.info("Season not in match_players, fetching from match_metadata")
             df = self._enrich_with_season(df)
 
+        # Enrich with series if not present
+        if 'series' not in df.columns:
+            logger.info("Series not in match_players, fetching from match_metadata")
+            df = self._enrich_with_series(df)
+
         group_cols = ['player_name', 'team', 'season']
 
-        agg_dict = {'matchid': 'count'}
+        # Base aggregation
+        agg_dict = {
+            'matchid': 'count'
+        }
 
+        # Add is_impact_player if exists
         if 'is_impact_player' in df.columns:
             agg_dict['is_impact_player'] = 'max'
 
+        # Add series aggregation - take first non-null value or concatenate unique values
+        if 'series' in df.columns:
+            agg_dict['series'] = lambda x: ', '.join(x.dropna().unique()) if len(x.dropna()) > 0 else None
+
+        # Perform aggregation
         df_agg = df.groupby(group_cols, dropna=False).agg(agg_dict).reset_index()
         df_agg.rename(columns={'matchid': 'matches_played'}, inplace=True)
 
+        # Set defaults for missing columns
         if 'is_impact_player' not in df_agg.columns:
             df_agg['is_impact_player'] = False
 
+        if 'series' not in df_agg.columns:
+            df_agg['series'] = None
+
+        # Type conversions and metadata
         df_agg['is_impact_player'] = df_agg['is_impact_player'].astype(bool)
         df_agg['effective_from'] = datetime.now().date()
         df_agg['effective_to'] = None
@@ -765,11 +831,14 @@ class GoldLayer:
         df_agg['version'] = 1
         df_agg['first_match_date'] = datetime.now().date()
         df_agg['last_match_date'] = datetime.now().date()
-        df_agg['series'] = None
         df_agg['created_at'] = datetime.now()
         df_agg['updated_at'] = datetime.now()
 
         logger.info(f"Built dimension with {len(df_agg)} player-team-season combinations")
+
+        # Log series info
+        series_with_data = df_agg['series'].notna().sum()
+        logger.info(f"Series column populated for {series_with_data}/{len(df_agg)} records")
 
         return df_agg
 
@@ -781,16 +850,39 @@ class GoldLayer:
             df_metadata = pd.read_sql(query, conn)
             conn.close()
 
+            # Merge with match_metadata to get season
             df = df.merge(df_metadata, on='matchid', how='left')
             df['season'] = df['season'].fillna(datetime.now().year)
 
-            logger.info("Enriched with season data")
+            logger.info(f"Enriched with season data: {len(df)} records")
             return df
+
         except Exception as e:
             logger.warning(f"Could not enrich with season: {e}")
             df['season'] = datetime.now().year
             return df
 
+    def _enrich_with_series(self, df: pd.DataFrame) -> pd.DataFrame:
+        """Enrich player data with series from match_metadata"""
+        try:
+            query = f"SELECT matchid, series FROM {self.source_schema}.match_metadata"
+            conn = get_connection()
+            df_metadata = pd.read_sql(query, conn)
+            conn.close()
+
+            # Merge with match_metadata to get series
+            df = df.merge(df_metadata, on='matchid', how='left')
+
+            # Count how many records got series data
+            series_count = df['series'].notna().sum()
+            logger.info(f"Enriched with series data: {series_count}/{len(df)} records have series")
+
+            return df
+
+        except Exception as e:
+            logger.warning(f"Could not enrich with series: {e}")
+            df['series'] = None
+            return df
     # ========================================================================
     # STANDARD AGGREGATION METHODS
     # ========================================================================
