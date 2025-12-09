@@ -341,7 +341,7 @@ def scrape_cricket_data():
     # ========================================================================
     # Filter Match Links
     # ========================================================================
-    scorecard_links = ["https://www.espncricinfo.com/series/ipl-2025-1449924/rajasthan-royals-vs-kolkata-knight-riders-6th-match-1473443/full-scorecard","https://www.espncricinfo.com/series/ipl-2025-1449924/kolkata-knight-riders-vs-royal-challengers-bengaluru-1st-match-1473438/full-scorecard                                               "]
+    scorecard_links = []
     count = 0
 
     for url in match_links:
@@ -352,6 +352,7 @@ def scrape_cricket_data():
             # REMOVE THIS LIMIT FOR PRODUCTION
             #if count >= 1:
                 #break
+            
 
     print(f"Found {len(scorecard_links)} match scorecards")
     logger.info(f"Found {len(scorecard_links)} match scorecards")
