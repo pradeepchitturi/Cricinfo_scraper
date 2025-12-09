@@ -199,15 +199,19 @@ class MetadataExtractor:
     @staticmethod
     def _parse_impact_player_text(text, match_id):
         """
-        Parse impact player text - handles both formats
+        Parse impact player text - handles multiple formats
 
-        Format 1 (Multiple subs):
+        Format 1 (Multiple subs - announced but not used):
         "Kolkata Knight Riders Impact Player Subs: Manish Pandey, Luvnith Sisodia,
          Anukul Roy, Anrich Nortje and Vaibhav Arora"
 
-        Format 2 (Single player used):
+        Format 2a (Single player used - with "in for"):
         "Royal Challengers Bengaluru Impact Player Sub: Devdutt Padikkal in for
          Suyash Sharma (Kolkata Knight Riders innings, 15.6 ov)"
+
+        Format 2b (Single player used - without "in"):
+        "Lucknow Super Giants Impact Player Sub: MR Marsh for DS Rathi
+         (Sunrisers Hyderabad innings, 19.6 ov)"
 
         Args:
             text: Text containing impact player information
@@ -218,62 +222,85 @@ class MetadataExtractor:
         """
         players = []
 
-
         try:
-            # Check if this is Format 2 (single player with "in for")
-            if ' in for ' in text.lower():
-                # Format 2: "Team Impact Player Sub: PlayerName in for..."
-                # Team name is before "Impact Player Sub:"
-                # Player name is between "Impact Player Sub:" and " in"
+            # Determine format by checking for "for" keyword (Format 2) vs comma-separated list (Format 1)
+            # Format 2 has " for " indicating a substitution
+            # Format 1 has commas and "and" for multiple players
 
+            is_substitution_format = ' for ' in text.lower() and '(' in text
+
+            if is_substitution_format:
+                # ================================================================
+                # Format 2: Single substitution (with or without "in")
+                # "Team Impact Player Sub: PlayerIN [in] for PlayerOUT (...)"
+                # ================================================================
+
+                # Extract team name (before "Impact Player Sub:")
                 team_match = re.search(r'^(.+?)\s+Impact Player Sub:', text, re.IGNORECASE)
-                player_in_name  = re.search(r'Impact Player Sub:\s*(.+?)\s+in\s+for', text, re.IGNORECASE)
-                player_out_match = re.search(r'in\s+for\s+(.+?)\s*\(', text, re.IGNORECASE)
 
-                if team_match and player_in_name :
+                # Extract player IN (with optional "in")
+                player_in_match = re.search(
+                    r'Impact Player Sub:\s*(.+?)\s+(?:in\s+)?for',
+                    text,
+                    re.IGNORECASE
+                )
+
+                # Extract player OUT (with optional "in")
+                player_out_match = re.search(
+                    r'(?:in\s+)?for\s+(.+?)\s*\(',
+                    text,
+                    re.IGNORECASE
+                )
+
+                if team_match and player_in_match:
                     team_name = team_match.group(1).strip()
-                    player_in_name  = player_in_name .group(1).strip()
+                    player_in_name = player_in_match.group(1).strip()
 
                     # Clean names
                     team_name = MetadataExtractor._clean_team_name(team_name)
                     if not team_name:
                         team_name = "Unknown Team"
 
-                    player_in_name  = MetadataExtractor._clean_player_name(player_in_name )
+                    player_in_name = MetadataExtractor._clean_player_name(player_in_name)
 
-
-                    if player_in_name :
+                    # Add player coming IN (impact player)
+                    if player_in_name:
                         players.append({
                             'matchid': int(match_id),
                             'innings': None,
                             'team': str(team_name),
-                            'player_name': str(player_in_name ),
+                            'player_name': str(player_in_name),
                             'batted': False,
                             'batting_position': None,
                             'player_type': 'impact'
                         })
 
-                        logger.debug(f"Parsed impact player (used): {player_in_name } for {team_name}")
+                        logger.debug(f"Parsed impact player (IN): {player_in_name} for {team_name}")
 
-                        # Add the player being replaced (if captured)
-                        if player_out_match:
-                            player_out_name = player_out_match.group(1).strip()
-                            player_out_name = MetadataExtractor._clean_player_name(player_out_name)
+                    # Add player going OUT (being replaced)
+                    if player_out_match:
+                        player_out_name = player_out_match.group(1).strip()
+                        player_out_name = MetadataExtractor._clean_player_name(player_out_name)
 
-                            if player_out_name:
-                                players.append({
-                                    'matchid': int(match_id),
-                                    'innings': None,
-                                    'team': str(team_name),
-                                    'player_name': str(player_out_name),
-                                    'batted': False,
-                                    'batting_position': None,
-                                    'player_type': 'regular'
-                                })
+                        if player_out_name:
+                            players.append({
+                                'matchid': int(match_id),
+                                'innings': None,
+                                'team': str(team_name),
+                                'player_name': str(player_out_name),
+                                'batted': False,
+                                'batting_position': None,
+                                'player_type': 'regular'
+                            })
 
-                                logger.debug(f"Parsed replaced player (out): {player_out_name} for {team_name}")
+                            logger.debug(f"Parsed replaced player (OUT): {player_out_name} for {team_name}")
+
             else:
-                # Format 1: "Team Impact Player Subs: Player1, Player2, Player3..."
+                # ================================================================
+                # Format 1: Multiple subs announced (comma-separated list)
+                # "Team Impact Player Subs: Player1, Player2, Player3..."
+                # ================================================================
+
                 match = re.search(r'(.+?)\s+Impact Player Subs?:\s*(.+)', text, re.IGNORECASE)
 
                 if match:
@@ -290,10 +317,13 @@ class MetadataExtractor:
 
                     # Handle "and" in last player
                     if player_names:
-                        player_names[-1] = player_names[-1].replace(' and ', ', ')
-                        if ', ' in player_names[-1]:
-                            last_players = [p.strip() for p in player_names[-1].split(',')]
-                            player_names = player_names[:-1] + last_players
+                        last_player = player_names[-1]
+                        if ' and ' in last_player:
+                            # Split by "and" and add both parts
+                            last_player = last_player.replace(' and ', ', ')
+                            if ', ' in last_player:
+                                last_players = [p.strip() for p in last_player.split(',')]
+                                player_names = player_names[:-1] + last_players
 
                     # Create player records
                     for player_name in player_names:

@@ -25,7 +25,7 @@ class PlayerExtractor:
         self.table_name = 'match_players'
         logger.info(f"PlayerExtractor initialized - Target: {schema}.{self.table_name}")
 
-    def extract_and_store(self, html_content: str, match_id: int) -> dict:
+    def extract_and_store(self, html_content: str, match_id: int) -> tuple:
         """
         Extract player names from HTML and store in database
 
@@ -34,7 +34,9 @@ class PlayerExtractor:
             match_id: Match identifier
 
         Returns:
-            Dictionary with extraction results
+            tuple: (players_df: pd.DataFrame, results_dict: dict)
+                - players_df: DataFrame containing player data (empty DataFrame on failure)
+                - results_dict: Dictionary with extraction statistics
         """
         try:
             logger.info(f"Extracting players for match {match_id}")
@@ -44,7 +46,7 @@ class PlayerExtractor:
 
             if players_df.empty:
                 logger.warning(f"No players extracted for match {match_id}")
-                return {
+                return players_df, {
                     'status': 'failed',
                     'total_players': 0,
                     'batted': 0,
@@ -52,20 +54,17 @@ class PlayerExtractor:
                     'teams': []
                 }
 
-            # Save to database
-            save_to_db(self.schema, self.table_name, players_df)
-
             # Calculate statistics
             total_players = len(players_df)
             batted_count = int(players_df['batted'].sum())
             did_not_bat_count = total_players - batted_count
             teams = players_df['team'].unique().tolist()
 
-            logger.info(f"Stored {total_players} players for match {match_id}")
+            logger.info(f"Extracted {total_players} players for match {match_id}")
             logger.info(f"  Teams: {', '.join(teams)}")
             logger.info(f"  Batted: {batted_count}, Did not bat: {did_not_bat_count}")
 
-            return {
+            results_dict = {
                 'status': 'success',
                 'total_players': total_players,
                 'batted': batted_count,
@@ -73,9 +72,16 @@ class PlayerExtractor:
                 'teams': teams
             }
 
+            return players_df, results_dict
+
         except Exception as e:
             logger.error(f"Error extracting players for match {match_id}: {e}", exc_info=True)
-            return {
+
+            # Return empty DataFrame and error dict
+            import pandas as pd
+            empty_df = pd.DataFrame()
+
+            error_dict = {
                 'status': 'failed',
                 'total_players': 0,
                 'batted': 0,
@@ -83,6 +89,8 @@ class PlayerExtractor:
                 'teams': [],
                 'error': str(e)
             }
+
+            return empty_df, error_dict
 
     def get_match_players(self, match_id: int) -> pd.DataFrame:
         """

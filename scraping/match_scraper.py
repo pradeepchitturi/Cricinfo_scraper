@@ -166,9 +166,9 @@ class MatchScraper:
             keys_to_merge = [k for k in metadata if pattern.match(k)]
             metadata["player_replacements"] = json.dumps({k: metadata.pop(k) for k in keys_to_merge})
 
-            #Extracting player names
+            # Extracting player names
             logger.info("Extracting player rosters...")
-            player_results = self.player_extractor.extract_and_store(
+            players_df, player_results = self.player_extractor.extract_and_store(
                 html_content=driver.page_source,
                 match_id=match_id
             )
@@ -179,6 +179,7 @@ class MatchScraper:
                     logger.info(f"  - {team}")
             else:
                 logger.warning("Player extraction failed")
+
 
             # Navigate to commentary page
             commentary_url = self.url.replace("/full-scorecard", "/ball-by-ball-commentary")
@@ -231,12 +232,6 @@ class MatchScraper:
                 .str.lower()
             )
 
-            # Save metadata to DB
-            print(f"Saving metadata to database...")
-            logger.info("Saving metadata to database")
-            save_to_db("raw", "match_metadata", metadata_df)
-            print(f"Metadata saved ({len(metadata_df)} rows)")
-
             time.sleep(5)
             page_nav.scroll_full_page()
             time.sleep(3)
@@ -268,6 +263,18 @@ class MatchScraper:
             save_to_db("raw", "match_events", final_df)
             print(f"Commentary saved ({len(final_df)} events)")
             logger.info(f"Commentary saved: {len(final_df)} total events")
+
+            # Save metadata to DB
+            print(f"Saving metadata to database...")
+            logger.info("Saving metadata to database")
+            save_to_db("raw", "match_metadata", metadata_df)
+            print(f"Metadata saved ({len(metadata_df)} rows)")
+
+            # Save match_players to DB
+            print(f"Saving match players to database...")
+            logger.info("Saving match players to database")
+            save_to_db("raw", "match_players", players_df)
+            print(f"Metadata saved ({len(players_df)} rows)")
 
             print(f"    ✓ Successfully scraped match {match_id}")
             logger.info(f"Successfully completed scraping match {match_id}")
@@ -301,6 +308,27 @@ class MatchScraper:
                     driver_manager.stop_driver()
                 except Exception as e:
                     logger.warning(f"Error closing driver: {e}")
+
+    def close(self):
+        """Close and cleanup WebDriver"""
+        if self.driver:
+            try:
+                logger.debug("Closing WebDriver...")
+                self.driver.quit()
+                logger.debug("WebDriver closed successfully")
+            except Exception as e:
+                logger.warning(f"Error closing WebDriver: {e}")
+            finally:
+                self.driver = None
+
+    def __enter__(self):
+        """Context manager entry"""
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        """Context manager exit - ensures cleanup"""
+        self.close()
+        return False
 
     def get_current_innings_team(self, driver):
         """Extract current innings team name from page"""

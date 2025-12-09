@@ -1,0 +1,468 @@
+2025-12-08 17:14:40 - core.page_navigator - ERROR - Error during page scroll: HTTPConnectionPool(host='localhost', port=56488): Read timed out. (read timeout=120)
+2025-12-08 17:16:43 - scraping.match_scraper - ERROR - Error scraping match 1473440: HTTPConnectionPool(host='localhost', port=56488): Read timed out. (read timeout=120)
+Traceback (most recent call last):
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\connectionpool.py", line 534, in _make_request
+    response = conn.getresponse()
+               ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\connection.py", line 516, in getresponse
+    httplib_response = super().getresponse()
+                       ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\AppData\Local\Programs\Python\Python311\Lib\http\client.py", line 1395, in getresponse
+    response.begin()
+  File "C:\Users\prade\AppData\Local\Programs\Python\Python311\Lib\http\client.py", line 325, in begin
+    version, status, reason = self._read_status()
+                              ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\AppData\Local\Programs\Python\Python311\Lib\http\client.py", line 286, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 706, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+TimeoutError: timed out
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\prade\Pycharm\Cricinfo_scraper\scraping\match_scraper.py", line 197, in scrape
+    default_team_name = self.get_current_innings_team(driver)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\Pycharm\Cricinfo_scraper\scraping\match_scraper.py", line 336, in get_current_innings_team
+    team_element = driver.find_element("css selector", "div.ds-cursor-pointer.ds-min-w-max")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\selenium\webdriver\remote\webdriver.py", line 914, in find_element
+    return self.execute(Command.FIND_ELEMENT, {"using": by, "value": value})["value"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\selenium\webdriver\remote\webdriver.py", line 445, in execute
+    response = self.command_executor.execute(driver_command, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\selenium\webdriver\remote\remote_connection.py", line 404, in execute
+    return self._request(command_info[0], url, body=data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\selenium\webdriver\remote\remote_connection.py", line 428, in _request
+    response = self._conn.request(method, url, body=body, headers=headers, timeout=self._client_config.timeout)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\_request_methods.py", line 143, in request
+    return self.request_encode_body(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\_request_methods.py", line 278, in request_encode_body
+    return self.urlopen(method, url, **extra_kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\poolmanager.py", line 443, in urlopen
+    response = conn.urlopen(method, u.request_uri, **kw)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+              ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\util\retry.py", line 474, in increment
+    raise reraise(type(error), error, _stacktrace)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\util\util.py", line 39, in reraise
+    raise value
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+               ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\connectionpool.py", line 536, in _make_request
+    self._raise_timeout(err=e, url=url, timeout_value=read_timeout)
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\connectionpool.py", line 367, in _raise_timeout
+    raise ReadTimeoutError(
+urllib3.exceptions.ReadTimeoutError: HTTPConnectionPool(host='localhost', port=56488): Read timed out. (read timeout=120)
+2025-12-08 17:52:05 - core.page_navigator - ERROR - Error during page scroll: HTTPConnectionPool(host='localhost', port=59066): Read timed out. (read timeout=120)
+2025-12-08 17:54:08 - scraping.match_scraper - ERROR - Error scraping match 1473446: HTTPConnectionPool(host='localhost', port=59066): Read timed out. (read timeout=120)
+Traceback (most recent call last):
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\connectionpool.py", line 534, in _make_request
+    response = conn.getresponse()
+               ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\connection.py", line 516, in getresponse
+    httplib_response = super().getresponse()
+                       ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\AppData\Local\Programs\Python\Python311\Lib\http\client.py", line 1395, in getresponse
+    response.begin()
+  File "C:\Users\prade\AppData\Local\Programs\Python\Python311\Lib\http\client.py", line 325, in begin
+    version, status, reason = self._read_status()
+                              ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\AppData\Local\Programs\Python\Python311\Lib\http\client.py", line 286, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 706, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+TimeoutError: timed out
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\prade\Pycharm\Cricinfo_scraper\scraping\match_scraper.py", line 197, in scrape
+    default_team_name = self.get_current_innings_team(driver)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\Pycharm\Cricinfo_scraper\scraping\match_scraper.py", line 336, in get_current_innings_team
+    team_element = driver.find_element("css selector", "div.ds-cursor-pointer.ds-min-w-max")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\selenium\webdriver\remote\webdriver.py", line 914, in find_element
+    return self.execute(Command.FIND_ELEMENT, {"using": by, "value": value})["value"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\selenium\webdriver\remote\webdriver.py", line 445, in execute
+    response = self.command_executor.execute(driver_command, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\selenium\webdriver\remote\remote_connection.py", line 404, in execute
+    return self._request(command_info[0], url, body=data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\selenium\webdriver\remote\remote_connection.py", line 428, in _request
+    response = self._conn.request(method, url, body=body, headers=headers, timeout=self._client_config.timeout)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\_request_methods.py", line 143, in request
+    return self.request_encode_body(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\_request_methods.py", line 278, in request_encode_body
+    return self.urlopen(method, url, **extra_kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\poolmanager.py", line 443, in urlopen
+    response = conn.urlopen(method, u.request_uri, **kw)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+              ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\util\retry.py", line 474, in increment
+    raise reraise(type(error), error, _stacktrace)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\util\util.py", line 39, in reraise
+    raise value
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+               ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\connectionpool.py", line 536, in _make_request
+    self._raise_timeout(err=e, url=url, timeout_value=read_timeout)
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\connectionpool.py", line 367, in _raise_timeout
+    raise ReadTimeoutError(
+urllib3.exceptions.ReadTimeoutError: HTTPConnectionPool(host='localhost', port=59066): Read timed out. (read timeout=120)
+2025-12-08 18:52:51 - core.page_navigator - ERROR - Error during page scroll: HTTPConnectionPool(host='localhost', port=49705): Read timed out. (read timeout=120)
+2025-12-08 19:39:28 - scraping.match_scraper - ERROR - Error scraping match 1473442: HTTPConnectionPool(host='localhost', port=53727): Max retries exceeded with url: /session/02d8a1cd91aede5b1fc79130bc2bb4c6/source (Caused by ReadTimeoutError("HTTPConnectionPool(host='localhost', port=53727): Read timed out. (read timeout=120)"))
+Traceback (most recent call last):
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\connectionpool.py", line 534, in _make_request
+    response = conn.getresponse()
+               ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\connection.py", line 516, in getresponse
+    httplib_response = super().getresponse()
+                       ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\AppData\Local\Programs\Python\Python311\Lib\http\client.py", line 1395, in getresponse
+    response.begin()
+  File "C:\Users\prade\AppData\Local\Programs\Python\Python311\Lib\http\client.py", line 325, in begin
+    version, status, reason = self._read_status()
+                              ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\AppData\Local\Programs\Python\Python311\Lib\http\client.py", line 286, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 706, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+TimeoutError: timed out
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+               ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\connectionpool.py", line 536, in _make_request
+    self._raise_timeout(err=e, url=url, timeout_value=read_timeout)
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\connectionpool.py", line 367, in _raise_timeout
+    raise ReadTimeoutError(
+urllib3.exceptions.ReadTimeoutError: HTTPConnectionPool(host='localhost', port=53727): Read timed out. (read timeout=120)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\prade\Pycharm\Cricinfo_scraper\scraping\match_scraper.py", line 162, in scrape
+    metadata = MetadataExtractor.extract_metadata(driver.page_source, match_id)
+                                                  ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\selenium\webdriver\remote\webdriver.py", line 586, in page_source
+    return self.execute(Command.GET_PAGE_SOURCE)["value"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\selenium\webdriver\remote\webdriver.py", line 445, in execute
+    response = self.command_executor.execute(driver_command, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\selenium\webdriver\remote\remote_connection.py", line 404, in execute
+    return self._request(command_info[0], url, body=data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\selenium\webdriver\remote\remote_connection.py", line 428, in _request
+    response = self._conn.request(method, url, body=body, headers=headers, timeout=self._client_config.timeout)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\_request_methods.py", line 135, in request
+    return self.request_encode_url(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\_request_methods.py", line 182, in request_encode_url
+    return self.urlopen(method, url, **extra_kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\poolmanager.py", line 443, in urlopen
+    response = conn.urlopen(method, u.request_uri, **kw)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\connectionpool.py", line 871, in urlopen
+    return self.urlopen(
+           ^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\connectionpool.py", line 871, in urlopen
+    return self.urlopen(
+           ^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\connectionpool.py", line 871, in urlopen
+    return self.urlopen(
+           ^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+              ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\util\retry.py", line 519, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+urllib3.exceptions.MaxRetryError: HTTPConnectionPool(host='localhost', port=53727): Max retries exceeded with url: /session/02d8a1cd91aede5b1fc79130bc2bb4c6/source (Caused by ReadTimeoutError("HTTPConnectionPool(host='localhost', port=53727): Read timed out. (read timeout=120)"))
+2025-12-08 19:54:42 - core.page_navigator - ERROR - Error during page scroll: HTTPConnectionPool(host='localhost', port=53032): Read timed out. (read timeout=120)
+2025-12-08 20:02:45 - scraping.match_scraper - ERROR - Error scraping match 1473443: HTTPConnectionPool(host='localhost', port=53032): Max retries exceeded with url: /session/7bdc555048d706d4814bc06fb5e9df23/source (Caused by ReadTimeoutError("HTTPConnectionPool(host='localhost', port=53032): Read timed out. (read timeout=120)"))
+Traceback (most recent call last):
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\connectionpool.py", line 534, in _make_request
+    response = conn.getresponse()
+               ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\connection.py", line 516, in getresponse
+    httplib_response = super().getresponse()
+                       ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\AppData\Local\Programs\Python\Python311\Lib\http\client.py", line 1395, in getresponse
+    response.begin()
+  File "C:\Users\prade\AppData\Local\Programs\Python\Python311\Lib\http\client.py", line 325, in begin
+    version, status, reason = self._read_status()
+                              ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\AppData\Local\Programs\Python\Python311\Lib\http\client.py", line 286, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 706, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+TimeoutError: timed out
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+               ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\connectionpool.py", line 536, in _make_request
+    self._raise_timeout(err=e, url=url, timeout_value=read_timeout)
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\connectionpool.py", line 367, in _raise_timeout
+    raise ReadTimeoutError(
+urllib3.exceptions.ReadTimeoutError: HTTPConnectionPool(host='localhost', port=53032): Read timed out. (read timeout=120)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\prade\Pycharm\Cricinfo_scraper\scraping\match_scraper.py", line 162, in scrape
+    metadata = MetadataExtractor.extract_metadata(driver.page_source, match_id)
+                                                  ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\selenium\webdriver\remote\webdriver.py", line 586, in page_source
+    return self.execute(Command.GET_PAGE_SOURCE)["value"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\selenium\webdriver\remote\webdriver.py", line 445, in execute
+    response = self.command_executor.execute(driver_command, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\selenium\webdriver\remote\remote_connection.py", line 404, in execute
+    return self._request(command_info[0], url, body=data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\selenium\webdriver\remote\remote_connection.py", line 428, in _request
+    response = self._conn.request(method, url, body=body, headers=headers, timeout=self._client_config.timeout)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\_request_methods.py", line 135, in request
+    return self.request_encode_url(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\_request_methods.py", line 182, in request_encode_url
+    return self.urlopen(method, url, **extra_kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\poolmanager.py", line 443, in urlopen
+    response = conn.urlopen(method, u.request_uri, **kw)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\connectionpool.py", line 871, in urlopen
+    return self.urlopen(
+           ^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\connectionpool.py", line 871, in urlopen
+    return self.urlopen(
+           ^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\connectionpool.py", line 871, in urlopen
+    return self.urlopen(
+           ^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+              ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\util\retry.py", line 519, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+urllib3.exceptions.MaxRetryError: HTTPConnectionPool(host='localhost', port=53032): Max retries exceeded with url: /session/7bdc555048d706d4814bc06fb5e9df23/source (Caused by ReadTimeoutError("HTTPConnectionPool(host='localhost', port=53032): Read timed out. (read timeout=120)"))
+2025-12-08 20:31:59 - scraping.match_scraper - ERROR - Error scraping match 1473446: HTTPConnectionPool(host='localhost', port=58640): Max retries exceeded with url: /session/3f59bf478cb8b536b9ba6188ad10da19/source (Caused by ReadTimeoutError("HTTPConnectionPool(host='localhost', port=58640): Read timed out. (read timeout=120)"))
+Traceback (most recent call last):
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\connectionpool.py", line 534, in _make_request
+    response = conn.getresponse()
+               ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\connection.py", line 516, in getresponse
+    httplib_response = super().getresponse()
+                       ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\AppData\Local\Programs\Python\Python311\Lib\http\client.py", line 1395, in getresponse
+    response.begin()
+  File "C:\Users\prade\AppData\Local\Programs\Python\Python311\Lib\http\client.py", line 325, in begin
+    version, status, reason = self._read_status()
+                              ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\AppData\Local\Programs\Python\Python311\Lib\http\client.py", line 286, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 706, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+TimeoutError: timed out
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+               ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\connectionpool.py", line 536, in _make_request
+    self._raise_timeout(err=e, url=url, timeout_value=read_timeout)
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\connectionpool.py", line 367, in _raise_timeout
+    raise ReadTimeoutError(
+urllib3.exceptions.ReadTimeoutError: HTTPConnectionPool(host='localhost', port=58640): Read timed out. (read timeout=120)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\prade\Pycharm\Cricinfo_scraper\scraping\match_scraper.py", line 162, in scrape
+    metadata = MetadataExtractor.extract_metadata(driver.page_source, match_id)
+                                                  ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\selenium\webdriver\remote\webdriver.py", line 586, in page_source
+    return self.execute(Command.GET_PAGE_SOURCE)["value"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\selenium\webdriver\remote\webdriver.py", line 445, in execute
+    response = self.command_executor.execute(driver_command, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\selenium\webdriver\remote\remote_connection.py", line 404, in execute
+    return self._request(command_info[0], url, body=data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\selenium\webdriver\remote\remote_connection.py", line 428, in _request
+    response = self._conn.request(method, url, body=body, headers=headers, timeout=self._client_config.timeout)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\_request_methods.py", line 135, in request
+    return self.request_encode_url(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\_request_methods.py", line 182, in request_encode_url
+    return self.urlopen(method, url, **extra_kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\poolmanager.py", line 443, in urlopen
+    response = conn.urlopen(method, u.request_uri, **kw)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\connectionpool.py", line 871, in urlopen
+    return self.urlopen(
+           ^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\connectionpool.py", line 871, in urlopen
+    return self.urlopen(
+           ^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\connectionpool.py", line 871, in urlopen
+    return self.urlopen(
+           ^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+              ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\util\retry.py", line 519, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+urllib3.exceptions.MaxRetryError: HTTPConnectionPool(host='localhost', port=58640): Max retries exceeded with url: /session/3f59bf478cb8b536b9ba6188ad10da19/source (Caused by ReadTimeoutError("HTTPConnectionPool(host='localhost', port=58640): Read timed out. (read timeout=120)"))
+2025-12-08 20:44:14 - core.page_navigator - ERROR - Error during page scroll: HTTPConnectionPool(host='localhost', port=58614): Read timed out. (read timeout=120)
+2025-12-08 20:50:14 - core.page_navigator - ERROR - Error during page scroll: HTTPConnectionPool(host='localhost', port=57326): Read timed out. (read timeout=120)
+2025-12-08 20:58:17 - scraping.match_scraper - ERROR - Error scraping match 1473447: HTTPConnectionPool(host='localhost', port=57326): Max retries exceeded with url: /session/6daf74cc8c007235994783d5206a51fe/source (Caused by ReadTimeoutError("HTTPConnectionPool(host='localhost', port=57326): Read timed out. (read timeout=120)"))
+Traceback (most recent call last):
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\connectionpool.py", line 534, in _make_request
+    response = conn.getresponse()
+               ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\connection.py", line 516, in getresponse
+    httplib_response = super().getresponse()
+                       ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\AppData\Local\Programs\Python\Python311\Lib\http\client.py", line 1395, in getresponse
+    response.begin()
+  File "C:\Users\prade\AppData\Local\Programs\Python\Python311\Lib\http\client.py", line 325, in begin
+    version, status, reason = self._read_status()
+                              ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\AppData\Local\Programs\Python\Python311\Lib\http\client.py", line 286, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 706, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+TimeoutError: timed out
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+               ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\connectionpool.py", line 536, in _make_request
+    self._raise_timeout(err=e, url=url, timeout_value=read_timeout)
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\connectionpool.py", line 367, in _raise_timeout
+    raise ReadTimeoutError(
+urllib3.exceptions.ReadTimeoutError: HTTPConnectionPool(host='localhost', port=57326): Read timed out. (read timeout=120)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\prade\Pycharm\Cricinfo_scraper\scraping\match_scraper.py", line 162, in scrape
+    metadata = MetadataExtractor.extract_metadata(driver.page_source, match_id)
+                                                  ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\selenium\webdriver\remote\webdriver.py", line 586, in page_source
+    return self.execute(Command.GET_PAGE_SOURCE)["value"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\selenium\webdriver\remote\webdriver.py", line 445, in execute
+    response = self.command_executor.execute(driver_command, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\selenium\webdriver\remote\remote_connection.py", line 404, in execute
+    return self._request(command_info[0], url, body=data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\selenium\webdriver\remote\remote_connection.py", line 428, in _request
+    response = self._conn.request(method, url, body=body, headers=headers, timeout=self._client_config.timeout)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\_request_methods.py", line 135, in request
+    return self.request_encode_url(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\_request_methods.py", line 182, in request_encode_url
+    return self.urlopen(method, url, **extra_kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\poolmanager.py", line 443, in urlopen
+    response = conn.urlopen(method, u.request_uri, **kw)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\connectionpool.py", line 871, in urlopen
+    return self.urlopen(
+           ^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\connectionpool.py", line 871, in urlopen
+    return self.urlopen(
+           ^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\connectionpool.py", line 871, in urlopen
+    return self.urlopen(
+           ^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+              ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\urllib3\util\retry.py", line 519, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+urllib3.exceptions.MaxRetryError: HTTPConnectionPool(host='localhost', port=57326): Max retries exceeded with url: /session/6daf74cc8c007235994783d5206a51fe/source (Caused by ReadTimeoutError("HTTPConnectionPool(host='localhost', port=57326): Read timed out. (read timeout=120)"))
+2025-12-08 22:12:40 - medallionlayer.gold_layer - ERROR - Error processing match_summary: Length mismatch: Expected axis has 4 elements, new values have 3 elements
+2025-12-08 22:12:40 - medallionlayer.gold_layer - ERROR - Full error details:
+Traceback (most recent call last):
+  File "C:\Users\prade\Pycharm\Cricinfo_scraper\medallionlayer\gold_layer.py", line 46, in run
+    rows_created = self._process_aggregation(agg_name, agg_config)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\Pycharm\Cricinfo_scraper\medallionlayer\gold_layer.py", line 77, in _process_aggregation
+    return self._process_match_summary()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\Pycharm\Cricinfo_scraper\medallionlayer\gold_layer.py", line 143, in _process_match_summary
+    df_scores_pivot.columns = ['matchid', 'first_innings_score', 'second_innings_score']
+    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\pandas\core\generic.py", line 6218, in __setattr__
+    return object.__setattr__(self, name, value)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "properties.pyx", line 69, in pandas._libs.properties.AxisProperty.__set__
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\pandas\core\generic.py", line 767, in _set_axis
+    self._mgr.set_axis(axis, labels)
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\pandas\core\internals\managers.py", line 227, in set_axis
+    self._validate_set_axis(axis, new_labels)
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\pandas\core\internals\base.py", line 85, in _validate_set_axis
+    raise ValueError(
+ValueError: Length mismatch: Expected axis has 4 elements, new values have 3 elements
+2025-12-08 22:12:42 - pipeline.orchestrator - ERROR -     - Error processing match_summary: Length mismatch: Expected axis has 4 elements, new values have 3 elements

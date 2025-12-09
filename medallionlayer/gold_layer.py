@@ -754,7 +754,7 @@ class GoldLayer:
             cursor.execute(insert_query)
             inserted_count = cursor.rowcount
             conn.commit()
-            logger.info(f"✓ Inserted {inserted_count} new records")
+            logger.info(f"Inserted {inserted_count} new records")
 
             # Summary
             total_processed = expired_count + updated_count + inserted_count

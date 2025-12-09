@@ -21,7 +21,7 @@ class PageNavigator:
         """
         self.driver = driver
 
-    def scroll_full_page(self, scroll_times=25):
+    def scroll_full_page(self, scroll_times=20):
         """
         Scroll down the entire page to load dynamic content
 
