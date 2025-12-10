@@ -125,6 +125,7 @@ class MatchScraper:
     def scrape(self, match_id):
         """
         Scrape match data with retry logic and proper error handling
+        Handles regular innings + Super Overs
 
         Args:
             match_id: Unique match identifier
@@ -180,7 +181,6 @@ class MatchScraper:
             else:
                 logger.warning("Player extraction failed")
 
-
             # Navigate to commentary page
             commentary_url = self.url.replace("/full-scorecard", "/ball-by-ball-commentary")
             self._navigate_with_retry(driver, commentary_url, "commentary page")
@@ -191,34 +191,133 @@ class MatchScraper:
             page_nav.scroll_full_page()
             time.sleep(3)
 
-            # Extract default innings team
+            # Get current innings (default view)
             print(f"    Extracting innings data...")
-            logger.info("Extracting first innings data")
-            default_team_name = self.get_current_innings_team(driver)
-            print(f"    Default batting team: {default_team_name}")
-            logger.info(f"Default batting team: {default_team_name}")
-            metadata["second_innings"] = default_team_name
+            logger.info("Getting current innings team")
+            default_innings = self.get_current_innings_team(driver)
+            print(f"    Default innings: {default_innings}")
+            logger.info(f"Default innings: {default_innings}")
 
-            # Save first innings commentary
-            innings1_html = driver.page_source
-            innings1_data = CommentaryParser.parse_commentary(innings1_html)
-            innings1_df = CommentaryParser.to_dataframe(innings1_data)
-            innings1_df["Innings"] = default_team_name
-            innings1_df["MatchID"] = match_id
-            print(f"    Extracted {len(innings1_df)} events from first innings")
-            logger.info(f"First innings: {len(innings1_df)} events")
+            # Get all available innings from dropdown
+            print(f"    Checking for all innings options...")
+            logger.info("Getting all innings options")
+            all_innings = page_nav.get_all_innings_options()
+            print(f"    Found {len(all_innings)} innings: {all_innings}")
+            logger.info(f"All innings: {all_innings}")
 
-            # Scroll to top before switch
-            page_nav.scroll_to_top()
-            time.sleep(5)
+            # Identify regular innings and super overs
+            regular_innings = [inn for inn in all_innings if 'Super Over' not in inn]
+            super_overs = [inn for inn in all_innings if 'Super Over' in inn]
 
-            # Switch innings
-            print(f"    Switching to second innings...")
-            logger.info("Switching to second innings")
-            switched_team_name = page_nav.click_dropdown_and_switch_innings(default_team_name)
-            print(f"    Switched batting team: {switched_team_name}")
-            logger.info(f"Switched batting team: {switched_team_name}")
-            metadata["first_innings"] = switched_team_name
+            logger.info(f"Regular innings: {regular_innings}")
+            logger.info(f"Super overs: {super_overs}")
+
+            # Set metadata for super overs
+            metadata["has_super_over"] = len(super_overs) > 0
+            metadata["super_over_count"] = len(super_overs)
+
+            if super_overs:
+                print(f"    ⚠ Match has {len(super_overs)} super over(s): {super_overs}")
+                logger.info(f"Match has {len(super_overs)} super over(s)")
+
+            # Set first and second innings metadata (regular innings only)
+            if len(regular_innings) >= 2:
+                if default_innings in regular_innings:
+                    # Default is one of the regular innings
+                    other_regular = [inn for inn in regular_innings if inn != default_innings][0]
+                    metadata["first_innings"] = regular_innings[0]
+                    metadata["second_innings"] = regular_innings[1]
+                else:
+                    # Default is super over, use regular innings in order
+                    metadata["first_innings"] = regular_innings[0]
+                    metadata["second_innings"] = regular_innings[1]
+            elif len(regular_innings) == 1:
+                metadata["first_innings"] = regular_innings[0]
+                metadata["second_innings"] = None
+            else:
+                # No regular innings (shouldn't happen)
+                metadata["first_innings"] = None
+                metadata["second_innings"] = None
+
+            # Scrape default innings first
+            print(f"    Scraping {default_innings}...")
+            logger.info(f"Scraping default innings: {default_innings}")
+
+            default_html = driver.page_source
+            default_data = CommentaryParser.parse_commentary(default_html)
+            default_df = CommentaryParser.to_dataframe(default_data)
+            default_df["innings"] = default_innings
+            default_df["matchid"] = match_id
+            default_df["is_super_over"] = 'Super Over' in default_innings  # Flag super over events
+
+            print(f"    Extracted {len(default_df)} events from {default_innings}")
+            logger.info(
+                f"{default_innings}: {len(default_df)} events (super_over={default_df['is_super_over'].iloc[0] if len(default_df) > 0 else False})")
+
+            # Store all innings dataframes
+            all_innings_dfs = [default_df]
+
+            # Scrape all other innings
+            other_innings = [inn for inn in all_innings if inn != default_innings]
+
+            for innings_name in other_innings:
+                print(f"    Switching to {innings_name}...")
+                logger.info(f"Switching to innings: {innings_name}")
+
+                # Scroll to top before switch
+                page_nav.scroll_to_top()
+                time.sleep(3)
+
+                # Switch to this innings
+                page_nav.switch_to_innings(innings_name)
+                print(f"    Switched to: {innings_name}")
+                logger.info(f"Successfully switched to: {innings_name}")
+
+                # Scroll to load commentary
+                time.sleep(3)
+                page_nav.scroll_full_page()
+                time.sleep(3)
+
+                # Extract commentary
+                print(f"    Scraping {innings_name}...")
+                logger.info(f"Scraping innings: {innings_name}")
+
+                innings_html = driver.page_source
+                innings_data = CommentaryParser.parse_commentary(innings_html)
+                innings_df = CommentaryParser.to_dataframe(innings_data)
+                innings_df["innings"] = innings_name
+                innings_df["matchid"] = match_id
+                innings_df["is_super_over"] = 'Super Over' in innings_name  # Flag super over events
+
+                print(f"    Extracted {len(innings_df)} events from {innings_name}")
+                logger.info(
+                    f"{innings_name}: {len(innings_df)} events (super_over={innings_df['is_super_over'].iloc[0] if len(innings_df) > 0 else False})")
+
+                all_innings_dfs.append(innings_df)
+
+            # Combine all innings
+            print(f"    Combining all innings...")
+            logger.info("Combining all innings dataframes")
+            final_df = pd.concat(all_innings_dfs, ignore_index=True)
+
+            # Log summary
+            total_events = len(final_df)
+            super_over_events = final_df['is_super_over'].sum() if 'is_super_over' in final_df.columns else 0
+            regular_events = total_events - super_over_events
+
+            print(f"    Total events: {total_events} ({regular_events} regular + {super_over_events} super over)")
+            logger.info(f"Total events: {total_events} across {len(all_innings_dfs)} innings")
+            logger.info(f"  - Regular innings: {regular_events} events")
+            logger.info(f"  - Super over(s): {super_over_events} events")
+
+            # Clean column names
+            final_df.columns = (
+                final_df.columns
+                .str.replace(r"[ ()]", "_", regex=True)
+                .str.replace(r"_+", "_", regex=True)
+                .str.strip("_")
+                .str.lower()
+            )
 
             # Convert metadata to DataFrame
             metadata_df = pd.DataFrame([metadata])
@@ -226,31 +325,6 @@ class MatchScraper:
             # Clean column names
             metadata_df.columns = (
                 metadata_df.columns
-                .str.replace(r"[ ()]", "_", regex=True)
-                .str.replace(r"_+", "_", regex=True)
-                .str.strip("_")
-                .str.lower()
-            )
-
-            time.sleep(5)
-            page_nav.scroll_full_page()
-            time.sleep(3)
-
-            # Save second innings commentary
-            innings2_html = driver.page_source
-            innings2_data = CommentaryParser.parse_commentary(innings2_html)
-            innings2_df = CommentaryParser.to_dataframe(innings2_data)
-            innings2_df["Innings"] = switched_team_name
-            innings2_df["MatchID"] = match_id
-            print(f"    Extracted {len(innings2_df)} events from second innings")
-            logger.info(f"Second innings: {len(innings2_df)} events")
-
-            # Combine both innings
-            final_df = pd.concat([innings1_df, innings2_df], ignore_index=True)
-
-            # Clean column names
-            final_df.columns = (
-                final_df.columns
                 .str.replace(r"[ ()]", "_", regex=True)
                 .str.replace(r"_+", "_", regex=True)
                 .str.strip("_")
@@ -269,17 +343,16 @@ class MatchScraper:
             logger.info("Saving metadata to database")
             save_to_db("raw", "match_metadata", metadata_df)
             print(f"Metadata saved ({len(metadata_df)} rows)")
+            logger.info(f"Metadata saved with super_over_count={metadata['super_over_count']}")
 
             # Save match_players to DB
             print(f"Saving match players to database...")
             logger.info("Saving match players to database")
             save_to_db("raw", "match_players", players_df)
-            print(f"Metadata saved ({len(players_df)} rows)")
+            print(f"Match players saved ({len(players_df)} rows)")
 
             print(f"    ✓ Successfully scraped match {match_id}")
             logger.info(f"Successfully completed scraping match {match_id}")
-
-
 
         except TimeoutException as e:
             error_msg = f"Timeout error after {self.max_retries} retries: {str(e)[:200]}"

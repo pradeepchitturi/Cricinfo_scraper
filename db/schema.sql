@@ -96,6 +96,32 @@ ALTER TABLE raw.match_metadata
 ADD COLUMN IF NOT EXISTS has_super_over BOOLEAN DEFAULT FALSE,
 ADD COLUMN IF NOT EXISTS super_over_count INTEGER DEFAULT 0;
 
+-- Fix RAW layer column limits
+ALTER TABLE raw.match_metadata
+    ALTER COLUMN player_replacements TYPE TEXT,
+    ALTER COLUMN umpires TYPE TEXT,
+    ALTER COLUMN match_days TYPE TEXT,
+    ALTER COLUMN series TYPE TEXT,
+    ALTER COLUMN points TYPE TEXT,
+    ALTER COLUMN toss TYPE TEXT,
+    ALTER COLUMN venue TYPE TEXT,
+    ALTER COLUMN player_of_the_match TYPE TEXT,
+    ALTER COLUMN tv_umpire TYPE TEXT,
+    ALTER COLUMN reserve_umpire TYPE TEXT,
+    ALTER COLUMN match_referee TYPE TEXT,
+    ALTER COLUMN t20_debut TYPE TEXT;
+
+-- Add series_result column to RAW layer
+ALTER TABLE raw.match_metadata
+ADD COLUMN IF NOT EXISTS series_result TEXT DEFAULT NULL;
+
+-- Also check match_events if needed
+ALTER TABLE raw.match_events
+    ALTER COLUMN event TYPE TEXT,
+    ALTER COLUMN commentary TYPE TEXT,
+    ALTER COLUMN innings TYPE TEXT;
+
+
 -- ============================================================================
 -- Indexes for Performance
 -- ============================================================================

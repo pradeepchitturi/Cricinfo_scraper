@@ -1,0 +1,93 @@
+2025-12-10 00:44:07 - core.page_navigator - ERROR - Error during page scroll: HTTPConnectionPool(host='localhost', port=53538): Read timed out. (read timeout=120)
+2025-12-10 00:51:41 - scraping.match_scraper - ERROR - Error scraping match 1473511: column "player_of_the_series" of relation "match_metadata" does not exist
+LINE 2: ...venue, toss, series, season, player_of_the_match, player_of_...
+                                                             ^
+Traceback (most recent call last):
+  File "C:\Users\prade\Pycharm\Cricinfo_scraper\scraping\match_scraper.py", line 344, in scrape
+    save_to_db("raw", "match_metadata", metadata_df)
+  File "C:\Users\prade\Pycharm\Cricinfo_scraper\configs\db_config.py", line 112, in save_to_db
+    execute_values(cur, insert_query, values)
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\psycopg2\extras.py", line 1299, in execute_values
+    cur.execute(b''.join(parts))
+psycopg2.errors.UndefinedColumn: column "player_of_the_series" of relation "match_metadata" does not exist
+LINE 2: ...venue, toss, series, season, player_of_the_match, player_of_...
+                                                             ^
+
+2025-12-10 00:51:44 - __main__ - ERROR - Non-retryable error for match 1473511: column "player_of_the_series" of relation "match_metadata" does not exist
+LINE 2: ...venue, toss, series, season, player_of_the_match, player_of_...
+                                                             ^
+
+2025-12-10 00:51:44 - __main__ - ERROR - Failed match 1473511: column "player_of_the_series" of relation "match_metadata" does not exist
+LINE 2: ...venue, toss, series, season, player_of_the_match, player_of_...
+                                                             ^
+
+2025-12-10 00:51:49 - medallionlayer.silver_layer - ERROR - Error processing match_metadata: value too long for type character varying(255)
+
+2025-12-10 00:53:25 - medallionlayer.silver_layer - ERROR -   Error during player name enrichment: unterminated character set at position 0
+Traceback (most recent call last):
+  File "C:\Users\prade\Pycharm\Cricinfo_scraper\medallionlayer\silver_layer.py", line 180, in _enrich_player_names
+    df, stats = self._enrich_column(df, column, players_df)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\Pycharm\Cricinfo_scraper\medallionlayer\silver_layer.py", line 256, in _enrich_column
+    full_name = self._find_full_player_name(
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\Pycharm\Cricinfo_scraper\medallionlayer\silver_layer.py", line 364, in _find_full_player_name
+    match_players['player_name'].str.lower().str.contains(part.lower(), na=False)
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\pandas\core\strings\accessor.py", line 136, in wrapper
+    return func(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\pandas\core\strings\accessor.py", line 1303, in contains
+    if regex and re.compile(pat).groups:
+                 ^^^^^^^^^^^^^^^
+  File "C:\Users\prade\AppData\Local\Programs\Python\Python311\Lib\re\__init__.py", line 227, in compile
+    return _compile(pattern, flags)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\AppData\Local\Programs\Python\Python311\Lib\re\__init__.py", line 294, in _compile
+    p = _compiler.compile(pattern, flags)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\AppData\Local\Programs\Python\Python311\Lib\re\_compiler.py", line 745, in compile
+    p = _parser.parse(p, flags)
+        ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\AppData\Local\Programs\Python\Python311\Lib\re\_parser.py", line 989, in parse
+    p = _parse_sub(source, state, flags & SRE_FLAG_VERBOSE, 0)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\AppData\Local\Programs\Python\Python311\Lib\re\_parser.py", line 464, in _parse_sub
+    itemsappend(_parse(source, state, verbose, nested + 1,
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\AppData\Local\Programs\Python\Python311\Lib\re\_parser.py", line 572, in _parse
+    raise source.error("unterminated character set",
+re.error: unterminated character set at position 0
+2025-12-10 00:53:26 - medallionlayer.silver_layer - ERROR - Error processing match_events: column "fielder_name_enriched" of relation "match_events" does not exist
+LINE 2: ..._at, runs_scored, dismissal_method, fielder_name, fielder_na...
+                                                             ^
+
+2025-12-10 00:53:26 - medallionlayer.gold_layer - ERROR - Error processing match_summary: Length mismatch: Expected axis has 1 elements, new values have 3 elements
+2025-12-10 00:53:26 - medallionlayer.gold_layer - ERROR - Full error details:
+Traceback (most recent call last):
+  File "C:\Users\prade\Pycharm\Cricinfo_scraper\medallionlayer\gold_layer.py", line 46, in run
+    rows_created = self._process_aggregation(agg_name, agg_config)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\Pycharm\Cricinfo_scraper\medallionlayer\gold_layer.py", line 77, in _process_aggregation
+    return self._process_match_summary()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\Pycharm\Cricinfo_scraper\medallionlayer\gold_layer.py", line 143, in _process_match_summary
+    df_scores_pivot.columns = ['matchid', 'first_innings_score', 'second_innings_score']
+    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\pandas\core\generic.py", line 6218, in __setattr__
+    return object.__setattr__(self, name, value)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "properties.pyx", line 69, in pandas._libs.properties.AxisProperty.__set__
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\pandas\core\generic.py", line 767, in _set_axis
+    self._mgr.set_axis(axis, labels)
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\pandas\core\internals\managers.py", line 227, in set_axis
+    self._validate_set_axis(axis, new_labels)
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\pandas\core\internals\base.py", line 85, in _validate_set_axis
+    raise ValueError(
+ValueError: Length mismatch: Expected axis has 1 elements, new values have 3 elements
+2025-12-10 00:53:28 - pipeline.orchestrator - ERROR -     - Error processing match_metadata: value too long for type character varying(255)
+
+2025-12-10 00:53:28 - pipeline.orchestrator - ERROR -     - Error processing match_events: column "fielder_name_enriched" of relation "match_events" does not exist
+LINE 2: ..._at, runs_scored, dismissal_method, fielder_name, fielder_na...
+                                                             ^
+
+2025-12-10 00:53:28 - pipeline.orchestrator - ERROR -     - Error processing match_summary: Length mismatch: Expected axis has 1 elements, new values have 3 elements
