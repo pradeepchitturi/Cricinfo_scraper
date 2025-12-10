@@ -243,7 +243,6 @@ class MatchTracker:
             Set of all match IDs
         """
         query_sql = f"SELECT match_id FROM {self.full_table_name}"
-
         conn = get_connection()
         try:
             with conn.cursor() as cursor:

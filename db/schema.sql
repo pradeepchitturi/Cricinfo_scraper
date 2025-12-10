@@ -8,8 +8,8 @@ CREATE SCHEMA IF NOT EXISTS raw;
 -- ============================================================================
 -- Match Metadata Table
 -- ============================================================================
-DROP TABLE IF EXISTS raw.match_metadata CASCADE;
-CREATE TABLE raw.match_metadata (
+
+CREATE TABLE IF NOT EXISTS raw.match_metadata (
     id SERIAL PRIMARY KEY,
     venue VARCHAR(255),
     toss VARCHAR(255),
@@ -34,8 +34,8 @@ CREATE TABLE raw.match_metadata (
 -- ============================================================================
 -- Match Events Table (Ball-by-ball commentary)
 -- ============================================================================
-DROP TABLE IF EXISTS raw.match_events CASCADE;
-CREATE TABLE raw.match_events (
+
+CREATE TABLE IF NOT EXISTS raw.match_events (
     id SERIAL PRIMARY KEY,
     ball VARCHAR(10),
     event TEXT,
@@ -51,8 +51,8 @@ CREATE TABLE raw.match_events (
 -- ============================================================================
 -- Match Players Table (Player rosters)
 -- ============================================================================
-DROP TABLE IF EXISTS raw.match_players CASCADE;
-CREATE TABLE raw.match_players (
+
+CREATE TABLE IF NOT EXISTS raw.match_players (
     id SERIAL PRIMARY KEY,
     matchid BIGINT NOT NULL,
     innings VARCHAR(20),  -- NULL for impact players
@@ -67,8 +67,8 @@ CREATE TABLE raw.match_players (
 -- ============================================================================
 -- Match Download Tracker Table
 -- ============================================================================
-DROP TABLE IF EXISTS raw.match_download_tracker CASCADE;
-CREATE TABLE raw.match_download_tracker (
+
+CREATE TABLE IF NOT EXISTS raw.match_download_tracker (
     id SERIAL PRIMARY KEY,
     match_id VARCHAR(50) NOT NULL,
     downloaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -85,39 +85,51 @@ CREATE TABLE raw.match_download_tracker (
 );
 
 -- ============================================================================
+-- Altering Tables to accommodate Super Over innings
+-- ============================================================================
+
+ALTER TABLE raw.match_events
+ADD COLUMN IF NOT EXISTS is_super_over BOOLEAN DEFAULT FALSE;
+
+-- Update metadata table
+ALTER TABLE raw.match_metadata
+ADD COLUMN IF NOT EXISTS has_super_over BOOLEAN DEFAULT FALSE,
+ADD COLUMN IF NOT EXISTS super_over_count INTEGER DEFAULT 0;
+
+-- ============================================================================
 -- Indexes for Performance
 -- ============================================================================
 
 -- Match Metadata Indexes
-CREATE INDEX idx_raw_metadata_matchid ON raw.match_metadata(matchid);
-CREATE INDEX idx_raw_metadata_series ON raw.match_metadata(series, season);
+CREATE INDEX IF NOT EXISTS idx_raw_metadata_matchid ON raw.match_metadata(matchid);
+CREATE INDEX IF NOT EXISTS idx_raw_metadata_series ON raw.match_metadata(series, season);
 
 -- Match Events Indexes
-CREATE INDEX idx_raw_events_matchid ON raw.match_events(matchid);
-CREATE INDEX idx_raw_events_innings ON raw.match_events(innings);
-CREATE INDEX idx_raw_events_batsman ON raw.match_events(batsman);
-CREATE INDEX idx_raw_events_bowler ON raw.match_events(bowler);
+CREATE INDEX IF NOT EXISTS idx_raw_events_matchid ON raw.match_events(matchid);
+CREATE INDEX IF NOT EXISTS idx_raw_events_innings ON raw.match_events(innings);
+CREATE INDEX IF NOT EXISTS idx_raw_events_batsman ON raw.match_events(batsman);
+CREATE INDEX IF NOT EXISTS idx_raw_events_bowler ON raw.match_events(bowler);
 
 -- Match Players Indexes
-CREATE INDEX idx_raw_players_matchid ON raw.match_players(matchid);
-CREATE INDEX idx_raw_players_team ON raw.match_players(team);
-CREATE INDEX idx_raw_players_player ON raw.match_players(player_name);
-CREATE INDEX idx_raw_players_batted ON raw.match_players(batted);
-CREATE INDEX idx_raw_players_type ON raw.match_players(player_type);
+CREATE INDEX IF NOT EXISTS idx_raw_players_matchid ON raw.match_players(matchid);
+CREATE INDEX IF NOT EXISTS idx_raw_players_team ON raw.match_players(team);
+CREATE INDEX IF NOT EXISTS idx_raw_players_player ON raw.match_players(player_name);
+CREATE INDEX IF NOT EXISTS idx_raw_players_batted ON raw.match_players(batted);
+CREATE INDEX IF NOT EXISTS idx_raw_players_type ON raw.match_players(player_type);
 -- Create unique index that handles NULL innings
 -- For regular players: (matchid, innings, player_name) must be unique
 -- For impact players: (matchid, player_name) must be unique when innings IS NULL
-CREATE UNIQUE INDEX idx_raw_players_unique_regular
+CREATE UNIQUE INDEX IF NOT EXISTS idx_raw_players_unique_regular
 ON raw.match_players(matchid, innings, player_name,player_type)
 WHERE innings IS NOT NULL;
 
-CREATE UNIQUE INDEX idx_raw_players_unique_impact
+CREATE UNIQUE INDEX IF NOT EXISTS idx_raw_players_unique_impact
 ON raw.match_players(matchid, player_name,player_type)
 WHERE innings IS NULL;
 
 -- Download Tracker Indexes
-CREATE INDEX idx_tracker_match_id ON raw.match_download_tracker(match_id);
-CREATE INDEX idx_tracker_status ON raw.match_download_tracker(status);
+CREATE INDEX IF NOT EXISTS idx_tracker_match_id ON raw.match_download_tracker(match_id);
+CREATE INDEX IF NOT EXISTS idx_tracker_status ON raw.match_download_tracker(status);
 
 -- ============================================================================
 -- Success Message

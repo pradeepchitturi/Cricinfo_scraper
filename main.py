@@ -178,7 +178,7 @@ def scrape_match_with_retry(url, match_id, tracker, max_retries=MAX_RETRIES):
             match_scraper = MatchScraper(
                 url=url,
                 base_dir="data",
-                page_load_timeout=300,  # 5 minutes timeout
+                page_load_timeout=60,  # 1 minutes timeout
                 max_retries=3  # Internal retries within MatchScraper
             )
 

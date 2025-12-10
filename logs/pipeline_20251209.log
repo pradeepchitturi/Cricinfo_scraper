@@ -1,0 +1,396 @@
+2025-12-09 21:19:40 - __main__ - INFO - Cricket Data Pipeline Started
+2025-12-09 21:19:40 - __main__ - INFO - STEP 1: Initializing database and schemas
+2025-12-09 21:19:41 - configs.db_config - INFO - Initializing Medallion Architecture schemas...
+2025-12-09 21:19:41 - configs.db_config - INFO - Medallion schemas (Bronze, Silver, Gold) initialized
+2025-12-09 21:19:41 - __main__ - INFO - Database initialization complete
+2025-12-09 21:19:41 - __main__ - INFO - STEP 2: Loading configuration
+2025-12-09 21:19:41 - __main__ - INFO - Configuration loaded successfully
+2025-12-09 21:19:41 - __main__ - INFO - STEP 3: Scraping data from Cricinfo
+2025-12-09 21:19:41 - __main__ - INFO - Initializing match tracker
+2025-12-09 21:19:42 - __main__ - INFO - Current Status: 68 matches already downloaded
+2025-12-09 21:19:42 - __main__ - INFO - Fetching match schedule from Cricinfo
+2025-12-09 21:19:42 - scraping.schedule_scraper - INFO - Initializing WebDriver for schedule scraping
+2025-12-09 21:19:48 - scraping.schedule_scraper - INFO - Loading schedule page - attempt 1
+2025-12-09 21:19:59 - scraping.schedule_scraper - INFO - Schedule page loaded successfully
+2025-12-09 21:19:59 - scraping.schedule_scraper - INFO - Parsing schedule page with BeautifulSoup
+2025-12-09 21:20:09 - scraping.schedule_scraper - INFO - Extracting match links from schedule
+2025-12-09 21:20:09 - scraping.schedule_scraper - INFO - Successfully extracted 98 match links
+2025-12-09 21:20:09 - scraping.schedule_scraper - INFO - Closing WebDriver
+2025-12-09 21:20:12 - __main__ - INFO - Found 98 total links
+2025-12-09 21:20:12 - __main__ - INFO - Found 74 match scorecards
+2025-12-09 21:20:12 - __main__ - INFO - Loading match cache
+2025-12-09 21:20:12 - __main__ - INFO - Starting match scraping process with retry logic
+2025-12-09 21:20:12 - __main__ - INFO - Processing match 1/74: https://www.espncricinfo.com/series/ipl-2025-1449924/kolkata-knight-riders-vs-royal-challengers-bengaluru-1st-match-1473438/full-scorecard
+2025-12-09 21:20:12 - __main__ - INFO - Match 1473438 already downloaded - skipping
+2025-12-09 21:20:12 - __main__ - INFO - Processing match 2/74: https://www.espncricinfo.com/series/ipl-2025-1449924/sunrisers-hyderabad-vs-rajasthan-royals-2nd-match-1473439/full-scorecard
+2025-12-09 21:20:12 - __main__ - INFO - Match 1473439 already downloaded - skipping
+2025-12-09 21:20:12 - __main__ - INFO - Processing match 3/74: https://www.espncricinfo.com/series/ipl-2025-1449924/chennai-super-kings-vs-mumbai-indians-3rd-match-1473440/full-scorecard
+2025-12-09 21:20:12 - __main__ - INFO - Match 1473440 already downloaded - skipping
+2025-12-09 21:20:12 - __main__ - INFO - Processing match 4/74: https://www.espncricinfo.com/series/ipl-2025-1449924/delhi-capitals-vs-lucknow-super-giants-4th-match-1473441/full-scorecard
+2025-12-09 21:20:12 - __main__ - INFO - Match 1473441 already downloaded - skipping
+2025-12-09 21:20:12 - __main__ - INFO - Processing match 5/74: https://www.espncricinfo.com/series/ipl-2025-1449924/gujarat-titans-vs-punjab-kings-5th-match-1473442/full-scorecard
+2025-12-09 21:20:12 - __main__ - INFO - Match 1473442 already downloaded - skipping
+2025-12-09 21:20:12 - __main__ - INFO - Processing match 6/74: https://www.espncricinfo.com/series/ipl-2025-1449924/rajasthan-royals-vs-kolkata-knight-riders-6th-match-1473443/full-scorecard
+2025-12-09 21:20:12 - __main__ - INFO - Match 1473443 already downloaded - skipping
+2025-12-09 21:20:12 - __main__ - INFO - Processing match 7/74: https://www.espncricinfo.com/series/ipl-2025-1449924/sunrisers-hyderabad-vs-lucknow-super-giants-7th-match-1473444/full-scorecard
+2025-12-09 21:20:12 - __main__ - INFO - Match 1473444 already downloaded - skipping
+2025-12-09 21:20:12 - __main__ - INFO - Processing match 8/74: https://www.espncricinfo.com/series/ipl-2025-1449924/chennai-super-kings-vs-royal-challengers-bengaluru-8th-match-1473445/full-scorecard
+2025-12-09 21:20:12 - __main__ - INFO - Match 1473445 already downloaded - skipping
+2025-12-09 21:20:12 - __main__ - INFO - Processing match 9/74: https://www.espncricinfo.com/series/ipl-2025-1449924/gujarat-titans-vs-mumbai-indians-9th-match-1473446/full-scorecard
+2025-12-09 21:20:12 - __main__ - INFO - Match 1473446 already downloaded - skipping
+2025-12-09 21:20:12 - __main__ - INFO - Processing match 10/74: https://www.espncricinfo.com/series/ipl-2025-1449924/delhi-capitals-vs-sunrisers-hyderabad-10th-match-1473447/full-scorecard
+2025-12-09 21:20:12 - __main__ - INFO - Match 1473447 already downloaded - skipping
+2025-12-09 21:20:12 - __main__ - INFO - Processing match 11/74: https://www.espncricinfo.com/series/ipl-2025-1449924/rajasthan-royals-vs-chennai-super-kings-11th-match-1473448/full-scorecard
+2025-12-09 21:20:12 - __main__ - INFO - Match 1473448 already downloaded - skipping
+2025-12-09 21:20:12 - __main__ - INFO - Processing match 12/74: https://www.espncricinfo.com/series/ipl-2025-1449924/mumbai-indians-vs-kolkata-knight-riders-12th-match-1473449/full-scorecard
+2025-12-09 21:20:12 - __main__ - INFO - Match 1473449 already downloaded - skipping
+2025-12-09 21:20:12 - __main__ - INFO - Processing match 13/74: https://www.espncricinfo.com/series/ipl-2025-1449924/lucknow-super-giants-vs-punjab-kings-13th-match-1473450/full-scorecard
+2025-12-09 21:20:12 - __main__ - INFO - Match 1473450 already downloaded - skipping
+2025-12-09 21:20:12 - __main__ - INFO - Processing match 14/74: https://www.espncricinfo.com/series/ipl-2025-1449924/royal-challengers-bengaluru-vs-gujarat-titans-14th-match-1473451/full-scorecard
+2025-12-09 21:20:12 - __main__ - INFO - Match 1473451 already downloaded - skipping
+2025-12-09 21:20:12 - __main__ - INFO - Processing match 15/74: https://www.espncricinfo.com/series/ipl-2025-1449924/kolkata-knight-riders-vs-sunrisers-hyderabad-15th-match-1473452/full-scorecard
+2025-12-09 21:20:12 - __main__ - INFO - Match 1473452 already downloaded - skipping
+2025-12-09 21:20:12 - __main__ - INFO - Processing match 16/74: https://www.espncricinfo.com/series/ipl-2025-1449924/lucknow-super-giants-vs-mumbai-indians-16th-match-1473453/full-scorecard
+2025-12-09 21:20:12 - __main__ - INFO - Match 1473453 already downloaded - skipping
+2025-12-09 21:20:12 - __main__ - INFO - Processing match 17/74: https://www.espncricinfo.com/series/ipl-2025-1449924/chennai-super-kings-vs-delhi-capitals-17th-match-1473454/full-scorecard
+2025-12-09 21:20:12 - __main__ - INFO - Match 1473454 already downloaded - skipping
+2025-12-09 21:20:12 - __main__ - INFO - Processing match 18/74: https://www.espncricinfo.com/series/ipl-2025-1449924/punjab-kings-vs-rajasthan-royals-18th-match-1473455/full-scorecard
+2025-12-09 21:20:12 - __main__ - INFO - Match 1473455 already downloaded - skipping
+2025-12-09 21:20:12 - __main__ - INFO - Processing match 19/74: https://www.espncricinfo.com/series/ipl-2025-1449924/sunrisers-hyderabad-vs-gujarat-titans-19th-match-1473457/full-scorecard
+2025-12-09 21:20:12 - __main__ - INFO - Match 1473457 already downloaded - skipping
+2025-12-09 21:20:12 - __main__ - INFO - Processing match 20/74: https://www.espncricinfo.com/series/ipl-2025-1449924/mumbai-indians-vs-royal-challengers-bengaluru-20th-match-1473458/full-scorecard
+2025-12-09 21:20:12 - __main__ - INFO - Match 1473458 already downloaded - skipping
+2025-12-09 21:20:12 - __main__ - INFO - Processing match 21/74: https://www.espncricinfo.com/series/ipl-2025-1449924/kolkata-knight-riders-vs-lucknow-super-giants-21st-match-1473456/full-scorecard
+2025-12-09 21:20:12 - __main__ - INFO - Match 1473456 already downloaded - skipping
+2025-12-09 21:20:12 - __main__ - INFO - Processing match 22/74: https://www.espncricinfo.com/series/ipl-2025-1449924/punjab-kings-vs-chennai-super-kings-22nd-match-1473459/full-scorecard
+2025-12-09 21:20:12 - __main__ - INFO - Match 1473459 already downloaded - skipping
+2025-12-09 21:20:12 - __main__ - INFO - Processing match 23/74: https://www.espncricinfo.com/series/ipl-2025-1449924/gujarat-titans-vs-rajasthan-royals-23rd-match-1473460/full-scorecard
+2025-12-09 21:20:12 - __main__ - INFO - Match 1473460 already downloaded - skipping
+2025-12-09 21:20:12 - __main__ - INFO - Processing match 24/74: https://www.espncricinfo.com/series/ipl-2025-1449924/royal-challengers-bengaluru-vs-delhi-capitals-24th-match-1473461/full-scorecard
+2025-12-09 21:20:12 - __main__ - INFO - Match 1473461 already downloaded - skipping
+2025-12-09 21:20:12 - __main__ - INFO - Processing match 25/74: https://www.espncricinfo.com/series/ipl-2025-1449924/chennai-super-kings-vs-kolkata-knight-riders-25th-match-1473462/full-scorecard
+2025-12-09 21:20:12 - __main__ - INFO - Attempting to download match 1473462 (attempt 1/4)
+2025-12-09 21:20:12 - scraping.player_extractor - INFO - PlayerExtractor initialized - Target: raw.match_players
+2025-12-09 21:20:12 - scraping.match_scraper - INFO - Initializing WebDriver
+2025-12-09 21:20:18 - scraping.match_scraper - INFO - Loading full scorecard - attempt 1
+2025-12-09 21:20:30 - scraping.match_scraper - INFO - full scorecard loaded successfully
+2025-12-09 21:20:30 - scraping.match_scraper - INFO - Scrolling full scorecard page
+2025-12-09 21:20:30 - core.page_navigator - INFO - Scrolling page 5 times
+2025-12-09 21:20:52 - core.page_navigator - INFO - Page scrolling completed
+2025-12-09 21:20:55 - scraping.match_scraper - INFO - Extracting metadata
+2025-12-09 21:20:55 - core.metadata_extractor - INFO - Found 13 metadata rows for match 1473462
+2025-12-09 21:20:55 - core.metadata_extractor - INFO - Extracted 14 metadata fields for match 1473462
+2025-12-09 21:20:55 - scraping.match_scraper - INFO - Extracting player rosters...
+2025-12-09 21:20:56 - scraping.player_extractor - INFO - Extracting players for match 1473462
+2025-12-09 21:20:56 - core.metadata_extractor - INFO - Extracting player names for match 1473462
+2025-12-09 21:20:56 - core.metadata_extractor - INFO - Found 2 scorecard table(s)
+2025-12-09 21:20:56 - core.metadata_extractor - INFO -   innings_1 (Chennai Super Kings): 11 batted, 1 did not bat
+2025-12-09 21:20:56 - core.metadata_extractor - INFO -   innings_2 (Kolkata Knight Riders): 4 batted, 7 did not bat
+2025-12-09 21:20:56 - core.metadata_extractor - INFO -   Found 10 impact players/substitutes
+2025-12-09 21:20:56 - core.metadata_extractor - INFO - Created DataFrame with 33 player records from 2 innings
+2025-12-09 21:20:56 - scraping.player_extractor - INFO - Extracted 32 players for match 1473462
+2025-12-09 21:20:56 - scraping.player_extractor - INFO -   Teams: Kolkata Knight Riders, Chennai Super Kings
+2025-12-09 21:20:56 - scraping.player_extractor - INFO -   Batted: 14, Did not bat: 18
+2025-12-09 21:20:56 - scraping.match_scraper - INFO - Stored 32 players
+2025-12-09 21:20:56 - scraping.match_scraper - INFO - Loading commentary page - attempt 1
+2025-12-09 21:21:07 - scraping.match_scraper - INFO - commentary page loaded successfully
+2025-12-09 21:21:07 - core.page_navigator - INFO - Getting all innings options
+2025-12-09 21:21:44 - core.page_navigator - INFO - Found 2 innings: ['CSK', 'KKR']
+2025-12-09 21:21:44 - scraping.match_scraper - INFO - Found 2 innings: ['CSK', 'KKR']
+2025-12-09 21:21:44 - scraping.match_scraper - INFO - Regular innings: ['CSK', 'KKR'], Super overs: []
+2025-12-09 21:21:44 - scraping.match_scraper - INFO - Scraping innings: CSK
+2025-12-09 21:21:44 - core.page_navigator - INFO - Switching to innings: CSK
+2025-12-09 21:22:14 - core.page_navigator - INFO - Scrolling to top of page
+2025-12-09 21:22:37 - core.page_navigator - ERROR - Error switching to innings 'CSK': Message: 
+
+2025-12-09 21:22:37 - scraping.match_scraper - WARNING - Failed to switch to CSK, skipping
+2025-12-09 21:22:37 - scraping.match_scraper - INFO - Scraping innings: KKR
+2025-12-09 21:22:37 - core.page_navigator - INFO - Switching to innings: KKR
+2025-12-09 21:22:44 - scraping.match_scraper - INFO - Closing WebDriver
+2025-12-09 21:25:20 - __main__ - INFO - Cricket Data Pipeline Started
+2025-12-09 21:25:20 - __main__ - INFO - STEP 1: Initializing database and schemas
+2025-12-09 21:25:20 - configs.db_config - INFO - Initializing Medallion Architecture schemas...
+2025-12-09 21:25:21 - configs.db_config - INFO - Medallion schemas (Bronze, Silver, Gold) initialized
+2025-12-09 21:25:21 - __main__ - INFO - Database initialization complete
+2025-12-09 21:25:21 - __main__ - INFO - STEP 2: Loading configuration
+2025-12-09 21:25:21 - __main__ - INFO - Configuration loaded successfully
+2025-12-09 21:25:21 - __main__ - INFO - STEP 3: Scraping data from Cricinfo
+2025-12-09 21:25:21 - __main__ - INFO - Initializing match tracker
+2025-12-09 21:25:21 - __main__ - INFO - Current Status: 68 matches already downloaded
+2025-12-09 21:25:21 - __main__ - INFO - Fetching match schedule from Cricinfo
+2025-12-09 21:25:21 - scraping.schedule_scraper - INFO - Initializing WebDriver for schedule scraping
+2025-12-09 21:25:27 - scraping.schedule_scraper - INFO - Loading schedule page - attempt 1
+2025-12-09 21:25:38 - scraping.schedule_scraper - INFO - Schedule page loaded successfully
+2025-12-09 21:25:38 - scraping.schedule_scraper - INFO - Parsing schedule page with BeautifulSoup
+2025-12-09 21:25:47 - scraping.schedule_scraper - INFO - Extracting match links from schedule
+2025-12-09 21:25:47 - scraping.schedule_scraper - INFO - Successfully extracted 98 match links
+2025-12-09 21:25:47 - scraping.schedule_scraper - INFO - Closing WebDriver
+2025-12-09 21:25:51 - __main__ - INFO - Found 98 total links
+2025-12-09 21:25:51 - __main__ - INFO - Found 74 match scorecards
+2025-12-09 21:25:51 - __main__ - INFO - Loading match cache
+2025-12-09 21:25:51 - __main__ - INFO - Starting match scraping process with retry logic
+2025-12-09 21:25:51 - __main__ - INFO - Processing match 1/74: https://www.espncricinfo.com/series/ipl-2025-1449924/kolkata-knight-riders-vs-royal-challengers-bengaluru-1st-match-1473438/full-scorecard
+2025-12-09 21:25:51 - __main__ - INFO - Match 1473438 already downloaded - skipping
+2025-12-09 21:25:51 - __main__ - INFO - Processing match 2/74: https://www.espncricinfo.com/series/ipl-2025-1449924/sunrisers-hyderabad-vs-rajasthan-royals-2nd-match-1473439/full-scorecard
+2025-12-09 21:25:51 - __main__ - INFO - Match 1473439 already downloaded - skipping
+2025-12-09 21:25:51 - __main__ - INFO - Processing match 3/74: https://www.espncricinfo.com/series/ipl-2025-1449924/chennai-super-kings-vs-mumbai-indians-3rd-match-1473440/full-scorecard
+2025-12-09 21:25:51 - __main__ - INFO - Match 1473440 already downloaded - skipping
+2025-12-09 21:25:51 - __main__ - INFO - Processing match 4/74: https://www.espncricinfo.com/series/ipl-2025-1449924/delhi-capitals-vs-lucknow-super-giants-4th-match-1473441/full-scorecard
+2025-12-09 21:25:51 - __main__ - INFO - Match 1473441 already downloaded - skipping
+2025-12-09 21:25:51 - __main__ - INFO - Processing match 5/74: https://www.espncricinfo.com/series/ipl-2025-1449924/gujarat-titans-vs-punjab-kings-5th-match-1473442/full-scorecard
+2025-12-09 21:25:51 - __main__ - INFO - Match 1473442 already downloaded - skipping
+2025-12-09 21:25:51 - __main__ - INFO - Processing match 6/74: https://www.espncricinfo.com/series/ipl-2025-1449924/rajasthan-royals-vs-kolkata-knight-riders-6th-match-1473443/full-scorecard
+2025-12-09 21:25:51 - __main__ - INFO - Match 1473443 already downloaded - skipping
+2025-12-09 21:25:51 - __main__ - INFO - Processing match 7/74: https://www.espncricinfo.com/series/ipl-2025-1449924/sunrisers-hyderabad-vs-lucknow-super-giants-7th-match-1473444/full-scorecard
+2025-12-09 21:25:51 - __main__ - INFO - Match 1473444 already downloaded - skipping
+2025-12-09 21:25:51 - __main__ - INFO - Processing match 8/74: https://www.espncricinfo.com/series/ipl-2025-1449924/chennai-super-kings-vs-royal-challengers-bengaluru-8th-match-1473445/full-scorecard
+2025-12-09 21:25:51 - __main__ - INFO - Match 1473445 already downloaded - skipping
+2025-12-09 21:25:51 - __main__ - INFO - Processing match 9/74: https://www.espncricinfo.com/series/ipl-2025-1449924/gujarat-titans-vs-mumbai-indians-9th-match-1473446/full-scorecard
+2025-12-09 21:25:51 - __main__ - INFO - Match 1473446 already downloaded - skipping
+2025-12-09 21:25:51 - __main__ - INFO - Processing match 10/74: https://www.espncricinfo.com/series/ipl-2025-1449924/delhi-capitals-vs-sunrisers-hyderabad-10th-match-1473447/full-scorecard
+2025-12-09 21:25:51 - __main__ - INFO - Match 1473447 already downloaded - skipping
+2025-12-09 21:25:51 - __main__ - INFO - Processing match 11/74: https://www.espncricinfo.com/series/ipl-2025-1449924/rajasthan-royals-vs-chennai-super-kings-11th-match-1473448/full-scorecard
+2025-12-09 21:25:51 - __main__ - INFO - Match 1473448 already downloaded - skipping
+2025-12-09 21:25:51 - __main__ - INFO - Processing match 12/74: https://www.espncricinfo.com/series/ipl-2025-1449924/mumbai-indians-vs-kolkata-knight-riders-12th-match-1473449/full-scorecard
+2025-12-09 21:25:51 - __main__ - INFO - Match 1473449 already downloaded - skipping
+2025-12-09 21:25:51 - __main__ - INFO - Processing match 13/74: https://www.espncricinfo.com/series/ipl-2025-1449924/lucknow-super-giants-vs-punjab-kings-13th-match-1473450/full-scorecard
+2025-12-09 21:25:51 - __main__ - INFO - Match 1473450 already downloaded - skipping
+2025-12-09 21:25:51 - __main__ - INFO - Processing match 14/74: https://www.espncricinfo.com/series/ipl-2025-1449924/royal-challengers-bengaluru-vs-gujarat-titans-14th-match-1473451/full-scorecard
+2025-12-09 21:25:51 - __main__ - INFO - Match 1473451 already downloaded - skipping
+2025-12-09 21:25:51 - __main__ - INFO - Processing match 15/74: https://www.espncricinfo.com/series/ipl-2025-1449924/kolkata-knight-riders-vs-sunrisers-hyderabad-15th-match-1473452/full-scorecard
+2025-12-09 21:25:51 - __main__ - INFO - Match 1473452 already downloaded - skipping
+2025-12-09 21:25:51 - __main__ - INFO - Processing match 16/74: https://www.espncricinfo.com/series/ipl-2025-1449924/lucknow-super-giants-vs-mumbai-indians-16th-match-1473453/full-scorecard
+2025-12-09 21:25:51 - __main__ - INFO - Match 1473453 already downloaded - skipping
+2025-12-09 21:25:51 - __main__ - INFO - Processing match 17/74: https://www.espncricinfo.com/series/ipl-2025-1449924/chennai-super-kings-vs-delhi-capitals-17th-match-1473454/full-scorecard
+2025-12-09 21:25:51 - __main__ - INFO - Match 1473454 already downloaded - skipping
+2025-12-09 21:25:51 - __main__ - INFO - Processing match 18/74: https://www.espncricinfo.com/series/ipl-2025-1449924/punjab-kings-vs-rajasthan-royals-18th-match-1473455/full-scorecard
+2025-12-09 21:25:51 - __main__ - INFO - Match 1473455 already downloaded - skipping
+2025-12-09 21:25:51 - __main__ - INFO - Processing match 19/74: https://www.espncricinfo.com/series/ipl-2025-1449924/sunrisers-hyderabad-vs-gujarat-titans-19th-match-1473457/full-scorecard
+2025-12-09 21:25:51 - __main__ - INFO - Match 1473457 already downloaded - skipping
+2025-12-09 21:25:51 - __main__ - INFO - Processing match 20/74: https://www.espncricinfo.com/series/ipl-2025-1449924/mumbai-indians-vs-royal-challengers-bengaluru-20th-match-1473458/full-scorecard
+2025-12-09 21:25:51 - __main__ - INFO - Match 1473458 already downloaded - skipping
+2025-12-09 21:25:51 - __main__ - INFO - Processing match 21/74: https://www.espncricinfo.com/series/ipl-2025-1449924/kolkata-knight-riders-vs-lucknow-super-giants-21st-match-1473456/full-scorecard
+2025-12-09 21:25:51 - __main__ - INFO - Match 1473456 already downloaded - skipping
+2025-12-09 21:25:51 - __main__ - INFO - Processing match 22/74: https://www.espncricinfo.com/series/ipl-2025-1449924/punjab-kings-vs-chennai-super-kings-22nd-match-1473459/full-scorecard
+2025-12-09 21:25:51 - __main__ - INFO - Match 1473459 already downloaded - skipping
+2025-12-09 21:25:51 - __main__ - INFO - Processing match 23/74: https://www.espncricinfo.com/series/ipl-2025-1449924/gujarat-titans-vs-rajasthan-royals-23rd-match-1473460/full-scorecard
+2025-12-09 21:25:51 - __main__ - INFO - Match 1473460 already downloaded - skipping
+2025-12-09 21:25:51 - __main__ - INFO - Processing match 24/74: https://www.espncricinfo.com/series/ipl-2025-1449924/royal-challengers-bengaluru-vs-delhi-capitals-24th-match-1473461/full-scorecard
+2025-12-09 21:25:51 - __main__ - INFO - Match 1473461 already downloaded - skipping
+2025-12-09 21:25:51 - __main__ - INFO - Processing match 25/74: https://www.espncricinfo.com/series/ipl-2025-1449924/chennai-super-kings-vs-kolkata-knight-riders-25th-match-1473462/full-scorecard
+2025-12-09 21:25:51 - __main__ - INFO - Attempting to download match 1473462 (attempt 1/4)
+2025-12-09 21:25:51 - scraping.player_extractor - INFO - PlayerExtractor initialized - Target: raw.match_players
+2025-12-09 21:25:51 - scraping.match_scraper - INFO - Initializing WebDriver
+2025-12-09 21:25:58 - scraping.match_scraper - INFO - Loading full scorecard - attempt 1
+2025-12-09 21:26:16 - scraping.match_scraper - INFO - full scorecard loaded successfully
+2025-12-09 21:26:16 - scraping.match_scraper - INFO - Scrolling full scorecard page
+2025-12-09 21:26:16 - core.page_navigator - INFO - Scrolling page 5 times
+2025-12-09 21:26:42 - core.page_navigator - INFO - Page scrolling completed
+2025-12-09 21:26:45 - scraping.match_scraper - INFO - Extracting metadata
+2025-12-09 21:26:45 - core.metadata_extractor - INFO - Found 13 metadata rows for match 1473462
+2025-12-09 21:26:45 - core.metadata_extractor - INFO - Extracted 14 metadata fields for match 1473462
+2025-12-09 21:26:45 - scraping.match_scraper - INFO - Extracting player rosters...
+2025-12-09 21:26:45 - scraping.player_extractor - INFO - Extracting players for match 1473462
+2025-12-09 21:26:45 - core.metadata_extractor - INFO - Extracting player names for match 1473462
+2025-12-09 21:26:45 - core.metadata_extractor - INFO - Found 2 scorecard table(s)
+2025-12-09 21:26:45 - core.metadata_extractor - INFO -   innings_1 (Chennai Super Kings): 11 batted, 1 did not bat
+2025-12-09 21:26:45 - core.metadata_extractor - INFO -   innings_2 (Kolkata Knight Riders): 4 batted, 7 did not bat
+2025-12-09 21:26:45 - core.metadata_extractor - INFO -   Found 10 impact players/substitutes
+2025-12-09 21:26:45 - core.metadata_extractor - INFO - Created DataFrame with 33 player records from 2 innings
+2025-12-09 21:26:45 - scraping.player_extractor - INFO - Extracted 32 players for match 1473462
+2025-12-09 21:26:45 - scraping.player_extractor - INFO -   Teams: Kolkata Knight Riders, Chennai Super Kings
+2025-12-09 21:26:45 - scraping.player_extractor - INFO -   Batted: 14, Did not bat: 18
+2025-12-09 21:26:45 - scraping.match_scraper - INFO - Stored 32 players
+2025-12-09 21:26:45 - scraping.match_scraper - INFO - Loading commentary page - attempt 1
+2025-12-09 21:26:55 - scraping.match_scraper - INFO - commentary page loaded successfully
+2025-12-09 21:26:55 - core.page_navigator - INFO - Getting all innings options
+2025-12-09 21:27:33 - core.page_navigator - INFO - Found 2 innings: ['CSK', 'KKR']
+2025-12-09 21:27:33 - scraping.match_scraper - INFO - Found 2 innings: ['CSK', 'KKR']
+2025-12-09 21:27:33 - scraping.match_scraper - INFO - Regular innings: ['CSK', 'KKR'], Super overs: []
+2025-12-09 21:27:33 - scraping.match_scraper - INFO - Scraping innings: CSK
+2025-12-09 21:27:33 - core.page_navigator - INFO - Switching to innings: CSK
+2025-12-09 21:28:22 - core.page_navigator - ERROR - Error switching to innings 'CSK': Message: 
+
+2025-12-09 21:28:22 - scraping.match_scraper - WARNING - Failed to switch to CSK, skipping
+2025-12-09 21:28:22 - scraping.match_scraper - INFO - Scraping innings: KKR
+2025-12-09 21:28:22 - core.page_navigator - INFO - Switching to innings: KKR
+2025-12-09 21:28:52 - core.page_navigator - INFO - Already on KKR
+2025-12-09 21:28:52 - core.page_navigator - INFO - Scrolling page 20 times
+2025-12-09 21:29:33 - core.page_navigator - INFO - Page scrolling completed
+2025-12-09 21:29:36 - core.commentary_parser - INFO - Found 65 commentary blocks
+2025-12-09 21:29:36 - core.commentary_parser - INFO - Parsed 65 commentary entries
+2025-12-09 21:29:36 - core.commentary_parser - INFO - Normalizing to 6 columns (most common)
+2025-12-09 21:29:36 - core.commentary_parser - INFO - Normalized 65 rows to 6 columns
+2025-12-09 21:29:36 - core.commentary_parser - INFO - DataFrame created with 65 rows and 6 columns
+2025-12-09 21:29:36 - core.commentary_parser - INFO - Final DataFrame: 65 rows with columns: ['Ball', 'Event', 'Score', 'Commentary', 'Bowler', 'Batsman']
+2025-12-09 21:29:36 - core.page_navigator - INFO - Scrolling to top of page
+2025-12-09 21:29:37 - scraping.match_scraper - INFO - Extracted 65 events from KKR
+2025-12-09 21:29:37 - scraping.match_scraper - INFO - Saving commentary to database
+2025-12-09 21:29:37 - scraping.match_scraper - INFO - Saving metadata to database
+2025-12-09 21:29:37 - scraping.match_scraper - INFO - Saving match players to database
+2025-12-09 21:29:37 - scraping.match_scraper - INFO - Successfully completed scraping match 1473462
+2025-12-09 21:29:37 - scraping.match_scraper - INFO - Closing WebDriver
+2025-12-09 21:29:40 - __main__ - INFO - Successfully downloaded match 1473462
+2025-12-09 21:31:08 - __main__ - INFO - Cricket Data Pipeline Started
+2025-12-09 21:31:08 - __main__ - INFO - STEP 1: Initializing database and schemas
+2025-12-09 21:31:08 - configs.db_config - INFO - Initializing Medallion Architecture schemas...
+2025-12-09 21:31:08 - configs.db_config - INFO - Medallion schemas (Bronze, Silver, Gold) initialized
+2025-12-09 21:31:08 - __main__ - INFO - Database initialization complete
+2025-12-09 21:31:08 - __main__ - INFO - STEP 2: Loading configuration
+2025-12-09 21:31:08 - __main__ - INFO - Configuration loaded successfully
+2025-12-09 21:31:08 - __main__ - INFO - STEP 3: Scraping data from Cricinfo
+2025-12-09 21:31:08 - __main__ - INFO - Initializing match tracker
+2025-12-09 21:31:08 - __main__ - INFO - Current Status: 69 matches already downloaded
+2025-12-09 21:31:08 - __main__ - INFO - Fetching match schedule from Cricinfo
+2025-12-09 21:31:08 - scraping.schedule_scraper - INFO - Initializing WebDriver for schedule scraping
+2025-12-09 21:31:11 - scraping.schedule_scraper - INFO - Closing WebDriver
+2025-12-09 21:31:19 - __main__ - INFO - Cricket Data Pipeline Started
+2025-12-09 21:31:19 - __main__ - INFO - STEP 1: Initializing database and schemas
+2025-12-09 21:31:19 - configs.db_config - INFO - Initializing Medallion Architecture schemas...
+2025-12-09 21:31:19 - configs.db_config - INFO - Medallion schemas (Bronze, Silver, Gold) initialized
+2025-12-09 21:31:19 - __main__ - INFO - Database initialization complete
+2025-12-09 21:31:19 - __main__ - INFO - STEP 2: Loading configuration
+2025-12-09 21:31:19 - __main__ - INFO - Configuration loaded successfully
+2025-12-09 21:31:19 - __main__ - INFO - STEP 3: Scraping data from Cricinfo
+2025-12-09 21:31:19 - __main__ - INFO - Initializing match tracker
+2025-12-09 21:31:19 - __main__ - INFO - Current Status: 68 matches already downloaded
+2025-12-09 21:31:19 - __main__ - INFO - Fetching match schedule from Cricinfo
+2025-12-09 21:31:19 - scraping.schedule_scraper - INFO - Initializing WebDriver for schedule scraping
+2025-12-09 21:31:25 - scraping.schedule_scraper - INFO - Loading schedule page - attempt 1
+2025-12-09 21:31:35 - scraping.schedule_scraper - INFO - Schedule page loaded successfully
+2025-12-09 21:31:35 - scraping.schedule_scraper - INFO - Parsing schedule page with BeautifulSoup
+2025-12-09 21:31:48 - scraping.schedule_scraper - INFO - Extracting match links from schedule
+2025-12-09 21:31:48 - scraping.schedule_scraper - INFO - Successfully extracted 98 match links
+2025-12-09 21:31:48 - scraping.schedule_scraper - INFO - Closing WebDriver
+2025-12-09 21:31:51 - __main__ - INFO - Found 98 total links
+2025-12-09 21:31:51 - __main__ - INFO - Found 74 match scorecards
+2025-12-09 21:31:51 - __main__ - INFO - Loading match cache
+2025-12-09 21:31:51 - __main__ - INFO - Starting match scraping process with retry logic
+2025-12-09 21:31:51 - __main__ - INFO - Processing match 1/74: https://www.espncricinfo.com/series/ipl-2025-1449924/kolkata-knight-riders-vs-royal-challengers-bengaluru-1st-match-1473438/full-scorecard
+2025-12-09 21:31:51 - __main__ - INFO - Match 1473438 already downloaded - skipping
+2025-12-09 21:31:51 - __main__ - INFO - Processing match 2/74: https://www.espncricinfo.com/series/ipl-2025-1449924/sunrisers-hyderabad-vs-rajasthan-royals-2nd-match-1473439/full-scorecard
+2025-12-09 21:31:51 - __main__ - INFO - Match 1473439 already downloaded - skipping
+2025-12-09 21:31:51 - __main__ - INFO - Processing match 3/74: https://www.espncricinfo.com/series/ipl-2025-1449924/chennai-super-kings-vs-mumbai-indians-3rd-match-1473440/full-scorecard
+2025-12-09 21:31:51 - __main__ - INFO - Match 1473440 already downloaded - skipping
+2025-12-09 21:31:51 - __main__ - INFO - Processing match 4/74: https://www.espncricinfo.com/series/ipl-2025-1449924/delhi-capitals-vs-lucknow-super-giants-4th-match-1473441/full-scorecard
+2025-12-09 21:31:51 - __main__ - INFO - Match 1473441 already downloaded - skipping
+2025-12-09 21:31:51 - __main__ - INFO - Processing match 5/74: https://www.espncricinfo.com/series/ipl-2025-1449924/gujarat-titans-vs-punjab-kings-5th-match-1473442/full-scorecard
+2025-12-09 21:31:51 - __main__ - INFO - Match 1473442 already downloaded - skipping
+2025-12-09 21:31:51 - __main__ - INFO - Processing match 6/74: https://www.espncricinfo.com/series/ipl-2025-1449924/rajasthan-royals-vs-kolkata-knight-riders-6th-match-1473443/full-scorecard
+2025-12-09 21:31:51 - __main__ - INFO - Match 1473443 already downloaded - skipping
+2025-12-09 21:31:51 - __main__ - INFO - Processing match 7/74: https://www.espncricinfo.com/series/ipl-2025-1449924/sunrisers-hyderabad-vs-lucknow-super-giants-7th-match-1473444/full-scorecard
+2025-12-09 21:31:51 - __main__ - INFO - Match 1473444 already downloaded - skipping
+2025-12-09 21:31:51 - __main__ - INFO - Processing match 8/74: https://www.espncricinfo.com/series/ipl-2025-1449924/chennai-super-kings-vs-royal-challengers-bengaluru-8th-match-1473445/full-scorecard
+2025-12-09 21:31:51 - __main__ - INFO - Match 1473445 already downloaded - skipping
+2025-12-09 21:31:51 - __main__ - INFO - Processing match 9/74: https://www.espncricinfo.com/series/ipl-2025-1449924/gujarat-titans-vs-mumbai-indians-9th-match-1473446/full-scorecard
+2025-12-09 21:31:51 - __main__ - INFO - Match 1473446 already downloaded - skipping
+2025-12-09 21:31:51 - __main__ - INFO - Processing match 10/74: https://www.espncricinfo.com/series/ipl-2025-1449924/delhi-capitals-vs-sunrisers-hyderabad-10th-match-1473447/full-scorecard
+2025-12-09 21:31:51 - __main__ - INFO - Match 1473447 already downloaded - skipping
+2025-12-09 21:31:51 - __main__ - INFO - Processing match 11/74: https://www.espncricinfo.com/series/ipl-2025-1449924/rajasthan-royals-vs-chennai-super-kings-11th-match-1473448/full-scorecard
+2025-12-09 21:31:51 - __main__ - INFO - Match 1473448 already downloaded - skipping
+2025-12-09 21:31:51 - __main__ - INFO - Processing match 12/74: https://www.espncricinfo.com/series/ipl-2025-1449924/mumbai-indians-vs-kolkata-knight-riders-12th-match-1473449/full-scorecard
+2025-12-09 21:31:51 - __main__ - INFO - Match 1473449 already downloaded - skipping
+2025-12-09 21:31:51 - __main__ - INFO - Processing match 13/74: https://www.espncricinfo.com/series/ipl-2025-1449924/lucknow-super-giants-vs-punjab-kings-13th-match-1473450/full-scorecard
+2025-12-09 21:31:51 - __main__ - INFO - Match 1473450 already downloaded - skipping
+2025-12-09 21:31:51 - __main__ - INFO - Processing match 14/74: https://www.espncricinfo.com/series/ipl-2025-1449924/royal-challengers-bengaluru-vs-gujarat-titans-14th-match-1473451/full-scorecard
+2025-12-09 21:31:51 - __main__ - INFO - Match 1473451 already downloaded - skipping
+2025-12-09 21:31:51 - __main__ - INFO - Processing match 15/74: https://www.espncricinfo.com/series/ipl-2025-1449924/kolkata-knight-riders-vs-sunrisers-hyderabad-15th-match-1473452/full-scorecard
+2025-12-09 21:31:51 - __main__ - INFO - Match 1473452 already downloaded - skipping
+2025-12-09 21:31:51 - __main__ - INFO - Processing match 16/74: https://www.espncricinfo.com/series/ipl-2025-1449924/lucknow-super-giants-vs-mumbai-indians-16th-match-1473453/full-scorecard
+2025-12-09 21:31:51 - __main__ - INFO - Match 1473453 already downloaded - skipping
+2025-12-09 21:31:51 - __main__ - INFO - Processing match 17/74: https://www.espncricinfo.com/series/ipl-2025-1449924/chennai-super-kings-vs-delhi-capitals-17th-match-1473454/full-scorecard
+2025-12-09 21:31:51 - __main__ - INFO - Match 1473454 already downloaded - skipping
+2025-12-09 21:31:51 - __main__ - INFO - Processing match 18/74: https://www.espncricinfo.com/series/ipl-2025-1449924/punjab-kings-vs-rajasthan-royals-18th-match-1473455/full-scorecard
+2025-12-09 21:31:51 - __main__ - INFO - Match 1473455 already downloaded - skipping
+2025-12-09 21:31:51 - __main__ - INFO - Processing match 19/74: https://www.espncricinfo.com/series/ipl-2025-1449924/sunrisers-hyderabad-vs-gujarat-titans-19th-match-1473457/full-scorecard
+2025-12-09 21:31:51 - __main__ - INFO - Match 1473457 already downloaded - skipping
+2025-12-09 21:31:51 - __main__ - INFO - Processing match 20/74: https://www.espncricinfo.com/series/ipl-2025-1449924/mumbai-indians-vs-royal-challengers-bengaluru-20th-match-1473458/full-scorecard
+2025-12-09 21:31:51 - __main__ - INFO - Match 1473458 already downloaded - skipping
+2025-12-09 21:31:51 - __main__ - INFO - Processing match 21/74: https://www.espncricinfo.com/series/ipl-2025-1449924/kolkata-knight-riders-vs-lucknow-super-giants-21st-match-1473456/full-scorecard
+2025-12-09 21:31:51 - __main__ - INFO - Match 1473456 already downloaded - skipping
+2025-12-09 21:31:51 - __main__ - INFO - Processing match 22/74: https://www.espncricinfo.com/series/ipl-2025-1449924/punjab-kings-vs-chennai-super-kings-22nd-match-1473459/full-scorecard
+2025-12-09 21:31:51 - __main__ - INFO - Match 1473459 already downloaded - skipping
+2025-12-09 21:31:51 - __main__ - INFO - Processing match 23/74: https://www.espncricinfo.com/series/ipl-2025-1449924/gujarat-titans-vs-rajasthan-royals-23rd-match-1473460/full-scorecard
+2025-12-09 21:31:51 - __main__ - INFO - Match 1473460 already downloaded - skipping
+2025-12-09 21:31:51 - __main__ - INFO - Processing match 24/74: https://www.espncricinfo.com/series/ipl-2025-1449924/royal-challengers-bengaluru-vs-delhi-capitals-24th-match-1473461/full-scorecard
+2025-12-09 21:31:51 - __main__ - INFO - Match 1473461 already downloaded - skipping
+2025-12-09 21:31:51 - __main__ - INFO - Processing match 25/74: https://www.espncricinfo.com/series/ipl-2025-1449924/chennai-super-kings-vs-kolkata-knight-riders-25th-match-1473462/full-scorecard
+2025-12-09 21:31:51 - __main__ - INFO - Attempting to download match 1473462 (attempt 1/4)
+2025-12-09 21:31:51 - scraping.player_extractor - INFO - PlayerExtractor initialized - Target: raw.match_players
+2025-12-09 21:31:51 - scraping.match_scraper - INFO - Initializing WebDriver
+2025-12-09 21:31:56 - scraping.match_scraper - INFO - Loading full scorecard - attempt 1
+2025-12-09 21:32:08 - scraping.match_scraper - INFO - full scorecard loaded successfully
+2025-12-09 21:32:08 - scraping.match_scraper - INFO - Scrolling full scorecard page
+2025-12-09 21:32:08 - core.page_navigator - INFO - Scrolling page 5 times
+2025-12-09 21:32:40 - core.page_navigator - INFO - Page scrolling completed
+2025-12-09 21:32:43 - scraping.match_scraper - INFO - Extracting metadata
+2025-12-09 21:32:43 - core.metadata_extractor - INFO - Found 13 metadata rows for match 1473462
+2025-12-09 21:32:43 - core.metadata_extractor - INFO - Extracted 14 metadata fields for match 1473462
+2025-12-09 21:32:43 - scraping.match_scraper - INFO - Extracting player rosters...
+2025-12-09 21:32:43 - scraping.player_extractor - INFO - Extracting players for match 1473462
+2025-12-09 21:32:43 - core.metadata_extractor - INFO - Extracting player names for match 1473462
+2025-12-09 21:32:43 - core.metadata_extractor - INFO - Found 2 scorecard table(s)
+2025-12-09 21:32:43 - core.metadata_extractor - INFO -   innings_1 (Chennai Super Kings): 11 batted, 1 did not bat
+2025-12-09 21:32:43 - core.metadata_extractor - INFO -   innings_2 (Kolkata Knight Riders): 4 batted, 7 did not bat
+2025-12-09 21:32:43 - core.metadata_extractor - INFO -   Found 10 impact players/substitutes
+2025-12-09 21:32:43 - core.metadata_extractor - INFO - Created DataFrame with 33 player records from 2 innings
+2025-12-09 21:32:43 - scraping.player_extractor - INFO - Extracted 32 players for match 1473462
+2025-12-09 21:32:43 - scraping.player_extractor - INFO -   Teams: Kolkata Knight Riders, Chennai Super Kings
+2025-12-09 21:32:43 - scraping.player_extractor - INFO -   Batted: 14, Did not bat: 18
+2025-12-09 21:32:43 - scraping.match_scraper - INFO - Stored 32 players
+2025-12-09 21:32:43 - scraping.match_scraper - INFO -   - Kolkata Knight Riders
+2025-12-09 21:32:43 - scraping.match_scraper - INFO -   - Chennai Super Kings
+2025-12-09 21:32:43 - scraping.match_scraper - INFO - Loading commentary page - attempt 1
+2025-12-09 21:32:53 - scraping.match_scraper - INFO - commentary page loaded successfully
+2025-12-09 21:32:53 - scraping.match_scraper - INFO - Scrolling commentary page
+2025-12-09 21:32:53 - core.page_navigator - INFO - Scrolling page 20 times
+2025-12-09 21:33:35 - core.page_navigator - INFO - Page scrolling completed
+2025-12-09 21:33:38 - scraping.match_scraper - INFO - Extracting first innings data
+2025-12-09 21:33:38 - scraping.match_scraper - INFO - Default batting team: KKR
+2025-12-09 21:33:38 - core.commentary_parser - INFO - Found 65 commentary blocks
+2025-12-09 21:33:38 - core.commentary_parser - INFO - Parsed 65 commentary entries
+2025-12-09 21:33:38 - core.commentary_parser - INFO - Normalizing to 6 columns (most common)
+2025-12-09 21:33:38 - core.commentary_parser - INFO - Normalized 65 rows to 6 columns
+2025-12-09 21:33:38 - core.commentary_parser - INFO - DataFrame created with 65 rows and 6 columns
+2025-12-09 21:33:38 - core.commentary_parser - INFO - Final DataFrame: 65 rows with columns: ['Ball', 'Event', 'Score', 'Commentary', 'Bowler', 'Batsman']
+2025-12-09 21:33:38 - scraping.match_scraper - INFO - First innings: 65 events
+2025-12-09 21:33:38 - core.page_navigator - INFO - Scrolling to top of page
+2025-12-09 21:33:44 - scraping.match_scraper - INFO - Switching to second innings
+2025-12-09 21:33:44 - core.page_navigator - INFO - Switching innings from: KKR
+2025-12-09 21:34:20 - core.page_navigator - INFO - Switching to innings: CSK
+2025-12-09 21:34:22 - core.page_navigator - INFO - Successfully switched to CSK
+2025-12-09 21:34:22 - scraping.match_scraper - INFO - Switched batting team: CSK
+2025-12-09 21:34:27 - core.page_navigator - INFO - Scrolling page 20 times
+2025-12-09 21:35:08 - core.page_navigator - INFO - Page scrolling completed
+2025-12-09 21:35:11 - core.commentary_parser - INFO - Found 124 commentary blocks
+2025-12-09 21:35:11 - core.commentary_parser - INFO - Parsed 124 commentary entries
+2025-12-09 21:35:11 - core.commentary_parser - INFO - Normalizing to 6 columns (most common)
+2025-12-09 21:35:11 - core.commentary_parser - INFO - Normalized 124 rows to 6 columns
+2025-12-09 21:35:11 - core.commentary_parser - INFO - DataFrame created with 124 rows and 6 columns
+2025-12-09 21:35:11 - core.commentary_parser - INFO - Final DataFrame: 124 rows with columns: ['Ball', 'Event', 'Score', 'Commentary', 'Bowler', 'Batsman']
+2025-12-09 21:35:11 - scraping.match_scraper - INFO - Second innings: 124 events
+2025-12-09 21:35:11 - scraping.match_scraper - INFO - Saving commentary to database
+2025-12-09 21:35:11 - scraping.match_scraper - INFO - Commentary saved: 189 total events
+2025-12-09 21:35:11 - scraping.match_scraper - INFO - Saving metadata to database
+2025-12-09 21:35:11 - scraping.match_scraper - INFO - Saving match players to database
+2025-12-09 21:35:11 - scraping.match_scraper - INFO - Successfully completed scraping match 1473462
+2025-12-09 21:35:11 - scraping.match_scraper - INFO - Closing WebDriver
+2025-12-09 21:35:14 - __main__ - INFO - Successfully downloaded match 1473462
+2025-12-09 21:35:24 - __main__ - INFO - Processing match 26/74: https://www.espncricinfo.com/series/ipl-2025-1449924/lucknow-super-giants-vs-gujarat-titans-26th-match-1473463/full-scorecard
+2025-12-09 21:35:24 - __main__ - INFO - Match 1473463 already downloaded - skipping
+2025-12-09 21:35:24 - __main__ - INFO - Processing match 27/74: https://www.espncricinfo.com/series/ipl-2025-1449924/sunrisers-hyderabad-vs-punjab-kings-27th-match-1473464/full-scorecard
+2025-12-09 21:35:24 - __main__ - INFO - Match 1473464 already downloaded - skipping
+2025-12-09 21:35:24 - __main__ - INFO - Processing match 28/74: https://www.espncricinfo.com/series/ipl-2025-1449924/rajasthan-royals-vs-royal-challengers-bengaluru-28th-match-1473465/full-scorecard
+2025-12-09 21:35:24 - __main__ - INFO - Match 1473465 already downloaded - skipping
+2025-12-09 21:35:24 - __main__ - INFO - Processing match 29/74: https://www.espncricinfo.com/series/ipl-2025-1449924/delhi-capitals-vs-mumbai-indians-29th-match-1473466/full-scorecard
+2025-12-09 21:35:24 - __main__ - INFO - Match 1473466 already downloaded - skipping
+2025-12-09 21:35:24 - __main__ - INFO - Processing match 30/74: https://www.espncricinfo.com/series/ipl-2025-1449924/lucknow-super-giants-vs-chennai-super-kings-30th-match-1473467/full-scorecard
+2025-12-09 21:35:24 - __main__ - INFO - Match 1473467 already downloaded - skipping
+2025-12-09 21:35:24 - __main__ - INFO - Processing match 31/74: https://www.espncricinfo.com/series/ipl-2025-1449924/punjab-kings-vs-kolkata-knight-riders-31st-match-1473468/full-scorecard
+2025-12-09 21:35:24 - __main__ - INFO - Match 1473468 already downloaded - skipping
+2025-12-09 21:35:24 - __main__ - INFO - Processing match 32/74: https://www.espncricinfo.com/series/ipl-2025-1449924/delhi-capitals-vs-rajasthan-royals-32nd-match-1473469/full-scorecard
+2025-12-09 21:35:24 - __main__ - INFO - Attempting to download match 1473469 (attempt 1/4)
+2025-12-09 21:35:24 - scraping.player_extractor - INFO - PlayerExtractor initialized - Target: raw.match_players
+2025-12-09 21:35:24 - scraping.match_scraper - INFO - Initializing WebDriver
+2025-12-09 21:35:31 - scraping.match_scraper - INFO - Loading full scorecard - attempt 1
+2025-12-09 21:35:41 - scraping.match_scraper - INFO - Closing WebDriver
