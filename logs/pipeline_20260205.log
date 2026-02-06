@@ -1,0 +1,405 @@
+2026-02-05 19:50:16 - __main__ - INFO - Cricket Data Pipeline Started
+2026-02-05 19:50:16 - __main__ - INFO - STEP 1: Initializing database and schemas
+2026-02-05 19:50:16 - configs.db_config - INFO - Initializing Medallion Architecture schemas...
+2026-02-05 19:50:16 - configs.db_config - INFO - Medallion schemas (Bronze, Silver, Gold) initialized
+2026-02-05 19:50:16 - __main__ - INFO - Database initialization complete
+2026-02-05 19:50:16 - __main__ - INFO - STEP 2: Loading configuration
+2026-02-05 19:50:16 - __main__ - INFO - Configuration loaded successfully
+2026-02-05 19:50:16 - __main__ - INFO - STEP 3: Scraping data from Cricinfo
+2026-02-05 19:50:16 - __main__ - INFO - Initializing match tracker
+2026-02-05 19:50:16 - __main__ - INFO - Current Status: 74 matches already downloaded
+2026-02-05 19:50:16 - __main__ - INFO - Fetching match schedule from Cricinfo
+2026-02-05 19:50:16 - scraping.schedule_scraper - INFO - Initializing WebDriver for schedule scraping
+2026-02-05 19:50:19 - scraping.schedule_scraper - INFO - Loading schedule page - attempt 1
+2026-02-05 19:50:29 - scraping.schedule_scraper - INFO - Schedule page loaded successfully
+2026-02-05 19:50:29 - scraping.schedule_scraper - INFO - Parsing schedule page with BeautifulSoup
+2026-02-05 19:50:31 - scraping.schedule_scraper - INFO - Extracting match links from schedule
+2026-02-05 19:50:31 - scraping.schedule_scraper - INFO - Successfully extracted 100 match links
+2026-02-05 19:50:31 - scraping.schedule_scraper - INFO - Closing WebDriver
+2026-02-05 19:50:34 - __main__ - INFO - Found 100 total links
+2026-02-05 19:50:34 - __main__ - INFO - Found 74 match scorecards
+2026-02-05 19:50:34 - __main__ - INFO - Loading match cache
+2026-02-05 19:50:34 - __main__ - INFO - Starting match scraping process with retry logic
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 1/74: https://www.espncricinfo.com/series/ipl-2025-1449924/kolkata-knight-riders-vs-royal-challengers-bengaluru-1st-match-1473438/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473438 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 2/74: https://www.espncricinfo.com/series/ipl-2025-1449924/sunrisers-hyderabad-vs-rajasthan-royals-2nd-match-1473439/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473439 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 3/74: https://www.espncricinfo.com/series/ipl-2025-1449924/chennai-super-kings-vs-mumbai-indians-3rd-match-1473440/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473440 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 4/74: https://www.espncricinfo.com/series/ipl-2025-1449924/delhi-capitals-vs-lucknow-super-giants-4th-match-1473441/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473441 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 5/74: https://www.espncricinfo.com/series/ipl-2025-1449924/gujarat-titans-vs-punjab-kings-5th-match-1473442/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473442 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 6/74: https://www.espncricinfo.com/series/ipl-2025-1449924/rajasthan-royals-vs-kolkata-knight-riders-6th-match-1473443/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473443 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 7/74: https://www.espncricinfo.com/series/ipl-2025-1449924/sunrisers-hyderabad-vs-lucknow-super-giants-7th-match-1473444/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473444 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 8/74: https://www.espncricinfo.com/series/ipl-2025-1449924/chennai-super-kings-vs-royal-challengers-bengaluru-8th-match-1473445/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473445 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 9/74: https://www.espncricinfo.com/series/ipl-2025-1449924/gujarat-titans-vs-mumbai-indians-9th-match-1473446/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473446 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 10/74: https://www.espncricinfo.com/series/ipl-2025-1449924/delhi-capitals-vs-sunrisers-hyderabad-10th-match-1473447/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473447 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 11/74: https://www.espncricinfo.com/series/ipl-2025-1449924/rajasthan-royals-vs-chennai-super-kings-11th-match-1473448/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473448 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 12/74: https://www.espncricinfo.com/series/ipl-2025-1449924/mumbai-indians-vs-kolkata-knight-riders-12th-match-1473449/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473449 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 13/74: https://www.espncricinfo.com/series/ipl-2025-1449924/lucknow-super-giants-vs-punjab-kings-13th-match-1473450/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473450 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 14/74: https://www.espncricinfo.com/series/ipl-2025-1449924/royal-challengers-bengaluru-vs-gujarat-titans-14th-match-1473451/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473451 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 15/74: https://www.espncricinfo.com/series/ipl-2025-1449924/kolkata-knight-riders-vs-sunrisers-hyderabad-15th-match-1473452/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473452 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 16/74: https://www.espncricinfo.com/series/ipl-2025-1449924/lucknow-super-giants-vs-mumbai-indians-16th-match-1473453/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473453 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 17/74: https://www.espncricinfo.com/series/ipl-2025-1449924/chennai-super-kings-vs-delhi-capitals-17th-match-1473454/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473454 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 18/74: https://www.espncricinfo.com/series/ipl-2025-1449924/punjab-kings-vs-rajasthan-royals-18th-match-1473455/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473455 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 19/74: https://www.espncricinfo.com/series/ipl-2025-1449924/sunrisers-hyderabad-vs-gujarat-titans-19th-match-1473457/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473457 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 20/74: https://www.espncricinfo.com/series/ipl-2025-1449924/mumbai-indians-vs-royal-challengers-bengaluru-20th-match-1473458/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473458 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 21/74: https://www.espncricinfo.com/series/ipl-2025-1449924/kolkata-knight-riders-vs-lucknow-super-giants-21st-match-1473456/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473456 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 22/74: https://www.espncricinfo.com/series/ipl-2025-1449924/punjab-kings-vs-chennai-super-kings-22nd-match-1473459/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473459 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 23/74: https://www.espncricinfo.com/series/ipl-2025-1449924/gujarat-titans-vs-rajasthan-royals-23rd-match-1473460/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473460 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 24/74: https://www.espncricinfo.com/series/ipl-2025-1449924/royal-challengers-bengaluru-vs-delhi-capitals-24th-match-1473461/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473461 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 25/74: https://www.espncricinfo.com/series/ipl-2025-1449924/chennai-super-kings-vs-kolkata-knight-riders-25th-match-1473462/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473462 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 26/74: https://www.espncricinfo.com/series/ipl-2025-1449924/lucknow-super-giants-vs-gujarat-titans-26th-match-1473463/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473463 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 27/74: https://www.espncricinfo.com/series/ipl-2025-1449924/sunrisers-hyderabad-vs-punjab-kings-27th-match-1473464/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473464 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 28/74: https://www.espncricinfo.com/series/ipl-2025-1449924/rajasthan-royals-vs-royal-challengers-bengaluru-28th-match-1473465/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473465 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 29/74: https://www.espncricinfo.com/series/ipl-2025-1449924/delhi-capitals-vs-mumbai-indians-29th-match-1473466/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473466 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 30/74: https://www.espncricinfo.com/series/ipl-2025-1449924/lucknow-super-giants-vs-chennai-super-kings-30th-match-1473467/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473467 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 31/74: https://www.espncricinfo.com/series/ipl-2025-1449924/punjab-kings-vs-kolkata-knight-riders-31st-match-1473468/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473468 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 32/74: https://www.espncricinfo.com/series/ipl-2025-1449924/delhi-capitals-vs-rajasthan-royals-32nd-match-1473469/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473469 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 33/74: https://www.espncricinfo.com/series/ipl-2025-1449924/mumbai-indians-vs-sunrisers-hyderabad-33rd-match-1473470/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473470 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 34/74: https://www.espncricinfo.com/series/ipl-2025-1449924/royal-challengers-bengaluru-vs-punjab-kings-34th-match-1473471/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473471 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 35/74: https://www.espncricinfo.com/series/ipl-2025-1449924/gujarat-titans-vs-delhi-capitals-35th-match-1473472/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473472 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 36/74: https://www.espncricinfo.com/series/ipl-2025-1449924/rajasthan-royals-vs-lucknow-super-giants-36th-match-1473473/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473473 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 37/74: https://www.espncricinfo.com/series/ipl-2025-1449924/punjab-kings-vs-royal-challengers-bengaluru-37th-match-1473474/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473474 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 38/74: https://www.espncricinfo.com/series/ipl-2025-1449924/mumbai-indians-vs-chennai-super-kings-38th-match-1473475/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473475 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 39/74: https://www.espncricinfo.com/series/ipl-2025-1449924/kolkata-knight-riders-vs-gujarat-titans-39th-match-1473476/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473476 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 40/74: https://www.espncricinfo.com/series/ipl-2025-1449924/lucknow-super-giants-vs-delhi-capitals-40th-match-1473477/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473477 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 41/74: https://www.espncricinfo.com/series/ipl-2025-1449924/sunrisers-hyderabad-vs-mumbai-indians-41st-match-1473478/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473478 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 42/74: https://www.espncricinfo.com/series/ipl-2025-1449924/royal-challengers-bengaluru-vs-rajasthan-royals-42nd-match-1473479/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473479 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 43/74: https://www.espncricinfo.com/series/ipl-2025-1449924/chennai-super-kings-vs-sunrisers-hyderabad-43rd-match-1473480/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473480 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 44/74: https://www.espncricinfo.com/series/ipl-2025-1449924/kolkata-knight-riders-vs-punjab-kings-44th-match-1473481/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473481 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 45/74: https://www.espncricinfo.com/series/ipl-2025-1449924/mumbai-indians-vs-lucknow-super-giants-45th-match-1473482/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473482 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 46/74: https://www.espncricinfo.com/series/ipl-2025-1449924/delhi-capitals-vs-royal-challengers-bengaluru-46th-match-1473483/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473483 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 47/74: https://www.espncricinfo.com/series/ipl-2025-1449924/rajasthan-royals-vs-gujarat-titans-47th-match-1473484/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473484 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 48/74: https://www.espncricinfo.com/series/ipl-2025-1449924/delhi-capitals-vs-kolkata-knight-riders-48th-match-1473485/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473485 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 49/74: https://www.espncricinfo.com/series/ipl-2025-1449924/chennai-super-kings-vs-punjab-kings-49th-match-1473486/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473486 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 50/74: https://www.espncricinfo.com/series/ipl-2025-1449924/rajasthan-royals-vs-mumbai-indians-50th-match-1473487/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473487 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 51/74: https://www.espncricinfo.com/series/ipl-2025-1449924/gujarat-titans-vs-sunrisers-hyderabad-51st-match-1473488/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473488 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 52/74: https://www.espncricinfo.com/series/ipl-2025-1449924/royal-challengers-bengaluru-vs-chennai-super-kings-52nd-match-1473489/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473489 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 53/74: https://www.espncricinfo.com/series/ipl-2025-1449924/kolkata-knight-riders-vs-rajasthan-royals-53rd-match-1473490/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473490 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 54/74: https://www.espncricinfo.com/series/ipl-2025-1449924/punjab-kings-vs-lucknow-super-giants-54th-match-1473491/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473491 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 55/74: https://www.espncricinfo.com/series/ipl-2025-1449924/sunrisers-hyderabad-vs-delhi-capitals-55th-match-1473492/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473492 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 56/74: https://www.espncricinfo.com/series/ipl-2025-1449924/mumbai-indians-vs-gujarat-titans-56th-match-1473493/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473493 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 57/74: https://www.espncricinfo.com/series/ipl-2025-1449924/kolkata-knight-riders-vs-chennai-super-kings-57th-match-1473494/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473494 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 58/74: https://www.espncricinfo.com/series/ipl-2025-1449924/royal-challengers-bengaluru-vs-kolkata-knight-riders-58th-match-1473496/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473496 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 59/74: https://www.espncricinfo.com/series/ipl-2025-1449924/rajasthan-royals-vs-punjab-kings-59th-match-1473497/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473497 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 60/74: https://www.espncricinfo.com/series/ipl-2025-1449924/delhi-capitals-vs-gujarat-titans-60th-match-1473498/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473498 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 61/74: https://www.espncricinfo.com/series/ipl-2025-1449924/lucknow-super-giants-vs-sunrisers-hyderabad-61st-match-1473499/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473499 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 62/74: https://www.espncricinfo.com/series/ipl-2025-1449924/chennai-super-kings-vs-rajasthan-royals-62nd-match-1473500/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473500 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 63/74: https://www.espncricinfo.com/series/ipl-2025-1449924/mumbai-indians-vs-delhi-capitals-63rd-match-1473501/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473501 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 64/74: https://www.espncricinfo.com/series/ipl-2025-1449924/gujarat-titans-vs-lucknow-super-giants-64th-match-1473502/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473502 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 65/74: https://www.espncricinfo.com/series/ipl-2025-1449924/royal-challengers-bengaluru-vs-sunrisers-hyderabad-65th-match-1473503/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473503 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 66/74: https://www.espncricinfo.com/series/ipl-2025-1449924/delhi-capitals-vs-punjab-kings-66th-match-1485779/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1485779 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 67/74: https://www.espncricinfo.com/series/ipl-2025-1449924/gujarat-titans-vs-chennai-super-kings-67th-match-1473504/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473504 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 68/74: https://www.espncricinfo.com/series/ipl-2025-1449924/kolkata-knight-riders-vs-sunrisers-hyderabad-68th-match-1473505/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473505 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 69/74: https://www.espncricinfo.com/series/ipl-2025-1449924/mumbai-indians-vs-punjab-kings-69th-match-1473506/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473506 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 70/74: https://www.espncricinfo.com/series/ipl-2025-1449924/lucknow-super-giants-vs-royal-challengers-bengaluru-70th-match-1473507/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473507 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 71/74: https://www.espncricinfo.com/series/ipl-2025-1449924/punjab-kings-vs-royal-challengers-bengaluru-qualifier-1-1473508/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473508 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 72/74: https://www.espncricinfo.com/series/ipl-2025-1449924/gujarat-titans-vs-mumbai-indians-eliminator-1473509/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473509 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 73/74: https://www.espncricinfo.com/series/ipl-2025-1449924/mumbai-indians-vs-punjab-kings-qualifier-2-1473510/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473510 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Processing match 74/74: https://www.espncricinfo.com/series/ipl-2025-1449924/punjab-kings-vs-royal-challengers-bengaluru-final-1473511/full-scorecard
+2026-02-05 19:50:34 - __main__ - INFO - Match 1473511 already downloaded - skipping
+2026-02-05 19:50:34 - __main__ - INFO - Scraping complete - Found: 74, Downloaded: 0, Skipped: 74, Failed: 0
+2026-02-05 19:50:34 - __main__ - INFO - STEP 4: Processing through Medallion Architecture
+2026-02-05 19:50:34 - __main__ - INFO - Starting Medallion Architecture pipeline
+2026-02-05 19:50:34 - pipeline.orchestrator - INFO - Pipeline Orchestrator initialized
+2026-02-05 19:50:34 - pipeline.orchestrator - INFO - 
+================================================================================
+2026-02-05 19:50:34 - pipeline.orchestrator - INFO - MEDALLION ARCHITECTURE PIPELINE - STARTING
+2026-02-05 19:50:34 - pipeline.orchestrator - INFO - ================================================================================
+2026-02-05 19:50:34 - pipeline.orchestrator - INFO - Start Time: 2026-02-05 19:50:34.206843
+2026-02-05 19:50:34 - pipeline.orchestrator - INFO - Layers to execute: bronze, silver, gold
+2026-02-05 19:50:34 - pipeline.orchestrator - INFO - ================================================================================
+2026-02-05 19:50:34 - medallionlayer.bronze_layer - INFO - Bronze Layer initialized - Run ID: f81f40b7-6c7c-4281-96d3-a7e9771476e8
+2026-02-05 19:50:34 - medallionlayer.bronze_layer - INFO - ======================================================================
+2026-02-05 19:50:34 - medallionlayer.bronze_layer - INFO - BRONZE LAYER - Starting
+2026-02-05 19:50:34 - medallionlayer.bronze_layer - INFO - ======================================================================
+2026-02-05 19:50:34 - medallionlayer.bronze_layer - INFO - 
+Processing table: match_metadata
+2026-02-05 19:50:34 - medallionlayer.bronze_layer - INFO - Read 73 rows from raw.match_metadata
+2026-02-05 19:50:34 - medallionlayer.bronze_layer - INFO -   No duplicates found based on ['matchid']
+2026-02-05 19:50:34 - medallionlayer.bronze_layer - INFO - After quality checks: 73 rows (removed 0)
+2026-02-05 19:50:34 - medallionlayer.bronze_layer - INFO - match_metadata: 73 rows ingested
+2026-02-05 19:50:34 - medallionlayer.bronze_layer - INFO - 
+Processing table: match_events
+2026-02-05 19:50:34 - medallionlayer.bronze_layer - INFO - Read 17447 rows from raw.match_events
+2026-02-05 19:50:34 - medallionlayer.bronze_layer - WARNING -   Found 240 duplicate rows based on ['matchid', 'ball', 'innings', 'commentary']
+2026-02-05 19:50:35 - medallionlayer.bronze_layer - INFO - After quality checks: 17207 rows (removed 240)
+2026-02-05 19:50:36 - medallionlayer.bronze_layer - INFO - match_events: 17207 rows ingested
+2026-02-05 19:50:36 - medallionlayer.bronze_layer - INFO - 
+Processing table: match_players
+2026-02-05 19:50:36 - medallionlayer.bronze_layer - INFO - Read 1715 rows from raw.match_players
+2026-02-05 19:50:36 - medallionlayer.bronze_layer - INFO -   No duplicates found based on ['matchid', 'innings', 'player_name']
+2026-02-05 19:50:36 - medallionlayer.bronze_layer - INFO - After quality checks: 1715 rows (removed 0)
+2026-02-05 19:50:36 - medallionlayer.bronze_layer - INFO - match_players: 1715 rows ingested
+2026-02-05 19:50:36 - medallionlayer.bronze_layer - INFO - 
+Validating innings data...
+2026-02-05 19:50:36 - medallionlayer.bronze_layer - WARNING - Found 1 matches with incomplete innings data
+2026-02-05 19:50:36 - medallionlayer.bronze_layer - WARNING -     Match 1473492: Has 1 innings (DC)
+2026-02-05 19:50:36 - medallionlayer.bronze_layer - INFO - 
+======================================================================
+2026-02-05 19:50:36 - medallionlayer.bronze_layer - INFO - DATA QUALITY REPORT
+2026-02-05 19:50:36 - medallionlayer.bronze_layer - INFO - ======================================================================
+2026-02-05 19:50:36 - medallionlayer.bronze_layer - INFO - 
+DUPLICATES REMOVED:
+2026-02-05 19:50:36 - medallionlayer.bronze_layer - INFO -   match_metadata: No duplicates found
+2026-02-05 19:50:36 - medallionlayer.bronze_layer - INFO -   match_events: 240 duplicate rows removed
+2026-02-05 19:50:36 - medallionlayer.bronze_layer - INFO -   match_players: No duplicates found
+2026-02-05 19:50:36 - medallionlayer.bronze_layer - INFO - 
+NULL VALUES FOUND:
+2026-02-05 19:50:36 - medallionlayer.bronze_layer - INFO -   match_metadata: No null values in required columns
+2026-02-05 19:50:36 - medallionlayer.bronze_layer - INFO -   match_events: No null values in required columns
+2026-02-05 19:50:36 - medallionlayer.bronze_layer - INFO -   match_players: No null values in required columns
+2026-02-05 19:50:36 - medallionlayer.bronze_layer - INFO - 
+INNINGS VALIDATION:
+2026-02-05 19:50:36 - medallionlayer.bronze_layer - WARNING - 1 matches with incomplete innings data
+2026-02-05 19:50:36 - medallionlayer.bronze_layer - INFO - ======================================================================
+
+2026-02-05 19:50:36 - medallionlayer.bronze_layer - INFO - 
+======================================================================
+2026-02-05 19:50:36 - medallionlayer.bronze_layer - INFO - BRONZE LAYER - Complete
+2026-02-05 19:50:36 - medallionlayer.bronze_layer - INFO - Tables Processed: 3/3
+2026-02-05 19:50:36 - medallionlayer.bronze_layer - INFO - Total Rows: 18995
+2026-02-05 19:50:36 - medallionlayer.bronze_layer - INFO - ======================================================================
+2026-02-05 19:50:36 - medallionlayer.silver_layer - INFO - Silver Layer initialized
+2026-02-05 19:50:36 - medallionlayer.silver_layer - INFO - ======================================================================
+2026-02-05 19:50:36 - medallionlayer.silver_layer - INFO - SILVER LAYER - Starting
+2026-02-05 19:50:36 - medallionlayer.silver_layer - INFO - ======================================================================
+2026-02-05 19:50:36 - medallionlayer.silver_layer - INFO - 
+Processing table: match_metadata
+2026-02-05 19:50:36 - medallionlayer.silver_layer - INFO - Read 73 rows from bronze.match_metadata
+2026-02-05 19:50:36 - medallionlayer.silver_layer - INFO - Cleaned columns: ['venue', 'series', 'toss', 'player_of_the_match']
+2026-02-05 19:50:36 - medallionlayer.silver_layer - INFO - After transformations: 73 rows (removed 0)
+2026-02-05 19:50:36 - medallionlayer.silver_layer - INFO - Removed Bronze audit columns: ['ingestion_timestamp', 'source_system', 'pipeline_run_id', 'is_active']
+2026-02-05 19:50:36 - medallionlayer.silver_layer - INFO - match_metadata: 73 rows processed
+2026-02-05 19:50:36 - medallionlayer.silver_layer - INFO - 
+Processing table: match_events
+2026-02-05 19:50:36 - medallionlayer.silver_layer - INFO - Read 17207 rows from bronze.match_events
+2026-02-05 19:50:36 - medallionlayer.silver_layer - INFO - Cleaned columns: ['bowler', 'batsman', 'commentary', 'innings']
+2026-02-05 19:50:36 - medallionlayer.silver_layer - INFO - Converting 'score' column to numeric...
+2026-02-05 19:50:37 - medallionlayer.silver_layer - INFO - Score conversion: 16330 converted, 877 not converted (set to 0)
+2026-02-05 19:50:37 - medallionlayer.silver_layer - INFO - Extracting dismissal information...
+2026-02-05 19:50:37 - medallionlayer.silver_layer - INFO - Extracted dismissal info for 448 wickets
+2026-02-05 19:50:37 - medallionlayer.silver_layer - INFO - Enriching player names for columns: ['batsman', 'bowler', 'fielder_name']
+2026-02-05 19:50:37 - medallionlayer.silver_layer - INFO - Loaded 1633 player records for enrichment
+2026-02-05 19:50:37 - medallionlayer.silver_layer - INFO - Enriching column: batsman
+2026-02-05 19:50:41 - medallionlayer.silver_layer - INFO -   batsman: 13217 enriched, 1214 not found, 0 null
+2026-02-05 19:50:41 - medallionlayer.silver_layer - INFO - Enriching column: bowler
+2026-02-05 19:50:42 - medallionlayer.silver_layer - INFO -   bowler: 11958 enriched, 160 not found, 0 null
+2026-02-05 19:50:42 - medallionlayer.silver_layer - INFO - Enriching column: fielder_name
+2026-02-05 19:50:43 - medallionlayer.silver_layer - INFO -   fielder_name: 235 enriched, 19 not found, 16643 null
+2026-02-05 19:50:43 - medallionlayer.silver_layer - INFO - Deduplicating player names within teams (per-match)...
+2026-02-05 19:50:43 - medallionlayer.silver_layer - INFO - Per-match deduplication: 0 entries deduplicated
+2026-02-05 19:50:43 - medallionlayer.silver_layer - INFO - Running global player name deduplication...
+2026-02-05 19:50:43 - medallionlayer.silver_layer - INFO - Global deduplication: 0 entries deduplicated
+2026-02-05 19:50:43 - medallionlayer.silver_layer - INFO - Enriching innings with team names from bronze.match_players...
+2026-02-05 19:50:43 - medallionlayer.silver_layer - INFO - Loaded 1715 team-innings mappings from bronze.match_players
+2026-02-05 19:50:43 - medallionlayer.silver_layer - INFO - Created 143 direct mappings
+2026-02-05 19:50:43 - medallionlayer.silver_layer - INFO - Created 144 match-team mappings
+2026-02-05 19:50:43 - medallionlayer.silver_layer - INFO - Created 432 abbreviation mappings
+2026-02-05 19:50:43 - medallionlayer.silver_layer - WARNING - Found 1 matches in events without player data
+2026-02-05 19:50:43 - medallionlayer.silver_layer - WARNING - Will use IPL abbreviation mapping for these matches: [1473511]
+2026-02-05 19:50:48 - medallionlayer.silver_layer - INFO - Enriched 17197 records with team names
+2026-02-05 19:50:48 - medallionlayer.silver_layer - INFO - Innings enrichment summary:
+2026-02-05 19:50:48 - medallionlayer.silver_layer - INFO -   'CSK' -> 'Chennai Super Kings' (1744 rows)
+2026-02-05 19:50:48 - medallionlayer.silver_layer - INFO -   'DC' -> 'Delhi Capitals' (1664 rows)
+2026-02-05 19:50:48 - medallionlayer.silver_layer - INFO -   'GT' -> 'Gujarat Titans' (1837 rows)
+2026-02-05 19:50:48 - medallionlayer.silver_layer - INFO -   'KKR' -> 'Kolkata Knight Riders' (1381 rows)
+2026-02-05 19:50:48 - medallionlayer.silver_layer - INFO -   'LSG' -> 'Lucknow Super Giants' (1744 rows)
+2026-02-05 19:50:48 - medallionlayer.silver_layer - INFO -   'MI' -> 'Mumbai Indians' (1885 rows)
+2026-02-05 19:50:48 - medallionlayer.silver_layer - INFO -   'PBKS' -> 'Punjab Kings' (1957 rows)
+2026-02-05 19:50:48 - medallionlayer.silver_layer - INFO -   'RCB' -> 'Royal Challengers Bengaluru' (1713 rows)
+2026-02-05 19:50:48 - medallionlayer.silver_layer - INFO -   'RR' -> 'Rajasthan Royals' (1673 rows)
+2026-02-05 19:50:48 - medallionlayer.silver_layer - INFO -   'SRH' -> 'Sunrisers Hyderabad' (1599 rows)
+2026-02-05 19:50:48 - medallionlayer.silver_layer - INFO - Resolving 10 Super Over innings to team names...
+2026-02-05 19:50:48 - medallionlayer.silver_layer - INFO - Super Over resolution: 10 resolved, 0 unresolved
+2026-02-05 19:50:48 - medallionlayer.silver_layer - INFO - All team abbreviations successfully enriched
+2026-02-05 19:50:48 - medallionlayer.silver_layer - INFO - All Super Over innings resolved to team names
+2026-02-05 19:50:48 - medallionlayer.silver_layer - INFO - After transformations: 17207 rows (removed 0)
+2026-02-05 19:50:48 - medallionlayer.silver_layer - INFO - Removed Bronze audit columns: ['ingestion_timestamp', 'source_system', 'pipeline_run_id', 'is_active']
+2026-02-05 19:50:50 - medallionlayer.silver_layer - INFO - match_events: 17207 rows processed
+2026-02-05 19:50:50 - medallionlayer.silver_layer - INFO - 
+Processing table: match_players
+2026-02-05 19:50:50 - medallionlayer.silver_layer - INFO - Read 1715 rows from bronze.match_players
+2026-02-05 19:50:50 - medallionlayer.silver_layer - INFO - Cleaned columns: ['player_name', 'team']
+2026-02-05 19:50:50 - medallionlayer.silver_layer - INFO - After transformations: 1715 rows (removed 0)
+2026-02-05 19:50:50 - medallionlayer.silver_layer - INFO - Removed Bronze audit columns: ['ingestion_timestamp', 'source_system', 'pipeline_run_id', 'is_active']
+2026-02-05 19:50:50 - medallionlayer.silver_layer - INFO - match_players: 1715 rows processed
+2026-02-05 19:50:50 - medallionlayer.silver_layer - INFO - 
+======================================================================
+2026-02-05 19:50:50 - medallionlayer.silver_layer - INFO - SILVER LAYER - Complete
+2026-02-05 19:50:50 - medallionlayer.silver_layer - INFO - Tables Processed: 3
+2026-02-05 19:50:50 - medallionlayer.silver_layer - INFO - Total Rows: 18995
+2026-02-05 19:50:50 - medallionlayer.silver_layer - INFO - ======================================================================
+2026-02-05 19:50:50 - medallionlayer.gold_layer - INFO - Gold Layer initialized
+2026-02-05 19:50:50 - medallionlayer.gold_layer - INFO - ======================================================================
+2026-02-05 19:50:50 - medallionlayer.gold_layer - INFO - GOLD LAYER - Starting
+2026-02-05 19:50:50 - medallionlayer.gold_layer - INFO - ======================================================================
+2026-02-05 19:50:50 - medallionlayer.gold_layer - INFO - 
+Processing aggregation: match_summary
+2026-02-05 19:50:50 - medallionlayer.gold_layer - INFO - Processing enhanced match summary...
+2026-02-05 19:50:50 - medallionlayer.gold_layer - INFO - Loaded 145 innings scores from 73 matches
+2026-02-05 19:50:50 - medallionlayer.gold_layer - INFO - Pivoted scores for 73 matches
+2026-02-05 19:50:50 - medallionlayer.gold_layer - INFO - Created match summary with 73 matches
+2026-02-05 19:50:50 - medallionlayer.gold_layer - INFO - Columns: ['matchid', 'venue', 'series', 'series_id', 'season', 'player_of_the_match', 'batting_first', 'batting_second', 'first_innings_score', 'second_innings_score', 'winner', 'margin', 'result_type', 'margin_type', 'created_at', 'updated_at']
+2026-02-05 19:50:50 - medallionlayer.gold_layer - INFO - Successfully created 73 rows for match_summary
+2026-02-05 19:50:50 - medallionlayer.gold_layer - INFO - 
+Processing aggregation: series_summary
+2026-02-05 19:50:50 - medallionlayer.gold_layer - INFO - Processing enhanced series summary...
+2026-02-05 19:50:50 - medallionlayer.gold_layer - INFO - Successfully created 1 rows for series_summary
+2026-02-05 19:50:50 - medallionlayer.gold_layer - INFO - 
+Processing aggregation: venue_statistics
+2026-02-05 19:50:50 - medallionlayer.gold_layer - INFO - Read 73 rows from silver.match_metadata
+2026-02-05 19:50:50 - medallionlayer.gold_layer - INFO -   Aggregated to 14 rows
+2026-02-05 19:50:50 - medallionlayer.gold_layer - INFO - Final DataFrame columns: ['venue', 'season', 'total_matches', 'created_at', 'updated_at']
+2026-02-05 19:50:50 - medallionlayer.gold_layer - INFO - Successfully wrote 14 rows to gold.venue_statistics
+2026-02-05 19:50:50 - medallionlayer.gold_layer - INFO - Successfully created 14 rows for venue_statistics
+2026-02-05 19:50:50 - medallionlayer.gold_layer - INFO - 
+Processing aggregation: match_ball_statistics
+2026-02-05 19:50:50 - medallionlayer.gold_layer - INFO - Processing match ball statistics with wickets...
+2026-02-05 19:50:50 - medallionlayer.gold_layer - INFO - Successfully created 145 rows for match_ball_statistics
+2026-02-05 19:50:50 - medallionlayer.gold_layer - INFO - 
+Processing aggregation: match_batsman_statistics
+2026-02-05 19:50:50 - medallionlayer.gold_layer - INFO - Processing match batsman statistics with run distribution...
+2026-02-05 19:50:51 - medallionlayer.gold_layer - INFO - Successfully created 1115 rows for match_batsman_statistics
+2026-02-05 19:50:51 - medallionlayer.gold_layer - INFO - 
+Processing aggregation: match_bowler_statistics
+2026-02-05 19:50:51 - medallionlayer.gold_layer - INFO - Processing match bowler statistics with wickets and extras...
+2026-02-05 19:50:51 - medallionlayer.gold_layer - INFO - Successfully created 862 rows for match_bowler_statistics
+2026-02-05 19:50:51 - medallionlayer.gold_layer - INFO - 
+Processing aggregation: batsman_statistics
+2026-02-05 19:50:51 - medallionlayer.gold_layer - INFO - Processing career batting statistics...
+2026-02-05 19:50:51 - medallionlayer.gold_layer - INFO - Successfully created 202 rows for batsman_statistics
+2026-02-05 19:50:51 - medallionlayer.gold_layer - INFO - 
+Processing aggregation: bowler_statistics
+2026-02-05 19:50:51 - medallionlayer.gold_layer - INFO - Processing career bowling statistics...
+2026-02-05 19:50:51 - medallionlayer.gold_layer - INFO - Successfully created 139 rows for bowler_statistics
+2026-02-05 19:50:51 - medallionlayer.gold_layer - INFO - 
+Processing aggregation: player_team_history
+2026-02-05 19:50:51 - medallionlayer.gold_layer - INFO - Processing SCD Type 2 (SQL MERGE) for player_team_history
+2026-02-05 19:50:51 - medallionlayer.gold_layer - INFO - Read 1715 rows from silver.match_players
+2026-02-05 19:50:51 - medallionlayer.gold_layer - INFO - Season not in match_players, fetching from match_metadata
+2026-02-05 19:50:51 - medallionlayer.gold_layer - INFO - Enriched with season data: 1715 records
+2026-02-05 19:50:51 - medallionlayer.gold_layer - INFO - Series not in match_players, fetching from match_metadata
+2026-02-05 19:50:51 - medallionlayer.gold_layer - INFO - Enriched with series data: 1715/1715 records have series
+2026-02-05 19:50:51 - medallionlayer.gold_layer - INFO - Built dimension with 207 player-team-season combinations
+2026-02-05 19:50:51 - medallionlayer.gold_layer - INFO - Series column populated for 207/207 records
+2026-02-05 19:50:51 - medallionlayer.gold_layer - INFO - Built 207 dimension records
+2026-02-05 19:50:51 - medallionlayer.gold_layer - INFO - Creating staging table...
+2026-02-05 19:50:51 - medallionlayer.gold_layer - INFO - Staging table created successfully
+2026-02-05 19:50:51 - medallionlayer.gold_layer - INFO - Loading data into staging table...
+2026-02-05 19:50:52 - medallionlayer.gold_layer - INFO - Loaded 207 records into staging
+2026-02-05 19:50:52 - medallionlayer.gold_layer - INFO - Step 1/3: Expiring old records where player changed teams...
+2026-02-05 19:50:52 - medallionlayer.gold_layer - INFO - Expired 0 old records
+2026-02-05 19:50:52 - medallionlayer.gold_layer - INFO - Step 2/3: Updating existing current records...
+2026-02-05 19:50:52 - medallionlayer.gold_layer - INFO - Updated 0 existing records
+2026-02-05 19:50:52 - medallionlayer.gold_layer - INFO - Step 3/3: Inserting new records...
+2026-02-05 19:50:52 - medallionlayer.gold_layer - INFO - Inserted 207 new records
+2026-02-05 19:50:52 - medallionlayer.gold_layer - INFO - ======================================================================
+2026-02-05 19:50:52 - medallionlayer.gold_layer - INFO - SCD TYPE 2 MERGE COMPLETE
+2026-02-05 19:50:52 - medallionlayer.gold_layer - INFO -   Expired: 0 records (player changed teams)
+2026-02-05 19:50:52 - medallionlayer.gold_layer - INFO -   Updated: 0 records (accumulated stats)
+2026-02-05 19:50:52 - medallionlayer.gold_layer - INFO -   Inserted: 207 records (new combinations)
+2026-02-05 19:50:52 - medallionlayer.gold_layer - INFO -   Total: 207 records processed
+2026-02-05 19:50:52 - medallionlayer.gold_layer - INFO - ======================================================================
+2026-02-05 19:50:52 - medallionlayer.gold_layer - INFO - Successfully created 207 rows for player_team_history
+2026-02-05 19:50:52 - medallionlayer.gold_layer - INFO - 
+======================================================================
+2026-02-05 19:50:52 - medallionlayer.gold_layer - INFO - GOLD LAYER - Complete
+2026-02-05 19:50:52 - medallionlayer.gold_layer - INFO - Aggregations Processed: 9
+2026-02-05 19:50:52 - medallionlayer.gold_layer - INFO - Total Rows: 2758
+2026-02-05 19:50:52 - medallionlayer.gold_layer - INFO - ======================================================================
+2026-02-05 19:50:52 - pipeline.orchestrator - INFO - 
+================================================================================
+2026-02-05 19:50:52 - pipeline.orchestrator - INFO - PIPELINE EXECUTION SUMMARY
+2026-02-05 19:50:52 - pipeline.orchestrator - INFO - ================================================================================
+2026-02-05 19:50:52 - pipeline.orchestrator - INFO - Status: SUCCESS
+2026-02-05 19:50:52 - pipeline.orchestrator - INFO - Duration: 17.85 seconds
+2026-02-05 19:50:52 - pipeline.orchestrator - INFO - 
+BRONZE Layer:
+2026-02-05 19:50:52 - pipeline.orchestrator - INFO -   Status: success
+2026-02-05 19:50:52 - pipeline.orchestrator - INFO -   Tables Processed: 3
+2026-02-05 19:50:52 - pipeline.orchestrator - INFO -   Total Rows: 18995
+2026-02-05 19:50:52 - pipeline.orchestrator - INFO - 
+SILVER Layer:
+2026-02-05 19:50:52 - pipeline.orchestrator - INFO -   Status: success
+2026-02-05 19:50:52 - pipeline.orchestrator - INFO -   Tables Processed: 3
+2026-02-05 19:50:52 - pipeline.orchestrator - INFO -   Total Rows: 18995
+2026-02-05 19:50:52 - pipeline.orchestrator - INFO - 
+GOLD Layer:
+2026-02-05 19:50:52 - pipeline.orchestrator - INFO -   Status: success
+2026-02-05 19:50:52 - pipeline.orchestrator - INFO -   Aggregations: 9
+2026-02-05 19:50:52 - pipeline.orchestrator - INFO -   Total Rows: 2758
+2026-02-05 19:50:52 - pipeline.orchestrator - INFO - ================================================================================
+
+2026-02-05 19:50:52 - __main__ - INFO - Pipeline completed - Status: success, Duration: 17.85s
+2026-02-05 19:50:52 - __main__ - INFO - Pipeline completed successfully

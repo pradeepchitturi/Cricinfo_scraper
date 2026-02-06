@@ -14,12 +14,12 @@ class PlayerExtractor:
     Extracts player names from match scorecard and stores in database
     """
 
-    def __init__(self, schema: str = 'raw'):
+    def __init__(self, schema: str = 'bronze'):
         """
         Initialize Player Extractor
 
         Args:
-            schema: Target schema for storing player data (default: 'raw')
+            schema: Target schema for storing player data (default: 'bronze')
         """
         self.schema = schema
         self.table_name = 'match_players'
@@ -51,6 +51,8 @@ class PlayerExtractor:
                     'total_players': 0,
                     'batted': 0,
                     'did_not_bat': 0,
+                    'regular_players': 0,
+                    'impact_players': 0,
                     'teams': []
                 }
 
@@ -60,15 +62,27 @@ class PlayerExtractor:
             did_not_bat_count = total_players - batted_count
             teams = players_df['team'].unique().tolist()
 
+            # NEW: Count impact vs regular players
+            regular_count = int((players_df['player_type'] == 'regular').sum())
+            impact_count = int((players_df['player_type'] == 'impact').sum())
+
             logger.info(f"Extracted {total_players} players for match {match_id}")
             logger.info(f"  Teams: {', '.join(teams)}")
             logger.info(f"  Batted: {batted_count}, Did not bat: {did_not_bat_count}")
+            logger.info(f"  Regular: {regular_count}, Impact: {impact_count}")
+
+            # Log impact players specifically
+            if impact_count > 0:
+                impact_players = players_df[players_df['player_type'] == 'impact']['player_name'].tolist()
+                logger.info(f"  Impact players: {', '.join(impact_players)}")
 
             results_dict = {
                 'status': 'success',
                 'total_players': total_players,
                 'batted': batted_count,
                 'did_not_bat': did_not_bat_count,
+                'regular_players': regular_count,
+                'impact_players': impact_count,
                 'teams': teams
             }
 
@@ -78,7 +92,6 @@ class PlayerExtractor:
             logger.error(f"Error extracting players for match {match_id}: {e}", exc_info=True)
 
             # Return empty DataFrame and error dict
-            import pandas as pd
             empty_df = pd.DataFrame()
 
             error_dict = {
@@ -86,6 +99,8 @@ class PlayerExtractor:
                 'total_players': 0,
                 'batted': 0,
                 'did_not_bat': 0,
+                'regular_players': 0,
+                'impact_players': 0,
                 'teams': [],
                 'error': str(e)
             }
@@ -103,10 +118,19 @@ class PlayerExtractor:
             DataFrame with player information
         """
         query = f"""
-            SELECT *
+            SELECT 
+                matchid,
+                innings,
+                team,
+                player_name,
+                batted,
+                batting_position,
+                player_type
             FROM {self.schema}.{self.table_name}
             WHERE matchid = %s
+              AND is_active = TRUE
             ORDER BY 
+                player_type ASC,  -- Impact players first
                 CASE WHEN batted = TRUE THEN batting_position ELSE 999 END,
                 player_name
         """
@@ -115,6 +139,13 @@ class PlayerExtractor:
         try:
             df = pd.read_sql(query, conn, params=(match_id,))
             logger.info(f"Retrieved {len(df)} players for match {match_id}")
+
+            # Log breakdown
+            if not df.empty:
+                impact_count = int((df['player_type'] == 'impact').sum())
+                regular_count = int((df['player_type'] == 'regular').sum())
+                logger.info(f"  Regular: {regular_count}, Impact: {impact_count}")
+
             return df
         finally:
             conn.close()
@@ -132,17 +163,33 @@ class PlayerExtractor:
         """
         if match_id:
             query = f"""
-                SELECT *
+                SELECT 
+                    matchid,
+                    innings,
+                    team,
+                    player_name,
+                    batted,
+                    batting_position,
+                    player_type
                 FROM {self.schema}.{self.table_name}
-                WHERE team = %s AND matchid = %s
-                ORDER BY batting_position NULLS LAST, player_name
+                WHERE team = %s 
+                  AND matchid = %s
+                  AND is_active = TRUE
+                ORDER BY 
+                    player_type ASC,  -- Impact players first
+                    batting_position NULLS LAST, 
+                    player_name
             """
             params = (team_name, match_id)
         else:
             query = f"""
-                SELECT DISTINCT player_name, team
+                SELECT DISTINCT 
+                    player_name, 
+                    team,
+                    player_type
                 FROM {self.schema}.{self.table_name}
                 WHERE team = %s
+                  AND is_active = TRUE
                 ORDER BY player_name
             """
             params = (team_name,)
@@ -151,6 +198,222 @@ class PlayerExtractor:
         try:
             df = pd.read_sql(query, conn, params=params)
             logger.info(f"Retrieved {len(df)} players for team {team_name}")
+
+            if not df.empty and 'player_type' in df.columns:
+                impact_count = int((df['player_type'] == 'impact').sum())
+                if impact_count > 0:
+                    logger.info(f"  Including {impact_count} impact player(s)")
+
             return df
         finally:
             conn.close()
+
+    def get_impact_players(self, match_id: int = None) -> pd.DataFrame:
+        """
+        Get all impact players, optionally filtered by match
+
+        Args:
+            match_id: Optional match ID to filter by
+
+        Returns:
+            DataFrame with impact players only
+        """
+        if match_id:
+            query = f"""
+                SELECT 
+                    matchid,
+                    innings,
+                    team,
+                    player_name,
+                    batted,
+                    batting_position
+                FROM {self.schema}.{self.table_name}
+                WHERE player_type = 'impact'
+                  AND matchid = %s
+                  AND is_active = TRUE
+                ORDER BY team, player_name
+            """
+            params = (match_id,)
+        else:
+            query = f"""
+                SELECT 
+                    matchid,
+                    innings,
+                    team,
+                    player_name,
+                    batted,
+                    batting_position
+                FROM {self.schema}.{self.table_name}
+                WHERE player_type = 'impact'
+                  AND is_active = TRUE
+                ORDER BY matchid, team, player_name
+            """
+            params = None
+
+        conn = get_connection()
+        try:
+            if params:
+                df = pd.read_sql(query, conn, params=params)
+            else:
+                df = pd.read_sql(query, conn)
+
+            logger.info(f"Retrieved {len(df)} impact player(s)")
+            return df
+        finally:
+            conn.close()
+
+    def get_player_matches(self, player_name: str) -> pd.DataFrame:
+        """
+        Get all matches for a specific player
+
+        Args:
+            player_name: Player name
+
+        Returns:
+            DataFrame with match information for the player
+        """
+        query = f"""
+            SELECT 
+                matchid,
+                innings,
+                team,
+                player_name,
+                batted,
+                batting_position,
+                player_type
+            FROM {self.schema}.{self.table_name}
+            WHERE player_name = %s
+              AND is_active = TRUE
+            ORDER BY matchid DESC
+        """
+
+        conn = get_connection()
+        try:
+            df = pd.read_sql(query, conn, params=(player_name,))
+            logger.info(f"Retrieved {len(df)} match(es) for player {player_name}")
+
+            if not df.empty:
+                impact_matches = int((df['player_type'] == 'impact').sum())
+                regular_matches = int((df['player_type'] == 'regular').sum())
+                logger.info(f"  Regular: {regular_matches}, As impact player: {impact_matches}")
+
+            return df
+        finally:
+            conn.close()
+
+    def get_player_statistics(self, match_id: int = None) -> dict:
+        """
+        Get player statistics summary
+
+        Args:
+            match_id: Optional match ID to filter by
+
+        Returns:
+            Dictionary with player statistics
+        """
+        if match_id:
+            query = f"""
+                SELECT 
+                    COUNT(*) as total_players,
+                    COUNT(*) FILTER (WHERE batted = TRUE) as batted,
+                    COUNT(*) FILTER (WHERE batted = FALSE) as did_not_bat,
+                    COUNT(*) FILTER (WHERE player_type = 'regular') as regular_players,
+                    COUNT(*) FILTER (WHERE player_type = 'impact') as impact_players,
+                    COUNT(DISTINCT team) as teams
+                FROM {self.schema}.{self.table_name}
+                WHERE matchid = %s
+                  AND is_active = TRUE
+            """
+            params = (match_id,)
+        else:
+            query = f"""
+                SELECT 
+                    COUNT(*) as total_players,
+                    COUNT(*) FILTER (WHERE batted = TRUE) as batted,
+                    COUNT(*) FILTER (WHERE batted = FALSE) as did_not_bat,
+                    COUNT(*) FILTER (WHERE player_type = 'regular') as regular_players,
+                    COUNT(*) FILTER (WHERE player_type = 'impact') as impact_players,
+                    COUNT(DISTINCT matchid) as matches,
+                    COUNT(DISTINCT team) as teams
+                FROM {self.schema}.{self.table_name}
+                WHERE is_active = TRUE
+            """
+            params = None
+
+        conn = get_connection()
+        try:
+            if params:
+                df = pd.read_sql(query, conn, params=params)
+            else:
+                df = pd.read_sql(query, conn)
+
+            stats = df.to_dict('records')[0] if not df.empty else {}
+
+            # Convert to int for cleaner output
+            for key in stats:
+                if stats[key] is not None:
+                    stats[key] = int(stats[key])
+
+            return stats
+        finally:
+            conn.close()
+
+    def verify_player_extraction(self, match_id: int) -> dict:
+        """
+        Verify player extraction for a match
+
+        Args:
+            match_id: Match identifier
+
+        Returns:
+            Dictionary with verification results
+        """
+        try:
+            df = self.get_match_players(match_id)
+
+            if df.empty:
+                return {
+                    'status': 'no_data',
+                    'message': f'No players found for match {match_id}'
+                }
+
+            # Get statistics
+            stats = self.get_player_statistics(match_id)
+
+            # Check for potential issues
+            issues = []
+
+            # Check if we have players from 2 teams
+            if stats.get('teams', 0) != 2:
+                issues.append(f"Expected 2 teams, found {stats.get('teams', 0)}")
+
+            # Check if we have reasonable number of players
+            if stats.get('total_players', 0) < 22:
+                issues.append(f"Only {stats.get('total_players', 0)} players (expected ~22)")
+
+            # Check if impact players are reasonable (0-4 expected)
+            impact_count = stats.get('impact_players', 0)
+            if impact_count > 4:
+                issues.append(f"Unusual number of impact players: {impact_count}")
+
+            verification_result = {
+                'status': 'success' if not issues else 'warning',
+                'match_id': match_id,
+                'statistics': stats,
+                'issues': issues
+            }
+
+            if issues:
+                logger.warning(f"Player extraction issues for match {match_id}: {', '.join(issues)}")
+            else:
+                logger.info(f"Player extraction verified for match {match_id}")
+
+            return verification_result
+
+        except Exception as e:
+            logger.error(f"Error verifying player extraction for match {match_id}: {e}", exc_info=True)
+            return {
+                'status': 'error',
+                'match_id': match_id,
+                'error': str(e)
+            }

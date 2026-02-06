@@ -28,31 +28,35 @@ class MetadataExtractor:
             metadata = {}
 
             # Find the match details table
-            match_details_table = soup.find("table", class_="ds-w-full ds-table ds-table-sm ds-table-auto")
+            match_details_rows = soup.find_all("div", class_="ds-border-color-border-secondary ds-flex ds-border-t")
 
-            if not match_details_table:
-                logger.warning(f"Match details table not found for match {match_id}")
+            if not match_details_rows:
+                logger.warning(f"Match details div not found for match {match_id}")
                 metadata["MatchID"] = match_id
                 return metadata
 
-            # Parse all rows in the table
-            rows = match_details_table.find_all("tr")
-            logger.info(f"Found {len(rows)} metadata rows for match {match_id}")
+            # Parse each row
+            for row in match_details_rows:
+                # Find all span elements in the row
+                spans = row.find_all("span")
 
-            for row in rows:
-                columns = row.find_all("td")
+                if len(spans) >= 2:
+                    # First span is typically the key, subsequent spans contain the value
+                    key = spans[0].get_text(strip=True)
 
-                if len(columns) == 2:
-                    # Key-value pair (e.g., "Toss" - "CSK won the toss")
-                    key = columns[0].get_text(strip=True)
-                    value = columns[1].get_text(separator=" ", strip=True)
-                    metadata[key] = value
+                    # Combine all remaining spans for the value (handles multi-span values)
+                    value_parts = [span.get_text(strip=True) for span in spans[1:]]
+                    value = " ".join(value_parts).strip()
 
-                elif len(columns) == 1:
-                    # Single column (usually venue)
-                    venue_text = columns[0].get_text(strip=True)
-                    if venue_text:
-                        metadata["Venue"] = venue_text
+                    if key and value:
+                        metadata[key] = value
+                        logger.debug(f"Extracted: {key} = {value}")
+
+                elif len(spans) == 1:
+                    # Single span might be a standalone value (like venue)
+                    text = spans[0].get_text(strip=True)
+                    if text and "Venue" not in metadata:
+                        metadata["Venue"] = text
 
             # Add match ID
             metadata["MatchID"] = match_id
@@ -70,62 +74,78 @@ class MetadataExtractor:
     def extract_player_names(html_content, match_id):
         """
         Extract full names of all players from scorecard tables
-        Includes regular players, impact players, and substitutes
+        Includes regular players and impact players (identified by icon)
 
         Returns:
             pandas DataFrame with columns:
-            - matchid, innings, team, player_name, batted, batting_position,
-            - player_type (regular, impact, substitute)
+            - matchid, innings, team, player_name, batted, batting_position, player_type
         """
         try:
             soup = BeautifulSoup(html_content, "html.parser")
-            rows = []
+            all_players = []
 
             logger.info(f"Extracting player names for match {match_id}")
 
-            # Find all scorecard tables
-            scorecard_tables = soup.find_all("table",
-                                             class_="ds-w-full ds-table ds-table-md ds-table-auto ci-scorecard-table")
+            # Find all batting scorecard table
+            batting_tables = soup.find_all("table", class_=lambda x: x and "ci-scorecard-table" in x)
 
-            if not scorecard_tables:
-                logger.warning(f"No scorecard tables found for match {match_id}")
+            if not batting_tables:
+                logger.warning(f"No batting scorecard tables found for match {match_id}")
                 return pd.DataFrame(
                     columns=['matchid', 'innings', 'team', 'player_name', 'batted', 'batting_position', 'player_type'])
 
-            logger.info(f"Found {len(scorecard_tables)} scorecard table(s)")
+            logger.info(f"Found {len(batting_tables)} batting scorecard table(s)")
 
-            # Process each table (each table = one innings)
-            for idx, table in enumerate(scorecard_tables, start=1):
-                innings_key = f"innings_{idx}"
-
-                # Extract team name
+            # STEP 1: Extract all batting teams first
+            batting_teams = []
+            for idx, table in enumerate(batting_tables, start=1):
                 team_name = MetadataExtractor._extract_team_name_from_table(table, idx)
+                batting_teams.append(team_name)
+                logger.info(f"  Innings {idx}: {team_name} (batting)")
 
-                # Extract regular players from this table
-                table_players = MetadataExtractor._extract_all_players_from_table(table, match_id, innings_key,
-                                                                                  team_name)
+            # STEP 2: Process each batting table
+            for idx, table in enumerate(batting_tables, start=1):
+                innings_key = f"innings_{idx}"
+                team_name = batting_teams[idx - 1]
 
-                rows.extend(table_players)
+                # Extract players who batted and did not bat
+                batting_players = MetadataExtractor._extract_batting_players(table, match_id, innings_key, team_name)
+                all_players.extend(batting_players)
 
-                batted_count = sum(1 for p in table_players if p['batted'])
-                did_not_bat_count = len(table_players) - batted_count
+                batted_count = sum(1 for p in batting_players if p['batted'])
+                did_not_bat_count = len(batting_players) - batted_count
 
                 logger.info(f"  {innings_key} ({team_name}): {batted_count} batted, {did_not_bat_count} did not bat")
 
-            # Extract impact players and substitutes
-            impact_players = MetadataExtractor._extract_impact_players(soup, match_id)
-            rows.extend(impact_players)
+            # STEP 3: Extract bowlers from bowling tables
+            bowling_tables = soup.find_all("table", class_="ds-w-full ds-v2-table ds-v2-table-md ds-table-auto")
 
+            # Filter out batting tables (already processed)
+            bowling_only_tables = [t for t in bowling_tables if "ci-scorecard-table" not in t.get("class", [])]
 
-            if impact_players:
-                logger.info(f"  Found {len(impact_players)} impact players/substitutes")
+            logger.info(f"Found {len(bowling_only_tables)} bowling table(s)")
+
+            for idx, table in enumerate(bowling_only_tables, start=1):
+                innings_key = f"innings_{idx}"
+
+                # FIXED: Get OPPOSITE team (bowling team, not batting team)
+                batting_team = batting_teams[idx - 1] if idx <= len(batting_teams) else None
+                bowling_team = MetadataExtractor._get_opposite_team(batting_team, batting_teams)
+
+                logger.info(f"  {innings_key} bowling: {bowling_team} (bowling against {batting_team})")
+
+                # Extract bowlers with correct team
+                bowlers = MetadataExtractor._extract_bowlers(table, match_id, innings_key, bowling_team)
+                all_players.extend(bowlers)
+
+                logger.info(f"  {innings_key} bowling ({bowling_team}): {len(bowlers)} bowlers")
 
             # Create DataFrame
-            df = pd.DataFrame(rows)
+            df = pd.DataFrame(all_players)
             df = df.replace(np.nan, None)
 
-            # Define priority order
-            type_priority = {'impact': 1, 'substitute': 2, 'regular': 3}
+            # Define priority order (impact > regular)
+            type_priority = {'impact': 1, 'regular': 2}
             df['priority'] = df['player_type'].map(type_priority)
 
             # Sort by priority (lower number = higher priority)
@@ -137,7 +157,7 @@ class MetadataExtractor:
             # Remove temporary priority column
             df_unique = df_unique.drop('priority', axis=1)
 
-            logger.info(f"Created DataFrame with {len(df)} player records from {len(scorecard_tables)} innings")
+            logger.info(f"Created DataFrame with {len(df)} player records, {len(df_unique)} unique players")
 
             return df_unique
 
@@ -146,214 +166,330 @@ class MetadataExtractor:
             return pd.DataFrame(
                 columns=['matchid', 'innings', 'team', 'player_name', 'batted', 'batting_position', 'player_type'])
 
-
-        except Exception as e:
-            logger.error(f"Error extracting player names for match {match_id}: {e}", exc_info=True)
-            return pd.DataFrame(columns=['matchid', 'innings', 'team', 'player_name', 'batted', 'batting_position'])
-
     @staticmethod
-    def _extract_impact_players(soup, match_id):
+    def _get_opposite_team(current_team, all_teams):
         """
-        Extract impact players from li elements
-
-        Two formats:
-        1. "Team Impact Player Subs: Player1, Player2, Player3" (plural - list of subs)
-        2. "Team Impact Player Sub: PlayerName in for..." (singular - player actually used)
-
-        Both are marked with is_impact_player = True
+        Get the opposite team name
 
         Args:
-            soup: BeautifulSoup object
+            current_team: Current team (batting team)
+            all_teams: List of all teams in the match
+
+        Returns:
+            Name of the opposite team (bowling team)
+        """
+        if not current_team or not all_teams or len(all_teams) < 2:
+            logger.warning(f"Cannot determine opposite team: current={current_team}, all={all_teams}")
+            return "Unknown Team"
+
+        # Return the other team
+        for team in all_teams:
+            if team != current_team:
+                return team
+
+        # Fallback
+        logger.warning(f"Could not find opposite team for {current_team}")
+        return "Unknown Team"
+
+    @staticmethod
+    def _extract_batting_players(table, match_id, innings_key, team_name):
+        """
+        Extract all batting players from a scorecard table
+
+        Players who batted: Found in td cells with player links
+        Players not out: Found in td with class containing "ci-v2-scorecard-player-notout"
+        Did not bat: Found in special colspan td with "Did not bat" section
+
+        Args:
+            table: BeautifulSoup table element
             match_id: Match identifier
+            innings_key: Innings identifier (e.g., "innings_1")
+            team_name: Team name
 
         Returns:
             List of player dictionaries
         """
         players = []
+        batting_position = 1
 
         try:
-            # Find all li elements with the specific class
-            impact_li_elements = soup.find_all("li", class_="ds-text-tight-s ds-font-regular ds-text-typo ds-py-1")
+            # Extract players who batted (both out and not out)
+            # Look for td cells with class "ds-w-0 ds-whitespace-nowrap ds-min-w-max"
+            batsman_cells = table.find_all("td", class_=lambda
+                x: x and "ds-w-0" in x and "ds-whitespace-nowrap" in x and "ds-min-w-max" in x)
 
-            logger.debug(f"Found {len(impact_li_elements)} li elements")
+            logger.debug(f"Found {len(batsman_cells)} batsman cells in {innings_key}")
 
-            for li in impact_li_elements:
-                li_text = li.get_text(strip=True)
+            for cell in batsman_cells:
+                # Skip if this is a "did not bat" section (has colspan)
+                if cell.get("colspan"):
+                    continue
 
-                # Check if this contains impact player information
-                if 'impact player' in li_text.lower():
-                    logger.debug(f"Processing impact player text: {li_text}")
+                # Look for player link (a tag with /cricketers/ in href)
+                player_link = cell.find("a", href=lambda x: x and "/cricketers/" in x)
 
-                    # Parse the text (handles both formats)
-                    parsed_players = MetadataExtractor._parse_impact_player_text(li_text, match_id)
-                    players.extend(parsed_players)
+                if player_link:
+                    # Get player name from title attribute (cleanest method)
+                    player_name = player_link.get("title", "").strip()
 
+                    # Fallback: extract from span if title not available
+                    if not player_name:
+                        player_span = player_link.find("span",
+                                                       class_=lambda x: x and "ds-text-table-link" in x)
+                        if player_span:
+                            inner_span = player_span.find("span")
+                            if inner_span:
+                                player_name = inner_span.get_text(strip=True)
 
-            logger.debug(f"Extracted {len(players)} impact players total")
+                    # Clean the player name
+                    player_name = MetadataExtractor._clean_player_name(player_name)
 
-        except Exception as e:
-            logger.warning(f"Error extracting impact players: {e}")
+                    # Check if player is not out
+                    cell_classes = cell.get("class", [])
+                    is_not_out = "ci-v2-scorecard-player-notout" in " ".join(cell_classes)
 
-        return players
+                    # Check for impact player icon
+                    is_impact = MetadataExtractor._is_impact_player(cell)
 
-    @staticmethod
-    def _parse_impact_player_text(text, match_id):
-        """
-        Parse impact player text - handles multiple formats
+                    # Check for retired/injured icon
+                    is_retired = bool(cell.find("i", class_=lambda x: x and "icon-arrow_forward-filled" in x))
 
-        Format 1 (Multiple subs - announced but not used):
-        "Kolkata Knight Riders Impact Player Subs: Manish Pandey, Luvnith Sisodia,
-         Anukul Roy, Anrich Nortje and Vaibhav Arora"
-
-        Format 2a (Single player used - with "in for"):
-        "Royal Challengers Bengaluru Impact Player Sub: Devdutt Padikkal in for
-         Suyash Sharma (Kolkata Knight Riders innings, 15.6 ov)"
-
-        Format 2b (Single player used - without "in"):
-        "Lucknow Super Giants Impact Player Sub: MR Marsh for DS Rathi
-         (Sunrisers Hyderabad innings, 19.6 ov)"
-
-        Args:
-            text: Text containing impact player information
-            match_id: Match identifier
-
-        Returns:
-            List of player dictionaries
-        """
-        players = []
-
-        try:
-            # Determine format by checking for "for" keyword (Format 2) vs comma-separated list (Format 1)
-            # Format 2 has " for " indicating a substitution
-            # Format 1 has commas and "and" for multiple players
-
-            is_substitution_format = ' for ' in text.lower() and '(' in text
-
-            if is_substitution_format:
-                # ================================================================
-                # Format 2: Single substitution (with or without "in")
-                # "Team Impact Player Sub: PlayerIN [in] for PlayerOUT (...)"
-                # ================================================================
-
-                # Extract team name (before "Impact Player Sub:")
-                team_match = re.search(r'^(.+?)\s+Impact Player Sub:', text, re.IGNORECASE)
-
-                # Extract player IN (with optional "in")
-                player_in_match = re.search(
-                    r'Impact Player Sub:\s*(.+?)\s+(?:in\s+)?for',
-                    text,
-                    re.IGNORECASE
-                )
-
-                # Extract player OUT (with optional "in")
-                player_out_match = re.search(
-                    r'(?:in\s+)?for\s+(.+?)\s*\(',
-                    text,
-                    re.IGNORECASE
-                )
-
-                if team_match and player_in_match:
-                    team_name = team_match.group(1).strip()
-                    player_in_name = player_in_match.group(1).strip()
-
-                    # Clean names
-                    team_name = MetadataExtractor._clean_team_name(team_name)
-                    if not team_name:
-                        team_name = "Unknown Team"
-
-                    player_in_name = MetadataExtractor._clean_player_name(player_in_name)
-
-                    # Add player coming IN (impact player)
-                    if player_in_name:
+                    if player_name:
                         players.append({
                             'matchid': int(match_id),
-                            'innings': None,
+                            'innings': str(innings_key),
                             'team': str(team_name),
-                            'player_name': str(player_in_name),
-                            'batted': False,
-                            'batting_position': None,
-                            'player_type': 'impact'
+                            'player_name': str(player_name),
+                            'batted': True,
+                            'batting_position': int(batting_position),
+                            'player_type': 'impact' if is_impact else 'regular',
+                            'retired': is_retired,
+                            'not_out': is_not_out
                         })
 
-                        logger.debug(f"Parsed impact player (IN): {player_in_name} for {team_name}")
+                        if is_impact:
+                            logger.debug(f"  Impact player (batted): {player_name}")
+                        if is_retired:
+                            logger.debug(f"  Retired/Injured: {player_name}")
+                        if is_not_out:
+                            logger.debug(f"  Not out: {player_name}")
 
-                    # Add player going OUT (being replaced)
-                    if player_out_match:
-                        player_out_name = player_out_match.group(1).strip()
-                        player_out_name = MetadataExtractor._clean_player_name(player_out_name)
+                        batting_position += 1
 
-                        if player_out_name:
+            # Extract players who did not bat
+            # Look for td with colspan and "Did not bat" section
+            dnb_cells = table.find_all("td", class_="!ds-py-2", colspan=True)
+
+            logger.debug(f"Found {len(dnb_cells)} potential 'did not bat' sections in {innings_key}")
+
+            for dnb_cell in dnb_cells:
+                # Check if this is actually a "Did not bat" section
+                dnb_header = dnb_cell.find("span", class_=lambda x: x and "ds-text-overline-2" in x)
+
+                if dnb_header and "did not bat" in dnb_header.get_text(strip=True).lower():
+                    # Find all player links in this section
+                    player_links = dnb_cell.find_all("a", href=lambda x: x and "/cricketers/" in x)
+
+                    logger.debug(f"Found {len(player_links)} players who did not bat in {innings_key}")
+
+                    for player_link in player_links:
+                        # Get player name from title attribute
+                        player_name = player_link.get("title", "").strip()
+
+                        # Fallback: extract from span
+                        if not player_name:
+                            player_span = player_link.find("span",
+                                                           class_=lambda x: x and "ds-text-body-3" in x)
+                            if player_span:
+                                inner_span = player_span.find("span")
+                                if inner_span:
+                                    player_name = inner_span.get_text(strip=True)
+
+                        # Clean the player name
+                        player_name = MetadataExtractor._clean_player_name(player_name)
+
+                        # Check for impact player icon in parent structure
+                        is_impact = MetadataExtractor._is_impact_player(dnb_cell)
+
+                        if player_name:
                             players.append({
                                 'matchid': int(match_id),
-                                'innings': None,
+                                'innings': str(innings_key),
                                 'team': str(team_name),
-                                'player_name': str(player_out_name),
+                                'player_name': str(player_name),
                                 'batted': False,
                                 'batting_position': None,
-                                'player_type': 'regular'
+                                'player_type': 'impact' if is_impact else 'regular',
+                                'retired': False,
+                                'not_out': False
                             })
 
-                            logger.debug(f"Parsed replaced player (OUT): {player_out_name} for {team_name}")
+                            if is_impact:
+                                logger.debug(f"  Impact player (did not bat): {player_name}")
 
-            else:
-                # ================================================================
-                # Format 1: Multiple subs announced (comma-separated list)
-                # "Team Impact Player Subs: Player1, Player2, Player3..."
-                # ================================================================
+            logger.debug(f"Extracted {len(players)} total players from {innings_key}")
 
-                match = re.search(r'(.+?)\s+Impact Player Subs?:\s*(.+)', text, re.IGNORECASE)
-
-                if match:
-                    team_name = match.group(1).strip()
-                    players_text = match.group(2).strip()
-
-                    # Clean team name
-                    team_name = MetadataExtractor._clean_team_name(team_name)
-                    if not team_name:
-                        team_name = "Unknown Team"
-
-                    # Split players by comma
-                    player_names = [name.strip() for name in players_text.split(',')]
-
-                    # Handle "and" in last player
-                    if player_names:
-                        last_player = player_names[-1]
-                        if ' and ' in last_player:
-                            # Split by "and" and add both parts
-                            last_player = last_player.replace(' and ', ', ')
-                            if ', ' in last_player:
-                                last_players = [p.strip() for p in last_player.split(',')]
-                                player_names = player_names[:-1] + last_players
-
-                    # Create player records
-                    for player_name in player_names:
-                        clean_name = MetadataExtractor._clean_player_name(player_name)
-
-                        if clean_name:
-                            players.append({
-                                'matchid': int(match_id),
-                                'innings': None,
-                                'team': str(team_name),
-                                'player_name': str(clean_name),
-                                'batted': False,
-                                'batting_position': None,
-                                'player_type': 'substitute'
-                            })
-
-                    logger.debug(f"Parsed {len(players)} impact player subs for {team_name}")
+            # Log summary
+            batted_count = sum(1 for p in players if p['batted'])
+            not_out_count = sum(1 for p in players if p.get('not_out', False))
+            retired_count = sum(1 for p in players if p.get('retired', False))
+            dnb_count = sum(1 for p in players if not p['batted'])
+            logger.info(
+                f"{innings_key} - Batted: {batted_count}, Not out: {not_out_count}, Retired: {retired_count}, Did not bat: {dnb_count}")
 
         except Exception as e:
-            logger.warning(f"Error parsing impact player text '{text}': {e}")
+            logger.warning(f"Error extracting batting players: {e}", exc_info=True)
 
         return players
+
+    @staticmethod
+    def _extract_bowlers(table, match_id, innings_key, team_name):
+        """
+        Extract bowlers from bowling table with enhanced detection
+
+        Args:
+            table: BeautifulSoup table element
+            match_id: Match identifier
+            innings_key: Innings identifier
+            team_name: Bowling team name (OPPOSITE of batting team)
+
+        Returns:
+            List of bowler dictionaries
+        """
+        bowlers = []
+        seen_names = set()  # Track seen names for faster duplicate checking
+
+        try:
+            # Method 1: Find by td cells
+            bowler_cells = table.find_all("td", class_="ds-w-0 ds-whitespace-nowrap ds-min-w-max")
+
+            # Method 2: Also try finding by span directly (fallback)
+            if not bowler_cells:
+                logger.warning(f"No bowler cells found by td, trying span method for {innings_key}")
+                bowler_spans = table.find_all("span",
+                                              class_=lambda
+                                                  x: x and "ds-text-table-link" in x and "ds-font-semibold" in x)
+
+                for span in bowler_spans:
+                    player_name = span.get_text(strip=True)
+                    player_name = MetadataExtractor._clean_player_name(player_name)
+
+                    if player_name and player_name not in ['Bowler', 'BOWLER'] and player_name not in seen_names:
+                        parent_td = span.find_parent("td")
+                        is_impact = MetadataExtractor._is_impact_player(parent_td) if parent_td else False
+
+                        bowlers.append({
+                            'matchid': int(match_id),
+                            'innings': str(innings_key),
+                            'team': str(team_name),
+                            'player_name': str(player_name),
+                            'batted': False,
+                            'batting_position': None,
+                            'player_type': 'impact' if is_impact else 'regular',
+                            'bowled': True
+                        })
+                        seen_names.add(player_name)
+            else:
+                # Process cells with player links
+                logger.debug(f"Found {len(bowler_cells)} bowler cells in {innings_key}")
+
+                for cell in bowler_cells:
+                    player_link = cell.find("a", href=lambda x: x and "/cricketers/" in x)
+
+                    if player_link:
+                        # Try title first
+                        player_name = player_link.get("title", "").strip()
+
+                        # Fallback to span text
+                        if not player_name:
+                            player_span = player_link.find("span",
+                                                           class_=lambda x: x and "ds-text-table-link" in x)
+                            if player_span:
+                                # Try inner span first
+                                inner_span = player_span.find("span")
+                                player_name = inner_span.get_text(strip=True) if inner_span else player_span.get_text(
+                                    strip=True)
+
+                        # Clean name
+                        player_name = MetadataExtractor._clean_player_name(player_name)
+
+                        # Check for impact player
+                        is_impact = MetadataExtractor._is_impact_player(cell)
+
+                        # Validate and add
+                        if player_name and player_name not in ['Bowler', 'BOWLER',
+                                                               'bowler'] and player_name not in seen_names:
+                            bowlers.append({
+                                'matchid': int(match_id),
+                                'innings': str(innings_key),
+                                'team': str(team_name),
+                                'player_name': str(player_name),
+                                'batted': False,
+                                'batting_position': None,
+                                'player_type': 'impact' if is_impact else 'regular',
+                                'bowled': True
+                            })
+
+                            seen_names.add(player_name)
+
+                            if is_impact:
+                                logger.debug(f"  Impact player (bowler): {player_name}")
+
+            logger.info(f"Extracted {len(bowlers)} unique bowlers from {innings_key}")
+
+            if bowlers:
+                logger.debug(f"Bowlers: {', '.join([b['player_name'] for b in bowlers])}")
+
+        except Exception as e:
+            logger.warning(f"Error extracting bowlers: {e}", exc_info=True)
+
+        return bowlers
+
+    @staticmethod
+    def _is_impact_player(td_element):
+        """
+        Check if a td element contains an impact player icon
+
+        Looks for <i> tag with classes:
+        - "icon-arrow_back-filled ds-text-icon ds-text-icon-success-hover ds-ml-0.5 ds-cursor-pointer"
+
+        Args:
+            td_element: BeautifulSoup td element
+
+        Returns:
+            bool: True if impact player icon found, False otherwise
+        """
+        if not td_element:
+            return False
+
+        try:
+            # Look for i tag with impact player icon classes
+            icon = td_element.find("i", class_="icon-arrow_back-filled")
+
+            if icon:
+                # Verify it has the full class set
+                icon_classes = icon.get("class", [])
+                required_classes = ["icon-arrow_back-filled", "ds-text-icon", "ds-text-icon-success-hover"]
+
+                if all(cls in icon_classes for cls in required_classes):
+                    logger.debug(f"Found impact player icon in td")
+                    return True
+
+        except Exception as e:
+            logger.debug(f"Error checking for impact player icon: {e}")
+
+        return False
 
     @staticmethod
     def _extract_team_name_from_table(table, innings_number):
         """
-        Extract team name from:
+        Extract team name from batting scorecard table
+
+        Looks for:
         - Div: ds-flex ds-flex-col ds-grow ds-justify-center
         - Span: ds-text-title-xs ds-font-bold ds-capitalize
         """
+        print("finding team name")
         try:
             # Strategy 1: Look in parent hierarchy
             current = table
@@ -363,10 +499,10 @@ class MetadataExtractor:
                 if not parent:
                     break
 
-                team_div = parent.find("div", class_="ds-flex ds-flex-col ds-grow ds-justify-center")
+                team_div = parent.find("div", class_="ds-bg-color-primary-bg ds-p-3")
 
                 if team_div:
-                    team_span = team_div.find("span", class_="ds-text-title-xs ds-font-bold ds-capitalize")
+                    team_span = team_div.find("span", class_="ds-text-title-1 ds-font-semibold ds-capitalize ds-text-color-text")
 
                     if team_span:
                         team_name = team_span.get_text(strip=True)
@@ -379,7 +515,7 @@ class MetadataExtractor:
                 current = parent
 
             # Strategy 2: Search for span directly
-            team_span = table.find_previous("span", class_="ds-text-title-xs ds-font-bold ds-capitalize")
+            team_span = table.find_previous("span", class_="ds-text-title-1 ds-font-semibold ds-capitalize ds-text-color-text")
 
             if team_span:
                 team_name = team_span.get_text(strip=True)
@@ -390,10 +526,10 @@ class MetadataExtractor:
                     return team_name
 
             # Strategy 3: Search for div, then span
-            team_div = table.find_previous("div", class_="ds-flex ds-flex-col ds-grow ds-justify-center")
+            team_div = table.find_previous("div", class_="ds-bg-color-primary-bg ds-p-3")
 
             if team_div:
-                team_span = team_div.find("span", class_="ds-text-title-xs ds-font-bold ds-capitalize")
+                team_span = team_div.find("span", class_="ds-text-title-1 ds-font-semibold ds-capitalize ds-text-color-text")
 
                 if team_span:
                     team_name = team_span.get_text(strip=True)
@@ -423,132 +559,30 @@ class MetadataExtractor:
         return cleaned if cleaned and len(cleaned) > 2 else None
 
     @staticmethod
-    def _extract_all_players_from_table(table, match_id, innings_key, team_name):
-        """
-        Extract all players from a single scorecard table
-
-        Players who batted: td class="ds-w-0 ds-whitespace-nowrap ds-min-w-max"
-        Did not bat: div class="ds-text-tight-m ds-font-regular ds-leading-4 ds-text-typo-mid1"
-        """
-        import numpy as np
-
-        players = []
-        batting_position = 1
-
-        try:
-            # Extract players who batted
-            batsman_cells = table.find_all("td", class_="ds-w-0 ds-whitespace-nowrap ds-min-w-max")
-            not_out_batsman_cells = table.find_all("td",
-                                                   class_="ds-w-0 ds-whitespace-nowrap ds-min-w-max ds-border-line-primary ci-scorecard-player-notout")
-            # Extend batsman_cells with the elements of not_out_batsman_cells
-            batsman_cells.extend(not_out_batsman_cells)
-            logger.debug(f"Found {len(batsman_cells)} batsman cells in {innings_key}")
-
-            for cell in batsman_cells:
-                player_name = MetadataExtractor._extract_batsman_from_cell(cell)
-
-                if player_name:
-                    players.append({
-                        'matchid': int(match_id),
-                        'innings': str(innings_key),
-                        'team': str(team_name),
-                        'player_name': str(player_name),
-                        'batted': True,
-                        'batting_position': int(batting_position),
-                        'player_type': 'regular'  # NEW: Mark as regular player
-                    })
-                    batting_position += 1
-
-            # Extract players who did not bat
-            dnb_divs = table.find_all("div", class_="ds-text-tight-m ds-font-regular ds-leading-4 ds-text-typo-mid1")
-
-            logger.debug(f"Found {len(dnb_divs)} did not bat divs in {innings_key}")
-
-            for div in dnb_divs:
-                div_text = div.get_text(strip=True).lower()
-
-                if "did not bat" in div_text:
-                    dnb_players = MetadataExtractor._extract_did_not_bat_from_div(div)
-
-                    for player_name in dnb_players:
-                        players.append({
-                            'matchid': int(match_id),
-                            'innings': str(innings_key),
-                            'team': str(team_name),
-                            'player_name': str(player_name),
-                            'batted': False,
-                            'batting_position': None,
-                            'player_type': 'regular'  # NEW: Mark as regular player
-                        })
-
-            logger.debug(f"Extracted {len(players)} total players from {innings_key}")
-
-        except Exception as e:
-            logger.warning(f"Error extracting players from table: {e}")
-
-        return players
-
-    @staticmethod
-    def _extract_batsman_from_cell(cell):
-        """Extract batsman name from td with class: ds-w-0 ds-whitespace-nowrap ds-min-w-max"""
-        try:
-            player_link = cell.find("a")
-
-            if player_link:
-                player_name = player_link.get_text(strip=True)
-            else:
-                player_span = cell.find("span")
-                if player_span:
-                    player_name = player_span.get_text(strip=True)
-                else:
-                    player_name = cell.get_text(strip=True)
-
-            player_name = MetadataExtractor._clean_player_name(player_name)
-
-            if not player_name or player_name.lower() in ['batter', 'batsman', 'batters', 'name']:
-                return None
-
-            return player_name
-
-        except Exception as e:
-            logger.debug(f"Error extracting batsman from cell: {e}")
-            return None
-
-    @staticmethod
-    def _extract_did_not_bat_from_div(div):
-        """Extract player names from div: ds-text-tight-m ds-font-regular ds-leading-4 ds-text-typo-mid1"""
-        players = []
-
-        try:
-            div_text = div.get_text(separator=" ", strip=True)
-
-            match = re.search(r'Did not bat[:\s]*(.+)', div_text, re.IGNORECASE)
-
-            if match:
-                players_text = match.group(1).strip()
-                player_names = [name.strip() for name in players_text.split(',')]
-
-                for name in player_names:
-                    clean_name = MetadataExtractor._clean_player_name(name)
-                    if clean_name:
-                        players.append(clean_name)
-
-                logger.debug(f"Extracted {len(players)} did not bat players: {players}")
-
-        except Exception as e:
-            logger.debug(f"Error extracting did not bat players: {e}")
-
-        return players
-
-    @staticmethod
     def _clean_player_name(name):
-        """Clean player name"""
+        """
+        Clean player name
+
+        FIXED: Removes trailing commas and other punctuation
+        """
         if not name:
             return None
 
+        # Remove captain and wicketkeeper symbols
         name = re.sub(r'[†*]', '', name)
         name = re.sub(r'\(c\)|\(wk\)', '', name, flags=re.IGNORECASE)
+
+        # FIXED: Remove trailing commas and other punctuation
+        name = re.sub(r'[,;]+$', '', name)  # Remove trailing commas/semicolons
+        name = re.sub(r'^[,;]+', '', name)  # Remove leading commas/semicolons
+
+        # Remove extra whitespace
         name = ' '.join(name.split())
 
         cleaned = name.strip()
+
+        # Filter out header/label text
+        if cleaned.lower() in ['batter', 'batsman', 'batters', 'name', 'bowler']:
+            return None
+
         return cleaned if cleaned and len(cleaned) > 1 else None

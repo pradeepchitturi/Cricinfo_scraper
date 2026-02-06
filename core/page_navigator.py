@@ -21,7 +21,7 @@ class PageNavigator:
         """
         self.driver = driver
 
-    def scroll_full_page(self, scroll_times=20):
+    def scroll_full_page(self, scroll_times=30):
         """
         Scroll down the entire page to load dynamic content
 
@@ -77,31 +77,46 @@ class PageNavigator:
         Raises:
             Exception: If unable to access dropdown
         """
-        #logger.info("Getting all innings options")
-
         try:
             # Dismiss any popups first
             self.dismiss_popup()
 
-            # Wait for and click the dropdown
-            logger.debug("Waiting for dropdown element")
+            # Wait for and click the dropdown (updated selector)
+            logger.debug("Waiting for dropdown button element")
+
+            # Use a more flexible selector
             dropdown = WebDriverWait(self.driver, 15).until(
-                EC.element_to_be_clickable((By.CSS_SELECTOR, "div.ds-cursor-pointer.ds-min-w-max"))
+                EC.element_to_be_clickable((
+                    By.CSS_SELECTOR,
+                    "button[class*='ds-capitalize'][class*='ds-cursor-pointer']"
+                ))
             )
 
+            # Log the element found
+            logger.debug(f"Found dropdown element: {dropdown.get_attribute('class')}")
+            logger.debug(f"Dropdown text: {dropdown.text}")
+
             # Scroll dropdown into view
-            self.driver.execute_script("arguments[0].scrollIntoView(true);", dropdown)
+            self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", dropdown)
             time.sleep(1)
 
             # Click the dropdown
+            click_successful = False
             try:
-                logger.debug("Opening dropdown")
+                logger.debug("Opening dropdown with regular click")
                 dropdown.click()
-            except ElementClickInterceptedException:
-                logger.debug("Regular click failed, trying JavaScript click")
+                click_successful = True
+            except ElementClickInterceptedException as e:
+                logger.debug(f"Regular click intercepted: {e}")
+                logger.debug("Trying JavaScript click")
                 self.driver.execute_script("arguments[0].click();", dropdown)
+                click_successful = True
+            except Exception as e:
+                logger.warning(f"Click failed: {e}")
+                raise
 
-            time.sleep(2)
+            if click_successful:
+                time.sleep(2)
 
             # Wait for innings items to appear
             logger.debug("Waiting for innings items")
@@ -109,28 +124,40 @@ class PageNavigator:
                 EC.presence_of_all_elements_located((By.CSS_SELECTOR, "li.ds-w-full.ds-flex"))
             )
 
+            logger.debug(f"Found {len(innings_items)} innings items")
+
             # Extract all innings names
             innings_names = []
-            for item in innings_items:
+            for idx, item in enumerate(innings_items):
                 label = item.text.strip()
                 if label:  # Ignore empty labels
                     innings_names.append(label)
-                    logger.debug(f"Found innings option: {label}")
+                    logger.debug(f"  {idx + 1}. {label}")
 
             logger.info(f"Found {len(innings_names)} innings options: {innings_names}")
 
+            # Verify we got some innings
+            if not innings_names:
+                logger.warning("No innings found in dropdown")
+                raise Exception("Dropdown opened but no innings found")
+
             # Close the dropdown by clicking it again
             try:
+                logger.debug("Closing dropdown")
                 dropdown.click()
             except:
+                logger.debug("Using JavaScript to close dropdown")
                 self.driver.execute_script("arguments[0].click();", dropdown)
 
             time.sleep(1)
 
             return innings_names
 
+        except TimeoutException as e:
+            logger.error(f"Timeout waiting for dropdown elements: {e}")
+            raise
         except Exception as e:
-            logger.error(f"Error getting innings options: {e}")
+            logger.error(f"Error getting innings options: {e}", exc_info=True)
             raise
 
     def switch_to_innings(self, target_innings):
@@ -152,18 +179,36 @@ class PageNavigator:
             # Dismiss any popups first
             self.dismiss_popup()
 
-            # Wait for and click the dropdown
-            logger.debug("Opening innings dropdown")
-            dropdown = WebDriverWait(self.driver, 15).until(
-                EC.element_to_be_clickable((By.CSS_SELECTOR, "div.ds-cursor-pointer.ds-min-w-max"))
-            )
+            # Try multiple selectors for the dropdown
+            dropdown_selectors = [
+                "button.ds-capitalize.ds-h-8.ds-cursor-pointer",  # Simplified new selector
+                "button.ds-flex.ds-capitalize.ds-items-center",  # Partial new selector
+                "div.ds-cursor-pointer.ds-min-w-max"  # Old selector (fallback)
+            ]
+
+            dropdown = None
+            for idx, selector in enumerate(dropdown_selectors):
+                try:
+                    logger.debug(f"Trying dropdown selector {idx + 1}: {selector}")
+                    dropdown = WebDriverWait(self.driver, 5).until(
+                        EC.element_to_be_clickable((By.CSS_SELECTOR, selector))
+                    )
+                    logger.info(f"Dropdown found with selector {idx + 1}")
+                    break
+                except TimeoutException:
+                    logger.debug(f"Selector {idx + 1} failed, trying next...")
+                    continue
+
+            if not dropdown:
+                raise Exception("Could not find dropdown with any selector")
 
             # Scroll dropdown into view
-            self.driver.execute_script("arguments[0].scrollIntoView(true);", dropdown)
+            self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", dropdown)
             time.sleep(1)
 
             # Click the dropdown
             try:
+                logger.debug("Opening dropdown")
                 dropdown.click()
             except ElementClickInterceptedException:
                 logger.debug("Regular click failed, trying JavaScript click")
@@ -189,7 +234,7 @@ class PageNavigator:
 
                     try:
                         # Scroll item into view
-                        self.driver.execute_script("arguments[0].scrollIntoView(true);", item)
+                        self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", item)
                         time.sleep(0.5)
                         item.click()
                     except ElementClickInterceptedException:
@@ -222,18 +267,35 @@ class PageNavigator:
         Raises:
             Exception: If switching innings fails
         """
-        logger.warning("click_dropdown_and_switch_innings is deprecated, use get_all_innings_options + switch_to_innings")
+        logger.warning(
+            "click_dropdown_and_switch_innings is deprecated, use get_all_innings_options + switch_to_innings")
         logger.info(f"Switching innings from: {default_team}")
 
         try:
             # Dismiss any popups first
             self.dismiss_popup()
 
-            # Wait for and click the dropdown
-            logger.debug("Waiting for dropdown element")
-            dropdown = WebDriverWait(self.driver, 15).until(
-                EC.element_to_be_clickable((By.CSS_SELECTOR, "div.ds-cursor-pointer.ds-min-w-max"))
-            )
+            # Try multiple selectors for the dropdown
+            dropdown_selectors = [
+                "button.ds-capitalize.ds-h-8.ds-cursor-pointer",
+                "button.ds-flex.ds-capitalize.ds-items-center",
+                "div.ds-cursor-pointer.ds-min-w-max"
+            ]
+
+            dropdown = None
+            for idx, selector in enumerate(dropdown_selectors):
+                try:
+                    logger.debug(f"Trying dropdown selector {idx + 1}")
+                    dropdown = WebDriverWait(self.driver, 5).until(
+                        EC.element_to_be_clickable((By.CSS_SELECTOR, selector))
+                    )
+                    logger.info(f"Dropdown found with selector {idx + 1}")
+                    break
+                except TimeoutException:
+                    continue
+
+            if not dropdown:
+                raise Exception("Could not find dropdown with any selector")
 
             # Scroll dropdown into view
             self.driver.execute_script("arguments[0].scrollIntoView(true);", dropdown)

@@ -1,0 +1,25 @@
+,matchid,innings,team,player_name,batted,batting_position,player_type,retired,not_out,bowled
+31,1473511,innings_2,Royal Challengers Bengaluru,Suyash Sharma,False,,impact,,,True
+12,1473511,innings_2,Punjab Kings,Prabhsimran Singh,True,2.0,impact,False,False,
+18,1473511,innings_2,Punjab Kings,Azmatullah Omarzai,True,8.0,regular,False,False,
+19,1473511,innings_2,Punjab Kings,Kyle Jamieson,True,9.0,regular,False,True,
+20,1473511,innings_2,Punjab Kings,Vijaykumar Vyshak,False,,regular,False,False,
+21,1473511,innings_2,Punjab Kings,Arshdeep Singh,False,,regular,False,False,
+17,1473511,innings_2,Punjab Kings,Marcus Stoinis,True,7.0,regular,False,False,
+0,1473511,innings_1,Royal Challengers Bengaluru,Phil Salt,True,1.0,regular,False,False,
+26,1473511,innings_1,Punjab Kings,Yuzvendra Chahal,False,,regular,,,True
+27,1473511,innings_2,Royal Challengers Bengaluru,Bhuvneshwar Kumar,False,,regular,,,True
+28,1473511,innings_2,Royal Challengers Bengaluru,Yash Dayal,False,,regular,,,True
+29,1473511,innings_2,Royal Challengers Bengaluru,Josh Hazlewood,False,,regular,,,True
+30,1473511,innings_2,Royal Challengers Bengaluru,Krunal Pandya,False,,regular,,,True
+16,1473511,innings_2,Punjab Kings,Shashank Singh,True,6.0,regular,False,True,
+14,1473511,innings_2,Punjab Kings,Shreyas Iyer,True,4.0,regular,False,False,
+13,1473511,innings_2,Punjab Kings,Josh Inglis,True,3.0,regular,False,False,
+11,1473511,innings_2,Punjab Kings,Priyansh Arya,True,1.0,regular,False,False,
+6,1473511,innings_1,Royal Challengers Bengaluru,Romario Shepherd,True,7.0,regular,False,False,
+5,1473511,innings_1,Royal Challengers Bengaluru,Jitesh Sharma,True,6.0,regular,False,False,
+4,1473511,innings_1,Royal Challengers Bengaluru,Liam Livingstone,True,5.0,regular,False,False,
+3,1473511,innings_1,Royal Challengers Bengaluru,Rajat Patidar,True,4.0,regular,False,False,
+2,1473511,innings_1,Royal Challengers Bengaluru,Mayank Agarwal,True,3.0,regular,True,False,
+1,1473511,innings_1,Royal Challengers Bengaluru,Virat Kohli,True,2.0,regular,False,False,
+15,1473511,innings_2,Punjab Kings,Nehal Wadhera,True,5.0,regular,False,False,

@@ -332,7 +332,6 @@ def scrape_cricket_data():
                 return results
         finally:
             # Final cleanup
-            if schedule_scraper:
                 cleanup_driver(schedule_scraper)
 
     print(f"Found {len(match_links)} total links")
@@ -352,7 +351,7 @@ def scrape_cricket_data():
             # REMOVE THIS LIMIT FOR PRODUCTION
             #if count >= 1:
                 #break
-            
+
 
     print(f"Found {len(scorecard_links)} match scorecards")
     logger.info(f"Found {len(scorecard_links)} match scorecards")

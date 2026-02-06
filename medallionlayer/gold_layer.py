@@ -7,6 +7,7 @@ from typing import Dict, Any
 from datetime import datetime
 from configs.db_config import get_connection, save_to_db
 from utils.logger import setup_logger
+import numpy as np
 import warnings
 
 warnings.filterwarnings('ignore', message='.*pandas only supports SQLAlchemy.*')
@@ -102,6 +103,8 @@ class GoldLayer:
         - First innings score
         - Second innings score
         - Winner from points
+
+        FIXED: Handles enriched team names in innings column
         """
         logger.info("Processing enhanced match summary...")
 
@@ -129,32 +132,82 @@ class GoldLayer:
                 SUM(runs_scored) as total_score
             FROM {self.source_schema}.match_events
             GROUP BY matchid, innings
+            ORDER BY matchid, innings
         """
         df_scores = pd.read_sql(scores_query, conn)
         conn.close()
 
-        # Pivot scores to get first_innings_score and second_innings_score
-        df_scores_pivot = df_scores.pivot(
+        if df_scores.empty:
+            logger.warning("No match event data found")
+            return 0
+
+        logger.info(f"Loaded {len(df_scores)} innings scores from {len(df_scores['matchid'].unique())} matches")
+
+        # FIXED PIVOT LOGIC: Handle dynamic team names after enrichment
+        # Sort by matchid and innings to ensure proper ordering
+        df_scores = df_scores.sort_values(['matchid', 'innings'])
+
+        # Create innings number for each match (1st innings, 2nd innings, etc.)
+        df_scores['innings_number'] = df_scores.groupby('matchid').cumcount() + 1
+
+        # Keep only first 2 innings (ignore Super Over aggregates if any)
+        df_scores_main = df_scores[df_scores['innings_number'] <= 2].copy()
+
+        # Pivot to get first and second innings scores
+        df_scores_pivot = df_scores_main.pivot_table(
             index='matchid',
-            columns='innings',
-            values='total_score'
+            columns='innings_number',
+            values='total_score',
+            aggfunc='sum'
         ).reset_index()
 
-        df_scores_pivot.columns = ['matchid', 'first_innings_score', 'second_innings_score']
+        # Rename columns properly
+        df_scores_pivot.columns = ['matchid'] + [f'innings_{i}_score' for i in df_scores_pivot.columns[1:]]
 
-        # Merge scores
-        df = df.merge(df_scores_pivot, on='matchid', how='left')
+        # Rename to standard names
+        column_mapping = {}
+        if 'innings_1_score' in df_scores_pivot.columns:
+            column_mapping['innings_1_score'] = 'first_innings_score'
+        if 'innings_2_score' in df_scores_pivot.columns:
+            column_mapping['innings_2_score'] = 'second_innings_score'
 
-        # Fill NaN scores with 0
-        df['first_innings_score'] = df['first_innings_score'].fillna(0).astype(int)
-        df['second_innings_score'] = df['second_innings_score'].fillna(0).astype(int)
+        if column_mapping:
+            df_scores_pivot = df_scores_pivot.rename(columns=column_mapping)
+
+        # Fill missing innings with 0
+        if 'first_innings_score' not in df_scores_pivot.columns:
+            df_scores_pivot['first_innings_score'] = 0
+        if 'second_innings_score' not in df_scores_pivot.columns:
+            df_scores_pivot['second_innings_score'] = 0
+
+        # Fill NaN with 0
+        df_scores_pivot['first_innings_score'] = df_scores_pivot['first_innings_score'].fillna(0).astype(int)
+        df_scores_pivot['second_innings_score'] = df_scores_pivot['second_innings_score'].fillna(0).astype(int)
+
+        logger.info(f"Pivoted scores for {len(df_scores_pivot)} matches")
+
+        # Get team names for each innings (first 2 unique teams per match)
+        df_teams_simple = df_scores_main.groupby('matchid').agg({
+            'innings': lambda x: list(x.unique()[:2])
+        }).reset_index()
+
+        df_teams_simple['batting_first'] = df_teams_simple['innings'].apply(
+            lambda x: x[0] if len(x) > 0 else None
+        )
+        df_teams_simple['batting_second'] = df_teams_simple['innings'].apply(
+            lambda x: x[1] if len(x) > 1 else None
+        )
+
+        df_teams_simple = df_teams_simple[['matchid', 'batting_first', 'batting_second']]
+
+        # Merge all data
+        df_summary = df_scores_pivot.merge(df, on='matchid', how='left')
+        df_summary = df_summary.merge(df_teams_simple, on='matchid', how='left')
 
         # Extract series_id from matchid (placeholder - will be extracted from URL in scraper)
-        # For now, we'll extract it if available in a pattern
-        df['series_id'] = None
+        df_summary['series_id'] = None
 
         # Determine winner from points
-        # Points format: "Team1: 2, Team2: 0" or "Team1: 1, Team2: 1"
         def extract_winner(row):
             points_str = row.get('points', '')
             if not points_str or pd.isna(points_str):
@@ -183,18 +236,42 @@ class GoldLayer:
             except:
                 return None
 
-        df['winner'] = df.apply(extract_winner, axis=1)
+        df_summary['winner'] = df_summary.apply(extract_winner, axis=1)
+
+        # Calculate margin
+        df_summary['margin'] = (
+            df_summary['first_innings_score'] - df_summary['second_innings_score']
+        ).abs()
+
+        # Add result analysis
+        df_summary['result_type'] = df_summary.apply(
+            lambda row: 'win' if pd.notna(row.get('winner')) else 'no_result',
+            axis=1
+        )
+
+        # Determine winning margin type (runs or wickets)
+        df_summary['margin_type'] = 'runs'
 
         # Select final columns
-        df_result = df[[
+        final_columns = [
             'matchid', 'venue', 'series', 'series_id', 'season',
-            'player_of_the_match', 'first_innings', 'second_innings',
-            'first_innings_score', 'second_innings_score', 'winner'
-        ]].copy()
+            'player_of_the_match', 'batting_first', 'batting_second',
+            'first_innings_score', 'second_innings_score', 'winner',
+            'margin', 'result_type', 'margin_type'
+        ]
+
+        # Keep only columns that exist
+        df_result = df_summary[[col for col in final_columns if col in df_summary.columns]].copy()
 
         # Add metadata
         df_result['created_at'] = datetime.now()
         df_result['updated_at'] = datetime.now()
+
+        # Replace NaN with None for database
+        df_result = df_result.replace({np.nan: None})
+
+        logger.info(f"Created match summary with {len(df_result)} matches")
+        logger.info(f"Columns: {list(df_result.columns)}")
 
         # Write to gold
         save_to_db(self.target_schema, 'match_summary', df_result)
@@ -687,7 +764,7 @@ class GoldLayer:
             cursor.execute(expire_query)
             expired_count = cursor.rowcount
             conn.commit()
-            logger.info(f"✓ Expired {expired_count} old records")
+            logger.info(f"Expired {expired_count} old records")
 
             # Step 4: Update existing current records (same player-team-season)
             logger.info("Step 2/3: Updating existing current records...")
@@ -717,7 +794,7 @@ class GoldLayer:
             cursor.execute(update_query)
             updated_count = cursor.rowcount
             conn.commit()
-            logger.info(f"✓ Updated {updated_count} existing records")
+            logger.info(f"Updated {updated_count} existing records")
 
             # Step 5: Insert new records (only if not exists)
             logger.info("Step 3/3: Inserting new records...")
@@ -883,6 +960,7 @@ class GoldLayer:
             logger.warning(f"Could not enrich with series: {e}")
             df['series'] = None
             return df
+
     # ========================================================================
     # STANDARD AGGREGATION METHODS
     # ========================================================================

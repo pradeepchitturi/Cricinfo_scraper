@@ -1,0 +1,1288 @@
+2026-02-06 13:46:23 - scraping.match_scraper - ERROR - Error extracting innings team: Message: no such element: Unable to locate element: {"method":"css selector","selector":"div.ds-cursor-pointer.ds-min-w-max"}
+  (Session info: chrome=144.0.7559.133); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x1265093
+	0x12650d4
+	0x105b490
+	0x10a58da
+	0x10a5b7b
+	0x10e7b42
+	0x10c8204
+	0x10e5341
+	0x10c7f56
+	0x10996c9
+	0x109a484
+	0x14b7e34
+	0x14b30c9
+	0x14d0add
+	0x127db38
+	0x12858ad
+	0x126d848
+	0x126da12
+	0x12575fa
+	0x76395d49
+	0x77aed83b
+	0x77aed7c1
+
+2026-02-06 13:46:23 - scraping.match_scraper - ERROR - WebDriver error scraping match 1473511: Message: no such element: Unable to locate element: {"method":"css selector","selector":"div.ds-cursor-pointer.ds-min-w-max"}
+  (Session info: chrome=144.0.7559.133); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x1265093
+	0x12650d4
+	0x105b490
+	0x10a58da
+	0x10a5b7b
+	0x10e7b42
+	0x10c8204
+	0x10e5341
+	0x10c7f56
+	0x10996c9
+	0x109a484
+	0x14b7e34
+	0x14b30c9
+	0x14d0add
+	0x127db38
+	0x12858ad
+	0x126d848
+	0x126da12
+	0x12575fa
+	0x76395d49
+	0x77aed83b
+	0x77aed7c1
+
+2026-02-06 13:46:25 - __main__ - ERROR - Non-retryable error for match 1473511: WebDriver error: Message: no such element: Unable to locate element: {"method":"css selector","selector":"div.ds-cursor-pointer.ds-min-w-max"}
+  (Session info: chrome=144.0.7559.133); For documentation on this error, 
+2026-02-06 13:46:25 - __main__ - ERROR - Failed match 1473511: WebDriver error: Message: no such element: Unable to locate element: {"method":"css selector","selector":"div.ds-cursor-pointer.ds-min-w-max"}
+  (Session info: chrome=144.0.7559.133); For documentation on this error, 
+2026-02-06 14:12:11 - scraping.match_scraper - ERROR - Error scraping match 1473511: 'NoneType' object is not iterable
+Traceback (most recent call last):
+  File "C:\Users\prade\Pycharm\Cricinfo_scraper\scraping\match_scraper.py", line 167, in scrape
+    keys_to_merge = [k for k in metadata if pattern.match(k)]
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: 'NoneType' object is not iterable
+2026-02-06 14:12:13 - __main__ - ERROR - Non-retryable error for match 1473511: 'NoneType' object is not iterable
+2026-02-06 14:12:13 - __main__ - ERROR - Failed match 1473511: 'NoneType' object is not iterable
+2026-02-06 14:19:49 - scraping.match_scraper - ERROR - Error extracting innings team: Message: no such element: Unable to locate element: {"method":"css selector","selector":"div.ds-cursor-pointer.ds-min-w-max"}
+  (Session info: chrome=144.0.7559.133); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x1265093
+	0x12650d4
+	0x105b490
+	0x10a58da
+	0x10a5b7b
+	0x10e7b42
+	0x10c8204
+	0x10e5341
+	0x10c7f56
+	0x10996c9
+	0x109a484
+	0x14b7e34
+	0x14b30c9
+	0x14d0add
+	0x127db38
+	0x12858ad
+	0x126d848
+	0x126da12
+	0x12575fa
+	0x76395d49
+	0x77aed83b
+	0x77aed7c1
+
+2026-02-06 14:19:49 - scraping.match_scraper - ERROR - WebDriver error scraping match 1473511: Message: no such element: Unable to locate element: {"method":"css selector","selector":"div.ds-cursor-pointer.ds-min-w-max"}
+  (Session info: chrome=144.0.7559.133); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x1265093
+	0x12650d4
+	0x105b490
+	0x10a58da
+	0x10a5b7b
+	0x10e7b42
+	0x10c8204
+	0x10e5341
+	0x10c7f56
+	0x10996c9
+	0x109a484
+	0x14b7e34
+	0x14b30c9
+	0x14d0add
+	0x127db38
+	0x12858ad
+	0x126d848
+	0x126da12
+	0x12575fa
+	0x76395d49
+	0x77aed83b
+	0x77aed7c1
+
+2026-02-06 14:19:51 - __main__ - ERROR - Non-retryable error for match 1473511: WebDriver error: Message: no such element: Unable to locate element: {"method":"css selector","selector":"div.ds-cursor-pointer.ds-min-w-max"}
+  (Session info: chrome=144.0.7559.133); For documentation on this error, 
+2026-02-06 14:19:51 - __main__ - ERROR - Failed match 1473511: WebDriver error: Message: no such element: Unable to locate element: {"method":"css selector","selector":"div.ds-cursor-pointer.ds-min-w-max"}
+  (Session info: chrome=144.0.7559.133); For documentation on this error, 
+2026-02-06 14:28:55 - scraping.match_scraper - ERROR - Error extracting innings team: Message: no such element: Unable to locate element: {"method":"css selector","selector":"div.ds-cursor-pointer.ds-min-w-max"}
+  (Session info: chrome=144.0.7559.133); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x1265093
+	0x12650d4
+	0x105b490
+	0x10a58da
+	0x10a5b7b
+	0x10e7b42
+	0x10c8204
+	0x10e5341
+	0x10c7f56
+	0x10996c9
+	0x109a484
+	0x14b7e34
+	0x14b30c9
+	0x14d0add
+	0x127db38
+	0x12858ad
+	0x126d848
+	0x126da12
+	0x12575fa
+	0x76395d49
+	0x77aed83b
+	0x77aed7c1
+
+2026-02-06 14:28:55 - scraping.match_scraper - ERROR - WebDriver error scraping match 1473511: Message: no such element: Unable to locate element: {"method":"css selector","selector":"div.ds-cursor-pointer.ds-min-w-max"}
+  (Session info: chrome=144.0.7559.133); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x1265093
+	0x12650d4
+	0x105b490
+	0x10a58da
+	0x10a5b7b
+	0x10e7b42
+	0x10c8204
+	0x10e5341
+	0x10c7f56
+	0x10996c9
+	0x109a484
+	0x14b7e34
+	0x14b30c9
+	0x14d0add
+	0x127db38
+	0x12858ad
+	0x126d848
+	0x126da12
+	0x12575fa
+	0x76395d49
+	0x77aed83b
+	0x77aed7c1
+
+2026-02-06 14:28:57 - __main__ - ERROR - Non-retryable error for match 1473511: WebDriver error: Message: no such element: Unable to locate element: {"method":"css selector","selector":"div.ds-cursor-pointer.ds-min-w-max"}
+  (Session info: chrome=144.0.7559.133); For documentation on this error, 
+2026-02-06 14:28:57 - __main__ - ERROR - Failed match 1473511: WebDriver error: Message: no such element: Unable to locate element: {"method":"css selector","selector":"div.ds-cursor-pointer.ds-min-w-max"}
+  (Session info: chrome=144.0.7559.133); For documentation on this error, 
+2026-02-06 14:36:47 - scraping.match_scraper - ERROR - Error extracting innings team: Message: no such element: Unable to locate element: {"method":"css selector","selector":"div.ds-cursor-pointer.ds-min-w-max"}
+  (Session info: chrome=144.0.7559.133); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x1265093
+	0x12650d4
+	0x105b490
+	0x10a58da
+	0x10a5b7b
+	0x10e7b42
+	0x10c8204
+	0x10e5341
+	0x10c7f56
+	0x10996c9
+	0x109a484
+	0x14b7e34
+	0x14b30c9
+	0x14d0add
+	0x127db38
+	0x12858ad
+	0x126d848
+	0x126da12
+	0x12575fa
+	0x76395d49
+	0x77aed83b
+	0x77aed7c1
+
+2026-02-06 14:36:47 - scraping.match_scraper - ERROR - WebDriver error scraping match 1473511: Message: no such element: Unable to locate element: {"method":"css selector","selector":"div.ds-cursor-pointer.ds-min-w-max"}
+  (Session info: chrome=144.0.7559.133); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x1265093
+	0x12650d4
+	0x105b490
+	0x10a58da
+	0x10a5b7b
+	0x10e7b42
+	0x10c8204
+	0x10e5341
+	0x10c7f56
+	0x10996c9
+	0x109a484
+	0x14b7e34
+	0x14b30c9
+	0x14d0add
+	0x127db38
+	0x12858ad
+	0x126d848
+	0x126da12
+	0x12575fa
+	0x76395d49
+	0x77aed83b
+	0x77aed7c1
+
+2026-02-06 14:36:50 - __main__ - ERROR - Non-retryable error for match 1473511: WebDriver error: Message: no such element: Unable to locate element: {"method":"css selector","selector":"div.ds-cursor-pointer.ds-min-w-max"}
+  (Session info: chrome=144.0.7559.133); For documentation on this error, 
+2026-02-06 14:36:51 - __main__ - ERROR - Failed match 1473511: WebDriver error: Message: no such element: Unable to locate element: {"method":"css selector","selector":"div.ds-cursor-pointer.ds-min-w-max"}
+  (Session info: chrome=144.0.7559.133); For documentation on this error, 
+2026-02-06 14:41:18 - core.metadata_extractor - ERROR - Error extracting player names for match 1473511: 'player_type'
+Traceback (most recent call last):
+  File "C:\Users\prade\Pycharm\Cricinfo_scraper\core\metadata_extractor.py", line 150, in extract_player_names
+    df['priority'] = df['player_type'].map(type_priority)
+                     ~~^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\pandas\core\frame.py", line 3893, in __getitem__
+    indexer = self.columns.get_loc(key)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\pandas\core\indexes\range.py", line 418, in get_loc
+    raise KeyError(key)
+KeyError: 'player_type'
+2026-02-06 14:42:51 - scraping.match_scraper - ERROR - Error extracting innings team: Message: no such element: Unable to locate element: {"method":"css selector","selector":"div.ds-cursor-pointer.ds-min-w-max"}
+  (Session info: chrome=144.0.7559.133); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x1265093
+	0x12650d4
+	0x105b490
+	0x10a58da
+	0x10a5b7b
+	0x10e7b42
+	0x10c8204
+	0x10e5341
+	0x10c7f56
+	0x10996c9
+	0x109a484
+	0x14b7e34
+	0x14b30c9
+	0x14d0add
+	0x127db38
+	0x12858ad
+	0x126d848
+	0x126da12
+	0x12575fa
+	0x76395d49
+	0x77aed83b
+	0x77aed7c1
+
+2026-02-06 14:42:51 - scraping.match_scraper - ERROR - WebDriver error scraping match 1473511: Message: no such element: Unable to locate element: {"method":"css selector","selector":"div.ds-cursor-pointer.ds-min-w-max"}
+  (Session info: chrome=144.0.7559.133); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x1265093
+	0x12650d4
+	0x105b490
+	0x10a58da
+	0x10a5b7b
+	0x10e7b42
+	0x10c8204
+	0x10e5341
+	0x10c7f56
+	0x10996c9
+	0x109a484
+	0x14b7e34
+	0x14b30c9
+	0x14d0add
+	0x127db38
+	0x12858ad
+	0x126d848
+	0x126da12
+	0x12575fa
+	0x76395d49
+	0x77aed83b
+	0x77aed7c1
+
+2026-02-06 14:42:53 - __main__ - ERROR - Non-retryable error for match 1473511: WebDriver error: Message: no such element: Unable to locate element: {"method":"css selector","selector":"div.ds-cursor-pointer.ds-min-w-max"}
+  (Session info: chrome=144.0.7559.133); For documentation on this error, 
+2026-02-06 14:42:53 - __main__ - ERROR - Failed match 1473511: WebDriver error: Message: no such element: Unable to locate element: {"method":"css selector","selector":"div.ds-cursor-pointer.ds-min-w-max"}
+  (Session info: chrome=144.0.7559.133); For documentation on this error, 
+2026-02-06 14:50:45 - core.metadata_extractor - ERROR - Error extracting player names for match 1473511: 'player_type'
+Traceback (most recent call last):
+  File "C:\Users\prade\Pycharm\Cricinfo_scraper\core\metadata_extractor.py", line 149, in extract_player_names
+    df['priority'] = df['player_type'].map(type_priority)
+                     ~~^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\pandas\core\frame.py", line 3893, in __getitem__
+    indexer = self.columns.get_loc(key)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\pandas\core\indexes\range.py", line 418, in get_loc
+    raise KeyError(key)
+KeyError: 'player_type'
+2026-02-06 14:56:47 - core.metadata_extractor - ERROR - Error extracting player names for match 1473511: 'player_type'
+Traceback (most recent call last):
+  File "C:\Users\prade\Pycharm\Cricinfo_scraper\core\metadata_extractor.py", line 149, in extract_player_names
+    df['priority'] = df['player_type'].map(type_priority)
+                     ~~^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\pandas\core\frame.py", line 3893, in __getitem__
+    indexer = self.columns.get_loc(key)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\pandas\core\indexes\range.py", line 418, in get_loc
+    raise KeyError(key)
+KeyError: 'player_type'
+2026-02-06 14:58:19 - scraping.match_scraper - ERROR - Error extracting innings team: Message: no such element: Unable to locate element: {"method":"css selector","selector":"div.ds-cursor-pointer.ds-min-w-max"}
+  (Session info: chrome=144.0.7559.133); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x1265093
+	0x12650d4
+	0x105b490
+	0x10a58da
+	0x10a5b7b
+	0x10e7b42
+	0x10c8204
+	0x10e5341
+	0x10c7f56
+	0x10996c9
+	0x109a484
+	0x14b7e34
+	0x14b30c9
+	0x14d0add
+	0x127db38
+	0x12858ad
+	0x126d848
+	0x126da12
+	0x12575fa
+	0x76395d49
+	0x77aed83b
+	0x77aed7c1
+
+2026-02-06 14:58:19 - scraping.match_scraper - ERROR - WebDriver error scraping match 1473511: Message: no such element: Unable to locate element: {"method":"css selector","selector":"div.ds-cursor-pointer.ds-min-w-max"}
+  (Session info: chrome=144.0.7559.133); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x1265093
+	0x12650d4
+	0x105b490
+	0x10a58da
+	0x10a5b7b
+	0x10e7b42
+	0x10c8204
+	0x10e5341
+	0x10c7f56
+	0x10996c9
+	0x109a484
+	0x14b7e34
+	0x14b30c9
+	0x14d0add
+	0x127db38
+	0x12858ad
+	0x126d848
+	0x126da12
+	0x12575fa
+	0x76395d49
+	0x77aed83b
+	0x77aed7c1
+
+2026-02-06 14:58:21 - __main__ - ERROR - Non-retryable error for match 1473511: WebDriver error: Message: no such element: Unable to locate element: {"method":"css selector","selector":"div.ds-cursor-pointer.ds-min-w-max"}
+  (Session info: chrome=144.0.7559.133); For documentation on this error, 
+2026-02-06 14:58:22 - __main__ - ERROR - Failed match 1473511: WebDriver error: Message: no such element: Unable to locate element: {"method":"css selector","selector":"div.ds-cursor-pointer.ds-min-w-max"}
+  (Session info: chrome=144.0.7559.133); For documentation on this error, 
+2026-02-06 14:59:55 - core.metadata_extractor - ERROR - Error extracting player names for match 1473511: 'player_type'
+Traceback (most recent call last):
+  File "C:\Users\prade\Pycharm\Cricinfo_scraper\core\metadata_extractor.py", line 149, in extract_player_names
+    df['priority'] = df['player_type'].map(type_priority)
+                     ~~^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\pandas\core\frame.py", line 3893, in __getitem__
+    indexer = self.columns.get_loc(key)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\pandas\core\indexes\range.py", line 418, in get_loc
+    raise KeyError(key)
+KeyError: 'player_type'
+2026-02-06 15:06:02 - core.metadata_extractor - ERROR - Error extracting player names for match 1473511: 'player_type'
+Traceback (most recent call last):
+  File "C:\Users\prade\Pycharm\Cricinfo_scraper\core\metadata_extractor.py", line 149, in extract_player_names
+    df['priority'] = df['player_type'].map(type_priority)
+                     ~~^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\pandas\core\frame.py", line 3893, in __getitem__
+    indexer = self.columns.get_loc(key)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\pandas\core\indexes\range.py", line 418, in get_loc
+    raise KeyError(key)
+KeyError: 'player_type'
+2026-02-06 15:18:18 - scraping.match_scraper - ERROR - Error extracting innings team: Message: no such element: Unable to locate element: {"method":"css selector","selector":"div.ds-cursor-pointer.ds-min-w-max"}
+  (Session info: chrome=144.0.7559.133); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x1265093
+	0x12650d4
+	0x105b490
+	0x10a58da
+	0x10a5b7b
+	0x10e7b42
+	0x10c8204
+	0x10e5341
+	0x10c7f56
+	0x10996c9
+	0x109a484
+	0x14b7e34
+	0x14b30c9
+	0x14d0add
+	0x127db38
+	0x12858ad
+	0x126d848
+	0x126da12
+	0x12575fa
+	0x76395d49
+	0x77aed83b
+	0x77aed7c1
+
+2026-02-06 15:18:18 - scraping.match_scraper - ERROR - WebDriver error scraping match 1473511: Message: no such element: Unable to locate element: {"method":"css selector","selector":"div.ds-cursor-pointer.ds-min-w-max"}
+  (Session info: chrome=144.0.7559.133); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x1265093
+	0x12650d4
+	0x105b490
+	0x10a58da
+	0x10a5b7b
+	0x10e7b42
+	0x10c8204
+	0x10e5341
+	0x10c7f56
+	0x10996c9
+	0x109a484
+	0x14b7e34
+	0x14b30c9
+	0x14d0add
+	0x127db38
+	0x12858ad
+	0x126d848
+	0x126da12
+	0x12575fa
+	0x76395d49
+	0x77aed83b
+	0x77aed7c1
+
+2026-02-06 15:18:21 - __main__ - ERROR - Non-retryable error for match 1473511: WebDriver error: Message: no such element: Unable to locate element: {"method":"css selector","selector":"div.ds-cursor-pointer.ds-min-w-max"}
+  (Session info: chrome=144.0.7559.133); For documentation on this error, 
+2026-02-06 15:18:21 - __main__ - ERROR - Failed match 1473511: WebDriver error: Message: no such element: Unable to locate element: {"method":"css selector","selector":"div.ds-cursor-pointer.ds-min-w-max"}
+  (Session info: chrome=144.0.7559.133); For documentation on this error, 
+2026-02-06 15:48:54 - scraping.match_scraper - ERROR - Error extracting innings team: Message: no such element: Unable to locate element: {"method":"css selector","selector":"div.ds-cursor-pointer.ds-min-w-max"}
+  (Session info: chrome=144.0.7559.133); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x1265093
+	0x12650d4
+	0x105b490
+	0x10a58da
+	0x10a5b7b
+	0x10e7b42
+	0x10c8204
+	0x10e5341
+	0x10c7f56
+	0x10996c9
+	0x109a484
+	0x14b7e34
+	0x14b30c9
+	0x14d0add
+	0x127db38
+	0x12858ad
+	0x126d848
+	0x126da12
+	0x12575fa
+	0x76395d49
+	0x77aed83b
+	0x77aed7c1
+
+2026-02-06 15:48:54 - scraping.match_scraper - ERROR - WebDriver error scraping match 1473511: Message: no such element: Unable to locate element: {"method":"css selector","selector":"div.ds-cursor-pointer.ds-min-w-max"}
+  (Session info: chrome=144.0.7559.133); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x1265093
+	0x12650d4
+	0x105b490
+	0x10a58da
+	0x10a5b7b
+	0x10e7b42
+	0x10c8204
+	0x10e5341
+	0x10c7f56
+	0x10996c9
+	0x109a484
+	0x14b7e34
+	0x14b30c9
+	0x14d0add
+	0x127db38
+	0x12858ad
+	0x126d848
+	0x126da12
+	0x12575fa
+	0x76395d49
+	0x77aed83b
+	0x77aed7c1
+
+2026-02-06 15:48:56 - __main__ - ERROR - Non-retryable error for match 1473511: WebDriver error: Message: no such element: Unable to locate element: {"method":"css selector","selector":"div.ds-cursor-pointer.ds-min-w-max"}
+  (Session info: chrome=144.0.7559.133); For documentation on this error, 
+2026-02-06 15:48:56 - __main__ - ERROR - Failed match 1473511: WebDriver error: Message: no such element: Unable to locate element: {"method":"css selector","selector":"div.ds-cursor-pointer.ds-min-w-max"}
+  (Session info: chrome=144.0.7559.133); For documentation on this error, 
+2026-02-06 15:59:38 - core.page_navigator - ERROR - Error getting innings options: Message: 
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x1265093
+	0x12650d4
+	0x105b490
+	0x10a58da
+	0x10a5b7b
+	0x10e7b42
+	0x10c8204
+	0x10e5341
+	0x10c7f56
+	0x10996c9
+	0x109a484
+	0x14b7e34
+	0x14b30c9
+	0x14d0add
+	0x127db38
+	0x12858ad
+	0x126d848
+	0x126da12
+	0x12575fa
+	0x76395d49
+	0x77aed83b
+	0x77aed7c1
+
+2026-02-06 15:59:38 - scraping.match_scraper - ERROR - Timeout scraping match 1473511: Message: 
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x1265093
+	0x12650d4
+	0x105b490
+	0x10a58da
+	0x10a5b7b
+	0x10e7b42
+	0x10c8204
+	0x10e5341
+	0x10c7f56
+	0x10996c9
+	0x109a484
+	0x14b7e34
+	0x14b30c9
+	0x14d0add
+	0x127db38
+	0x12858ad
+	0x126d848
+	0x126da12
+	0x12575fa
+	0x76395d49
+	0x77aed83b
+	0x77aed7c1
+
+2026-02-06 16:05:49 - core.page_navigator - ERROR - Error switching to innings 'RCB': Message: 
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x1265093
+	0x12650d4
+	0x105b490
+	0x10a58da
+	0x10a5b7b
+	0x10e7b42
+	0x10c8204
+	0x10e5341
+	0x10c7f56
+	0x10996c9
+	0x109a484
+	0x14b7e34
+	0x14b30c9
+	0x14d0add
+	0x127db38
+	0x12858ad
+	0x126d848
+	0x126da12
+	0x12575fa
+	0x76395d49
+	0x77aed83b
+	0x77aed7c1
+
+2026-02-06 16:05:49 - scraping.match_scraper - ERROR - Timeout scraping match 1473511: Message: 
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x1265093
+	0x12650d4
+	0x105b490
+	0x10a58da
+	0x10a5b7b
+	0x10e7b42
+	0x10c8204
+	0x10e5341
+	0x10c7f56
+	0x10996c9
+	0x109a484
+	0x14b7e34
+	0x14b30c9
+	0x14d0add
+	0x127db38
+	0x12858ad
+	0x126d848
+	0x126da12
+	0x12575fa
+	0x76395d49
+	0x77aed83b
+	0x77aed7c1
+
+2026-02-06 16:12:12 - core.commentary_parser - ERROR - Unexpected column count: 4. Expected 6 or 7.
+2026-02-06 16:13:01 - core.page_navigator - ERROR - Error switching to innings 'RCB': Message: 
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x1265093
+	0x12650d4
+	0x105b490
+	0x10a58da
+	0x10a5b7b
+	0x10e7b42
+	0x10c8204
+	0x10e5341
+	0x10c7f56
+	0x10996c9
+	0x109a484
+	0x14b7e34
+	0x14b30c9
+	0x14d0add
+	0x127db38
+	0x12858ad
+	0x126d848
+	0x126da12
+	0x12575fa
+	0x76395d49
+	0x77aed83b
+	0x77aed7c1
+
+2026-02-06 16:13:01 - scraping.match_scraper - ERROR - Timeout scraping match 1473511: Message: 
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x1265093
+	0x12650d4
+	0x105b490
+	0x10a58da
+	0x10a5b7b
+	0x10e7b42
+	0x10c8204
+	0x10e5341
+	0x10c7f56
+	0x10996c9
+	0x109a484
+	0x14b7e34
+	0x14b30c9
+	0x14d0add
+	0x127db38
+	0x12858ad
+	0x126d848
+	0x126da12
+	0x12575fa
+	0x76395d49
+	0x77aed83b
+	0x77aed7c1
+
+2026-02-06 16:25:48 - core.commentary_parser - ERROR - Unexpected column count: 4. Expected 6 or 7.
+2026-02-06 16:26:37 - core.page_navigator - ERROR - Error switching to innings 'RCB': Message: 
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x1265093
+	0x12650d4
+	0x105b490
+	0x10a58da
+	0x10a5b7b
+	0x10e7b42
+	0x10c8204
+	0x10e5341
+	0x10c7f56
+	0x10996c9
+	0x109a484
+	0x14b7e34
+	0x14b30c9
+	0x14d0add
+	0x127db38
+	0x12858ad
+	0x126d848
+	0x126da12
+	0x12575fa
+	0x76395d49
+	0x77aed83b
+	0x77aed7c1
+
+2026-02-06 16:26:37 - scraping.match_scraper - ERROR - Timeout scraping match 1473511: Message: 
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x1265093
+	0x12650d4
+	0x105b490
+	0x10a58da
+	0x10a5b7b
+	0x10e7b42
+	0x10c8204
+	0x10e5341
+	0x10c7f56
+	0x10996c9
+	0x109a484
+	0x14b7e34
+	0x14b30c9
+	0x14d0add
+	0x127db38
+	0x12858ad
+	0x126d848
+	0x126da12
+	0x12575fa
+	0x76395d49
+	0x77aed83b
+	0x77aed7c1
+
+2026-02-06 16:36:02 - core.commentary_parser - ERROR - Unexpected column count: 5. Expected 6 or 7.
+2026-02-06 16:36:51 - core.page_navigator - ERROR - Error switching to innings 'RCB': Message: 
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x1265093
+	0x12650d4
+	0x105b490
+	0x10a58da
+	0x10a5b7b
+	0x10e7b42
+	0x10c8204
+	0x10e5341
+	0x10c7f56
+	0x10996c9
+	0x109a484
+	0x14b7e34
+	0x14b30c9
+	0x14d0add
+	0x127db38
+	0x12858ad
+	0x126d848
+	0x126da12
+	0x12575fa
+	0x76395d49
+	0x77aed83b
+	0x77aed7c1
+
+2026-02-06 16:36:51 - scraping.match_scraper - ERROR - Timeout scraping match 1473511: Message: 
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x1265093
+	0x12650d4
+	0x105b490
+	0x10a58da
+	0x10a5b7b
+	0x10e7b42
+	0x10c8204
+	0x10e5341
+	0x10c7f56
+	0x10996c9
+	0x109a484
+	0x14b7e34
+	0x14b30c9
+	0x14d0add
+	0x127db38
+	0x12858ad
+	0x126d848
+	0x126da12
+	0x12575fa
+	0x76395d49
+	0x77aed83b
+	0x77aed7c1
+
+2026-02-06 16:46:57 - core.commentary_parser - ERROR - Unexpected column count: 5. Expected 6 or 7.
+2026-02-06 16:50:30 - core.page_navigator - ERROR - Error during page scroll: Message: invalid session id: session deleted as the browser has closed the connection
+from disconnected: not connected to DevTools
+  (Session info: chrome=144.0.7559.133)
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x1265093
+	0x12650d4
+	0x105b490
+	0x104a43e
+	0x1068ef3
+	0x10cf00c
+	0x10e4df9
+	0x10c7f56
+	0x10996c9
+	0x109a484
+	0x14b7e34
+	0x14b30c9
+	0x14d0add
+	0x127db38
+	0x12858ad
+	0x126d848
+	0x126da12
+	0x12575fa
+	0x76395d49
+	0x77aed83b
+	0x77aed7c1
+
+2026-02-06 16:50:33 - scraping.match_scraper - ERROR - WebDriver error scraping match 1473511: Message: invalid session id
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x1265093
+	0x12650d4
+	0x105b2ce
+	0x1098957
+	0x10c8076
+	0x10c3dc1
+	0x10c32c2
+	0x102e26b
+	0x102e80e
+	0x102eced
+	0x14b7e34
+	0x14b30c9
+	0x14d0add
+	0x127db38
+	0x12858ad
+	0x102dde9
+	0x102d430
+	0x1609aaf
+	0x76395d49
+	0x77aed83b
+	0x77aed7c1
+
+2026-02-06 16:50:36 - __main__ - ERROR - Non-retryable error for match 1473511: WebDriver error: Message: invalid session id
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x1265093
+	0x12650d4
+	0x105b2ce
+	0x1098957
+	0x10c8076
+	0x10c3dc1
+	0x10c32c2
+	0x102e26b
+	0x102e80e
+	0x102ec
+2026-02-06 16:50:36 - __main__ - ERROR - Failed match 1473511: WebDriver error: Message: invalid session id
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x1265093
+	0x12650d4
+	0x105b2ce
+	0x1098957
+	0x10c8076
+	0x10c3dc1
+	0x10c32c2
+	0x102e26b
+	0x102e80e
+	0x102ec
+2026-02-06 16:54:08 - core.commentary_parser - ERROR - Unexpected column count: 5. Expected 6 or 7.
+2026-02-06 16:58:45 - core.commentary_parser - ERROR - Unexpected column count: 5. Expected 6 or 7.
+2026-02-06 16:59:34 - core.page_navigator - ERROR - Error switching to innings 'RCB': Message: 
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x1265093
+	0x12650d4
+	0x105b490
+	0x10a58da
+	0x10a5b7b
+	0x10e7b42
+	0x10c8204
+	0x10e5341
+	0x10c7f56
+	0x10996c9
+	0x109a484
+	0x14b7e34
+	0x14b30c9
+	0x14d0add
+	0x127db38
+	0x12858ad
+	0x126d848
+	0x126da12
+	0x12575fa
+	0x76395d49
+	0x77aed83b
+	0x77aed7c1
+
+2026-02-06 16:59:34 - scraping.match_scraper - ERROR - Timeout scraping match 1473511: Message: 
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x1265093
+	0x12650d4
+	0x105b490
+	0x10a58da
+	0x10a5b7b
+	0x10e7b42
+	0x10c8204
+	0x10e5341
+	0x10c7f56
+	0x10996c9
+	0x109a484
+	0x14b7e34
+	0x14b30c9
+	0x14d0add
+	0x127db38
+	0x12858ad
+	0x126d848
+	0x126da12
+	0x12575fa
+	0x76395d49
+	0x77aed83b
+	0x77aed7c1
+
+2026-02-06 17:03:49 - core.commentary_parser - ERROR - Unexpected column count: 5. Expected 6 or 7.
+2026-02-06 17:04:38 - core.page_navigator - ERROR - Error switching to innings 'RCB': Message: 
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x1265093
+	0x12650d4
+	0x105b490
+	0x10a58da
+	0x10a5b7b
+	0x10e7b42
+	0x10c8204
+	0x10e5341
+	0x10c7f56
+	0x10996c9
+	0x109a484
+	0x14b7e34
+	0x14b30c9
+	0x14d0add
+	0x127db38
+	0x12858ad
+	0x126d848
+	0x126da12
+	0x12575fa
+	0x76395d49
+	0x77aed83b
+	0x77aed7c1
+
+2026-02-06 17:04:38 - scraping.match_scraper - ERROR - Timeout scraping match 1473511: Message: 
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x1265093
+	0x12650d4
+	0x105b490
+	0x10a58da
+	0x10a5b7b
+	0x10e7b42
+	0x10c8204
+	0x10e5341
+	0x10c7f56
+	0x10996c9
+	0x109a484
+	0x14b7e34
+	0x14b30c9
+	0x14d0add
+	0x127db38
+	0x12858ad
+	0x126d848
+	0x126da12
+	0x12575fa
+	0x76395d49
+	0x77aed83b
+	0x77aed7c1
+
+2026-02-06 17:15:28 - core.commentary_parser - ERROR - Unexpected column count: 5. Expected 6 or 7.
+2026-02-06 17:16:17 - core.page_navigator - ERROR - Error switching to innings 'RCB': Message: 
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x1265093
+	0x12650d4
+	0x105b490
+	0x10a58da
+	0x10a5b7b
+	0x10e7b42
+	0x10c8204
+	0x10e5341
+	0x10c7f56
+	0x10996c9
+	0x109a484
+	0x14b7e34
+	0x14b30c9
+	0x14d0add
+	0x127db38
+	0x12858ad
+	0x126d848
+	0x126da12
+	0x12575fa
+	0x76395d49
+	0x77aed83b
+	0x77aed7c1
+
+2026-02-06 17:16:17 - scraping.match_scraper - ERROR - Timeout scraping match 1473511: Message: 
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x1265093
+	0x12650d4
+	0x105b490
+	0x10a58da
+	0x10a5b7b
+	0x10e7b42
+	0x10c8204
+	0x10e5341
+	0x10c7f56
+	0x10996c9
+	0x109a484
+	0x14b7e34
+	0x14b30c9
+	0x14d0add
+	0x127db38
+	0x12858ad
+	0x126d848
+	0x126da12
+	0x12575fa
+	0x76395d49
+	0x77aed83b
+	0x77aed7c1
+
+2026-02-06 17:23:52 - core.commentary_parser - ERROR - Unexpected column count: 5. Expected 6 or 7.
+2026-02-06 17:42:20 - core.commentary_parser - ERROR - Unexpected column count: 5. Expected 6 or 7.
+2026-02-06 17:43:09 - core.page_navigator - ERROR - Error switching to innings 'RCB': Message: 
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x1265093
+	0x12650d4
+	0x105b490
+	0x10a58da
+	0x10a5b7b
+	0x10e7b42
+	0x10c8204
+	0x10e5341
+	0x10c7f56
+	0x10996c9
+	0x109a484
+	0x14b7e34
+	0x14b30c9
+	0x14d0add
+	0x127db38
+	0x12858ad
+	0x126d848
+	0x126da12
+	0x12575fa
+	0x76395d49
+	0x77aed83b
+	0x77aed7c1
+
+2026-02-06 17:43:09 - scraping.match_scraper - ERROR - Timeout scraping match 1473511: Message: 
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x1265093
+	0x12650d4
+	0x105b490
+	0x10a58da
+	0x10a5b7b
+	0x10e7b42
+	0x10c8204
+	0x10e5341
+	0x10c7f56
+	0x10996c9
+	0x109a484
+	0x14b7e34
+	0x14b30c9
+	0x14d0add
+	0x127db38
+	0x12858ad
+	0x126d848
+	0x126da12
+	0x12575fa
+	0x76395d49
+	0x77aed83b
+	0x77aed7c1
+
+2026-02-06 17:48:00 - core.commentary_parser - ERROR - Unexpected column count: 5. Expected 6 or 7.
+2026-02-06 17:55:58 - core.page_navigator - ERROR - Error switching to innings 'RCB': Message: 
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x1265093
+	0x12650d4
+	0x105b490
+	0x10a58da
+	0x10a5b7b
+	0x10e7b42
+	0x10c8204
+	0x10e5341
+	0x10c7f56
+	0x10996c9
+	0x109a484
+	0x14b7e34
+	0x14b30c9
+	0x14d0add
+	0x127db38
+	0x12858ad
+	0x126d848
+	0x126da12
+	0x12575fa
+	0x76395d49
+	0x77aed83b
+	0x77aed7c1
+
+2026-02-06 17:55:58 - scraping.match_scraper - ERROR - Timeout scraping match 1473511: Message: 
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x1265093
+	0x12650d4
+	0x105b490
+	0x10a58da
+	0x10a5b7b
+	0x10e7b42
+	0x10c8204
+	0x10e5341
+	0x10c7f56
+	0x10996c9
+	0x109a484
+	0x14b7e34
+	0x14b30c9
+	0x14d0add
+	0x127db38
+	0x12858ad
+	0x126d848
+	0x126da12
+	0x12575fa
+	0x76395d49
+	0x77aed83b
+	0x77aed7c1
+
+2026-02-06 18:06:09 - scraping.match_scraper - ERROR - Error scraping match 1473511: column "ground" of relation "match_metadata" does not exist
+LINE 2:         INSERT INTO raw.match_metadata (ground, toss, series...
+                                                ^
+Traceback (most recent call last):
+  File "C:\Users\prade\Pycharm\Cricinfo_scraper\scraping\match_scraper.py", line 344, in scrape
+    save_to_db("raw", "match_metadata", metadata_df)
+  File "C:\Users\prade\Pycharm\Cricinfo_scraper\configs\db_config.py", line 120, in save_to_db
+    execute_values(cur, insert_query, values)
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\psycopg2\extras.py", line 1299, in execute_values
+    cur.execute(b''.join(parts))
+psycopg2.errors.UndefinedColumn: column "ground" of relation "match_metadata" does not exist
+LINE 2:         INSERT INTO raw.match_metadata (ground, toss, series...
+                                                ^
+
+2026-02-06 18:06:12 - __main__ - ERROR - Non-retryable error for match 1473511: column "ground" of relation "match_metadata" does not exist
+LINE 2:         INSERT INTO raw.match_metadata (ground, toss, series...
+                                                ^
+
+2026-02-06 18:06:12 - __main__ - ERROR - Failed match 1473511: column "ground" of relation "match_metadata" does not exist
+LINE 2:         INSERT INTO raw.match_metadata (ground, toss, series...
+                                                ^
+
+2026-02-06 18:14:52 - scraping.match_scraper - ERROR - Error scraping match 1473511: column "ground" of relation "match_metadata" does not exist
+LINE 2:         INSERT INTO raw.match_metadata (ground, toss, series...
+                                                ^
+Traceback (most recent call last):
+  File "C:\Users\prade\Pycharm\Cricinfo_scraper\scraping\match_scraper.py", line 345, in scrape
+    save_to_db("raw", "match_metadata", metadata_df)
+  File "C:\Users\prade\Pycharm\Cricinfo_scraper\configs\db_config.py", line 120, in save_to_db
+    execute_values(cur, insert_query, values)
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\psycopg2\extras.py", line 1299, in execute_values
+    cur.execute(b''.join(parts))
+psycopg2.errors.UndefinedColumn: column "ground" of relation "match_metadata" does not exist
+LINE 2:         INSERT INTO raw.match_metadata (ground, toss, series...
+                                                ^
+
+2026-02-06 18:14:54 - __main__ - ERROR - Non-retryable error for match 1473511: column "ground" of relation "match_metadata" does not exist
+LINE 2:         INSERT INTO raw.match_metadata (ground, toss, series...
+                                                ^
+
+2026-02-06 18:14:54 - __main__ - ERROR - Failed match 1473511: column "ground" of relation "match_metadata" does not exist
+LINE 2:         INSERT INTO raw.match_metadata (ground, toss, series...
+                                                ^
+
+2026-02-06 18:20:43 - __main__ - ERROR - Fatal error: column "venue" of relation "match_metadata" does not exist
+Traceback (most recent call last):
+  File "C:\Users\prade\Pycharm\Cricinfo_scraper\main.py", line 521, in main
+    initialize_database()
+  File "C:\Users\prade\Pycharm\Cricinfo_scraper\configs\db_config.py", line 67, in initialize_database
+    cur.execute(schema_sql)
+psycopg2.errors.UndefinedColumn: column "venue" of relation "match_metadata" does not exist
+
+2026-02-06 18:21:14 - __main__ - ERROR - Fatal error: column "venue" of relation "match_metadata" does not exist
+Traceback (most recent call last):
+  File "C:\Users\prade\Pycharm\Cricinfo_scraper\main.py", line 521, in main
+    initialize_database()
+  File "C:\Users\prade\Pycharm\Cricinfo_scraper\configs\db_config.py", line 67, in initialize_database
+    cur.execute(schema_sql)
+psycopg2.errors.UndefinedColumn: column "venue" of relation "match_metadata" does not exist
+
+2026-02-06 18:21:34 - __main__ - ERROR - Fatal error: column "venue" of relation "match_metadata" does not exist
+Traceback (most recent call last):
+  File "C:\Users\prade\Pycharm\Cricinfo_scraper\main.py", line 521, in main
+    initialize_database()
+  File "C:\Users\prade\Pycharm\Cricinfo_scraper\configs\db_config.py", line 67, in initialize_database
+    cur.execute(schema_sql)
+psycopg2.errors.UndefinedColumn: column "venue" of relation "match_metadata" does not exist
+
+2026-02-06 18:29:12 - scraping.match_scraper - ERROR - Error scraping match 1473511: column "retired" of relation "match_players" does not exist
+LINE 2: ...ayer_name, batted, batting_position, player_type, retired, n...
+                                                             ^
+Traceback (most recent call last):
+  File "C:\Users\prade\Pycharm\Cricinfo_scraper\scraping\match_scraper.py", line 352, in scrape
+    save_to_db("raw", "match_players", players_df)
+  File "C:\Users\prade\Pycharm\Cricinfo_scraper\configs\db_config.py", line 120, in save_to_db
+    execute_values(cur, insert_query, values)
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\psycopg2\extras.py", line 1299, in execute_values
+    cur.execute(b''.join(parts))
+psycopg2.errors.UndefinedColumn: column "retired" of relation "match_players" does not exist
+LINE 2: ...ayer_name, batted, batting_position, player_type, retired, n...
+                                                             ^
+
+2026-02-06 18:29:15 - __main__ - ERROR - Non-retryable error for match 1473511: column "retired" of relation "match_players" does not exist
+LINE 2: ...ayer_name, batted, batting_position, player_type, retired, n...
+                                                             ^
+
+2026-02-06 18:29:15 - __main__ - ERROR - Failed match 1473511: column "retired" of relation "match_players" does not exist
+LINE 2: ...ayer_name, batted, batting_position, player_type, retired, n...
+                                                             ^
+
+2026-02-06 18:29:15 - medallionlayer.bronze_layer - ERROR - Error processing match_metadata: column "ground" of relation "match_metadata" does not exist
+LINE 2:         INSERT INTO bronze.match_metadata (id, ground, toss,...
+                                                       ^
+
+2026-02-06 18:36:14 - scraping.match_scraper - ERROR - Error scraping match 1473511: column "retired" of relation "match_players" does not exist
+LINE 2: ...ayer_name, batted, batting_position, player_type, retired, n...
+                                                             ^
+Traceback (most recent call last):
+  File "C:\Users\prade\Pycharm\Cricinfo_scraper\scraping\match_scraper.py", line 353, in scrape
+    save_to_db("raw", "match_players", players_df)
+  File "C:\Users\prade\Pycharm\Cricinfo_scraper\configs\db_config.py", line 120, in save_to_db
+    execute_values(cur, insert_query, values)
+  File "C:\Users\prade\PycharmProjects\Cricinfo_scraper\.venv\Lib\site-packages\psycopg2\extras.py", line 1299, in execute_values
+    cur.execute(b''.join(parts))
+psycopg2.errors.UndefinedColumn: column "retired" of relation "match_players" does not exist
+LINE 2: ...ayer_name, batted, batting_position, player_type, retired, n...
+                                                             ^
+
+2026-02-06 18:36:17 - __main__ - ERROR - Non-retryable error for match 1473511: column "retired" of relation "match_players" does not exist
+LINE 2: ...ayer_name, batted, batting_position, player_type, retired, n...
+                                                             ^
+
+2026-02-06 18:36:17 - __main__ - ERROR - Failed match 1473511: column "retired" of relation "match_players" does not exist
+LINE 2: ...ayer_name, batted, batting_position, player_type, retired, n...
+                                                             ^
+
+2026-02-06 18:36:17 - medallionlayer.bronze_layer - ERROR - Error processing match_metadata: column "ground" of relation "match_metadata" does not exist
+LINE 2:         INSERT INTO bronze.match_metadata (id, ground, toss,...
+                                                       ^
+
+2026-02-06 18:36:38 - pipeline.orchestrator - ERROR -     - Error processing match_metadata: column "ground" of relation "match_metadata" does not exist
+LINE 2:         INSERT INTO bronze.match_metadata (id, ground, toss,...
+                                                       ^
+
+2026-02-06 18:43:01 - __main__ - ERROR - Fatal error: syntax error at or near "ADD"
+LINE 134: ADD COLUMN IF NOT EXISTS bowled TEXT DEFAULT NULL;
+          ^
+Traceback (most recent call last):
+  File "C:\Users\prade\Pycharm\Cricinfo_scraper\main.py", line 521, in main
+    initialize_database()
+  File "C:\Users\prade\Pycharm\Cricinfo_scraper\configs\db_config.py", line 67, in initialize_database
+    cur.execute(schema_sql)
+psycopg2.errors.SyntaxError: syntax error at or near "ADD"
+LINE 134: ADD COLUMN IF NOT EXISTS bowled TEXT DEFAULT NULL;
+          ^
+
+2026-02-06 18:51:24 - medallionlayer.bronze_layer - ERROR - Error processing match_metadata: column "ground" of relation "match_metadata" does not exist
+LINE 2:         INSERT INTO bronze.match_metadata (id, ground, toss,...
+                                                       ^
+
+2026-02-06 18:51:26 - medallionlayer.bronze_layer - ERROR - Error processing match_players: column "retired" of relation "match_players" does not exist
+LINE 2: ...atted, batting_position, player_type, created_at, retired, n...
+                                                             ^
+
+2026-02-06 18:51:31 - pipeline.orchestrator - ERROR -     - Error processing match_metadata: column "ground" of relation "match_metadata" does not exist
+LINE 2:         INSERT INTO bronze.match_metadata (id, ground, toss,...
+                                                       ^
+
+2026-02-06 18:51:31 - pipeline.orchestrator - ERROR -     - Error processing match_players: column "retired" of relation "match_players" does not exist
+LINE 2: ...atted, batting_position, player_type, created_at, retired, n...
+                                                             ^
+

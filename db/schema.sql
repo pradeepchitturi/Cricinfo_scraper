@@ -11,7 +11,7 @@ CREATE SCHEMA IF NOT EXISTS raw;
 
 CREATE TABLE IF NOT EXISTS raw.match_metadata (
     id SERIAL PRIMARY KEY,
-    venue VARCHAR(255),
+    ground VARCHAR(255),
     toss VARCHAR(255),
     series VARCHAR(255),
     season INT,
@@ -104,7 +104,7 @@ ALTER TABLE raw.match_metadata
     ALTER COLUMN series TYPE TEXT,
     ALTER COLUMN points TYPE TEXT,
     ALTER COLUMN toss TYPE TEXT,
-    ALTER COLUMN venue TYPE TEXT,
+    ALTER COLUMN ground TYPE TEXT,
     ALTER COLUMN player_of_the_match TYPE TEXT,
     ALTER COLUMN tv_umpire TYPE TEXT,
     ALTER COLUMN reserve_umpire TYPE TEXT,
@@ -115,13 +115,23 @@ ALTER TABLE raw.match_metadata
 ALTER TABLE raw.match_metadata
 ADD COLUMN IF NOT EXISTS series_result TEXT DEFAULT NULL;
 
+
+-- Add player_of_series column to raw.metadata table
+ALTER TABLE raw.match_metadata
+ADD COLUMN IF NOT EXISTS player_of_series TEXT DEFAULT NULL;
+
+
+
 -- Also check match_events if needed
 ALTER TABLE raw.match_events
     ALTER COLUMN event TYPE TEXT,
     ALTER COLUMN commentary TYPE TEXT,
     ALTER COLUMN innings TYPE TEXT;
 
-
+ALTER TABLE raw.match_players
+ADD COLUMN IF NOT EXISTS retired TEXT DEFAULT NULL,
+ADD COLUMN IF NOT EXISTS not_out TEXT DEFAULT NULL,
+ADD COLUMN IF NOT EXISTS bowled TEXT DEFAULT NULL;
 -- ============================================================================
 -- Indexes for Performance
 -- ============================================================================
@@ -157,6 +167,10 @@ WHERE innings IS NULL;
 CREATE INDEX IF NOT EXISTS idx_tracker_match_id ON raw.match_download_tracker(match_id);
 CREATE INDEX IF NOT EXISTS idx_tracker_status ON raw.match_download_tracker(status);
 
+
+-- Add index for better query performance
+CREATE INDEX IF NOT EXISTS idx_raw_metadata_player_of_series
+ON raw.match_metadata(player_of_series);
 -- ============================================================================
 -- Success Message
 -- ============================================================================

@@ -331,6 +331,7 @@ class MatchScraper:
                 .str.lower()
             )
 
+
             # Save commentary to DB
             print(f"Saving commentary to database...")
             logger.info("Saving commentary to database")
@@ -348,6 +349,7 @@ class MatchScraper:
             # Save match_players to DB
             print(f"Saving match players to database...")
             logger.info("Saving match players to database")
+            players_df.to_csv("players.csv")
             save_to_db("raw", "match_players", players_df)
             print(f"Match players saved ({len(players_df)} rows)")
 
@@ -406,8 +408,20 @@ class MatchScraper:
     def get_current_innings_team(self, driver):
         """Extract current innings team name from page"""
         try:
-            team_element = driver.find_element("css selector", "div.ds-cursor-pointer.ds-min-w-max")
-            return team_element.text.strip()
+            # Use partial class matching for more flexibility
+            team_element = driver.find_element(
+                "css selector",
+                "button.ds-capitalize.ds-cursor-pointer[class*='ds-border-color-border']"
+            )
+            team_name = team_element.text.strip()
+
+            if not team_name:
+                logger.warning("Team element found but text is empty")
+                raise NoSuchElementException("Team name is empty")
+
+            logger.debug(f"Extracted innings team: {team_name}")
+            return team_name
+
         except NoSuchElementException as e:
             logger.error(f"Error extracting innings team: {e}")
             raise

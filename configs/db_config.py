@@ -2,11 +2,19 @@
 import os
 import psycopg2
 from psycopg2.extras import execute_values
-from dotenv import load_dotenv
+from dotenv import load_dotenv,find_dotenv
 from utils.logger import setup_logger
+import sys
 
 # Load .env variables
-load_dotenv()
+env_path = find_dotenv()
+if env_path:
+    print(f"✓ Found .env file at: {env_path}")
+    load_dotenv(env_path, override=True)  # override=True forces reload
+else:
+    print("✗ WARNING: No .env file found!")
+    print(f"  Searching from: {os.getcwd()}")
+    sys.exit(1)
 
 logger = setup_logger(__name__)
 
@@ -16,7 +24,7 @@ def get_connection(db_override=None):
     If db_override is provided, connect to that DB instead.
     """
     dbname = db_override if db_override else os.getenv("DB_NAME")
-
+    print(dbname)
     return psycopg2.connect(
         dbname=dbname,
         user=os.getenv("DB_USER"),
@@ -36,7 +44,7 @@ def initialize_database():
     cur = conn.cursor()
 
     db_name = os.getenv("DB_NAME")
-
+    print(db_name)
     cur.execute("SELECT 1 FROM pg_database WHERE datname=%s;", (db_name,))
     exists = cur.fetchone()
 
