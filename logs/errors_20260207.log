@@ -1,0 +1,16 @@
+2026-02-07 14:14:57 - medallionlayer.bronze_layer - ERROR - Error processing match_metadata: column "ground" of relation "match_metadata" does not exist
+LINE 2:         INSERT INTO bronze.match_metadata (id, ground, toss,...
+                                                       ^
+
+2026-02-07 14:15:01 - medallionlayer.bronze_layer - ERROR - Error processing match_players: column "retired" of relation "match_players" does not exist
+LINE 2: ...atted, batting_position, player_type, created_at, retired, n...
+                                                             ^
+
+2026-02-07 14:15:17 - pipeline.orchestrator - ERROR -     - Error processing match_metadata: column "ground" of relation "match_metadata" does not exist
+LINE 2:         INSERT INTO bronze.match_metadata (id, ground, toss,...
+                                                       ^
+
+2026-02-07 14:15:17 - pipeline.orchestrator - ERROR -     - Error processing match_players: column "retired" of relation "match_players" does not exist
+LINE 2: ...atted, batting_position, player_type, created_at, retired, n...
+                                                             ^
+
